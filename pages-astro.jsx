@@ -492,7 +492,7 @@ const MultiSelect = ({ label, options, value, onChange, width = 180 }) => {
           position: 'absolute', top: 'calc(100% + 4px)', left: 0,
           minWidth: '100%', maxWidth: 320,
           background: 'var(--surface-2)', border: '1px solid var(--border-2)',
-          borderRadius: 8, zIndex: 50,
+          borderRadius: 8, zIndex: 9999,
           boxShadow: '0 12px 36px rgba(0,0,0,0.5)',
           maxHeight: 360, overflow: 'auto', padding: 6,
         }}>
@@ -590,9 +590,10 @@ const FilterBarAstro = ({ filters, setF }) => {
       background: 'rgba(13,18,22,0.7)',
       borderBottom: '1px solid var(--border)',
       padding: '12px 0', marginBottom: 16,
+      position: 'relative', zIndex: 30,
     }}>
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'flex-end' }}>
-        <MultiSelect label="Ano-Mês" options={anoMesOpts} value={filters.anoMes} onChange={(v) => setF({ anoMes: v })} width={160} />
+        {/* Filtro temporal vem do Header global (year/month) — não duplicar aqui */}
         <SegToggle label="Dia útil" value={filters.diaUtil}
                     options={[{ value: 'all', label: 'Todos' }, { value: 'util', label: 'Útil' }, { value: 'fds', label: 'FDS' }]}
                     onChange={(v) => setF({ diaUtil: v })} />

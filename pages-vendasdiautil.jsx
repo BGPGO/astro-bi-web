@@ -50,17 +50,11 @@ const DEFAULT_FILTERS_VDU = {
   diaUtil: 'util', // util | all (essa tela ESPERA dia util; deixamos toggle pra inspecao)
 };
 
-const _buildWhereVDU = (f, gp) => {
+const _buildWhereVDU = (f) => {
   const parts = [];
   parts.push(`data_pedido IS NOT NULL`);
-  // Filtro global Header (year/month)
-  if ((!f.anoMes || !f.anoMes.length) && gp && gp.year) {
-    if (gp.month && gp.month >= 1 && gp.month <= 12) {
-      parts.push(`EXTRACT(YEAR FROM data_pedido) = ${gp.year} AND EXTRACT(MONTH FROM data_pedido) = ${gp.month}`);
-    } else {
-      parts.push(`EXTRACT(YEAR FROM data_pedido) = ${gp.year}`);
-    }
-  }
+  // Tela é "últimos 12 meses fixos" — não escuta Header global nem anoMes da page
+  parts.push(`data_pedido >= (current_date - INTERVAL 12 MONTH)`);
   if (f.diaUtil === 'util') parts.push(`dayofweek(data_pedido) BETWEEN 1 AND 5`);
   if (f.anoMes && f.anoMes.length) parts.push(`strftime(data_pedido, '%Y-%m') IN (${_sqlList(f.anoMes)})`);
   if (f.marca && f.marca.length) parts.push(`marca IN (${_sqlList(f.marca)})`);
@@ -174,8 +168,8 @@ const PageVendasDiaUtil = () => {
   const status = useDuckDBStatus();
   const setF = React.useCallback((np) => setFilters((prev) => ({ ...prev, ...np })), []);
 
-  const gpVDU = (typeof useGlobalPeriod === 'function') ? useGlobalPeriod() : null;
-  const where = React.useMemo(() => _buildWhereVDU(filters, gpVDU), [filters, gpVDU]);
+  // Vendas/Dia Util é janela FIXA últimos 12 meses — não escuta o filtro global
+  const where = React.useMemo(() => _buildWhereVDU(filters), [filters]);
 
   // === Opcoes de filtro (DISTINCT global; nao depende dos filtros) ===
   // VDU_DATA pode existir como fallback; se nao, query 1x via DuckDB.
