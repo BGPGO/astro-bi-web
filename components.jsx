@@ -39,28 +39,24 @@ const Icon = ({ name, ...props }) => {
 
 const ASTRO_LEGACY_BASE = "https://astro-bi-legacy.187.77.238.125.sslip.io";
 const Sidebar = ({ active, onSelect, open }) => {
-  // === Power BI — telas migradas (1 ativa, 13 em breve) ===
+  // === Power BI — telas na ORDEM do PDF original (17 telas, 3 ainda EM BREVE) ===
   const general = [
-    { id: "astro_dash", icon: "home", label: "Dash" },
-    { id: "astro_dashfatur", icon: "chart", label: "Dash · Faturamento" },
-    { id: "pbi_variacao_uf", icon: "chart", label: "Variação UF", badge: "EM BREVE" },
-    { id: "pbi_ltv", icon: "user", label: "LTV", badge: "EM BREVE" },
-    { id: "pbi_coorte", icon: "chart", label: "Cohort" },
-    { id: "pbi_campanhas", icon: "invest", label: "Campanhas", badge: "EM BREVE" },
-    { id: "pbi_campest", icon: "invest", label: "Campanha × Estado" },
-    { id: "pbi_mapa_uf", icon: "chart", label: "Mapa UF", badge: "EM BREVE" },
-    { id: "pbi_analise_vendas", icon: "money", label: "Análise Vendas" },
-    { id: "pbi_tend_composicao", icon: "chart", label: "Tend. Composição" },
-    { id: "pbi_tend_vendas", icon: "chart", label: "Tend. Vendas", badge: "EM BREVE" },
-    { id: "pbi_tend_temporais", icon: "chart", label: "Tend. Temporais" },
-    { id: "pbi_tend_produtos", icon: "chart", label: "Tend. Produtos" },
-    { id: "pbi_tend_marcas", icon: "chart", label: "Tend. Marcas" },
-    { id: "pbi_composicao_vendas", icon: "chart", label: "Composição Venda" },
-    { id: "pbi_composicao_total", icon: "chart", label: "Composição Total" },
-    { id: "pbi_const_venda", icon: "chart", label: "Const. Venda", badge: "EM BREVE" },
-    { id: "pbi_vendas_dia_util", icon: "chart", label: "Vendas / Dia Útil" },
-    { id: "pbi_cfv", icon: "money", label: "CFV (Custo Fin.)" },
-    { id: "pbi_geral", icon: "invest", label: "Visão Comercial" },
+    { id: "astro_dash",              icon: "home",    label: "01 · Dash" },
+    { id: "astro_dashfatur",         icon: "chart",   label: "02 · Dash · Faturamento" },
+    { id: "pbi_vendas_dia_util",     icon: "chart",   label: "03 · Vendas / Dia Útil" },
+    { id: "pbi_cfv",                 icon: "money",   label: "04 · CFV" },
+    { id: "pbi_geral",               icon: "invest",  label: "05 · Geral" },
+    { id: "pbi_campanhas",           icon: "invest",  label: "06 · Campanhas", badge: "EM BREVE" },
+    { id: "pbi_campest",             icon: "invest",  label: "07 · Campanha × Estado" },
+    { id: "pbi_geral_faturamento",   icon: "money",   label: "08 · Geral · Faturamento", badge: "EM BREVE" },
+    { id: "pbi_analise_vendas",      icon: "money",   label: "09 · Análise de Vendas" },
+    { id: "pbi_tend_composicao",     icon: "chart",   label: "10 · Tendência Composição" },
+    { id: "pbi_tend_temporais",      icon: "chart",   label: "11 · Tendência Temporal" },
+    { id: "pbi_tend_produtos",       icon: "chart",   label: "12 · Tendência Produtos" },
+    { id: "pbi_tend_marcas",         icon: "chart",   label: "13 · Tendências Marcas" },
+    { id: "pbi_composicao_vendas",   icon: "chart",   label: "14 · Composição de Venda" },
+    { id: "pbi_composicao_total",    icon: "chart",   label: "15 · Composição (Total)" },
+    { id: "pbi_coorte",              icon: "chart",   label: "16-17 · Cohort (Valor + Vendas)" },
   ];
   // === Outras Análises — todas migradas internamente (não mais links externos) ===
   const others = [
