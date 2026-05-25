@@ -96,27 +96,27 @@ const AstroBarV = ({ values, labels, color = 'cyan', height = 220, fmt = _fmtBRL
   );
 };
 
-// ===== Mini chart: line area com hover tooltip + marker vertical =====
+// ===== Mini chart: line area com hover, eixo Y, todos os pontos =====
 const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200, fmt = _fmtBRLk, activeIdx }) => {
   if (!values || !values.length) return <div className="empty">sem dados</div>;
   const [hover, setHover] = useState(null);
   const wrapRef = React.useRef(null);
-  const W = 600, H = height, P = 22;
+  const W = 600, H = height;
+  const padT = 18, padB = 22, padL = 52, padR = 12;  // padL maior pra labels eixo Y
   const max = Math.max(...values), min = Math.min(...values);
   const range = max - min || 1;
   const pts = values.map((v, i) => {
-    const x = P + (i / Math.max(1, values.length - 1)) * (W - P*2);
-    const y = H - P - ((v - min) / range) * (H - P*2);
+    const x = padL + (i / Math.max(1, values.length - 1)) * (W - padL - padR);
+    const y = padT + (H - padT - padB) - ((v - min) / range) * (H - padT - padB);
     return [x, y];
   });
   const path = pts.map((p, i) => (i === 0 ? `M ${p[0]} ${p[1]}` : `L ${p[0]} ${p[1]}`)).join(' ');
-  const area = `${path} L ${pts[pts.length-1][0]} ${H-P} L ${pts[0][0]} ${H-P} Z`;
+  const area = `${path} L ${pts[pts.length-1][0]} ${H-padB} L ${pts[0][0]} ${H-padB} Z`;
   const gradId = `astro-line-grad-${Math.random().toString(36).slice(2,8)}`;
 
   const onMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * W;
-    // acha indice mais perto
     let bestI = 0, bestD = Infinity;
     for (let i = 0; i < pts.length; i++) {
       const d = Math.abs(pts[i][0] - x);
@@ -125,12 +125,14 @@ const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200, fmt = 
     setHover({ i: bestI, x: pts[bestI][0], y: pts[bestI][1] });
   };
 
-  // pontos de destaque: máximo, mínimo, último
-  const idxMax = values.indexOf(max);
-  const idxMin = values.indexOf(min);
-  const idxLast = values.length - 1;
-  const markers = new Set([idxMax, idxMin, idxLast]);
-  if (activeIdx != null) markers.add(activeIdx);
+  // Eixo Y: 4 ticks (0%, 33%, 66%, 100% do range)
+  const yTicks = [0, 0.25, 0.5, 0.75, 1].map((t) => ({
+    v: min + range * t,
+    y: padT + (H - padT - padB) * (1 - t),
+  }));
+  // Pontos: limitar densidade visual (no max 30 pontos visíveis), mas SEMPRE
+  // mostrar pelo menos a cada N para não poluir. Aqui mostramos todos se ≤30.
+  const dotEvery = values.length <= 30 ? 1 : Math.ceil(values.length / 30);
 
   return (
     <div ref={wrapRef} style={{ position: 'relative', width: '100%' }}
@@ -144,31 +146,41 @@ const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200, fmt = 
             <stop offset="100%" stopColor={color} stopOpacity="0" />
           </linearGradient>
         </defs>
+        {/* Grid + eixo Y */}
+        {yTicks.map((t, i) => (
+          <g key={i} pointerEvents="none">
+            <line x1={padL} y1={t.y} x2={W - padR} y2={t.y}
+                  stroke="rgba(255,255,255,0.06)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+            <text x={padL - 6} y={t.y + 3} textAnchor="end"
+                  style={{ fontSize: 10, fill: '#7a8597', fontFamily: 'JetBrains Mono, monospace' }}>
+              {fmt(t.v)}
+            </text>
+          </g>
+        ))}
         <path d={area} fill={`url(#${gradId})`} />
         <path d={path} stroke={color} strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-        {/* marker dots (max/min/last/active) */}
-        {pts.map((p, i) => markers.has(i) && (
-          <circle key={i} cx={p[0]} cy={p[1]} r={i === activeIdx ? 5 : 3}
-                  fill={i === activeIdx ? '#fff' : color} stroke="#0a0f14" strokeWidth="1.5"
-                  vectorEffect="non-scaling-stroke" />
-        ))}
-        {/* valor texto no max */}
-        <text x={pts[idxMax][0]} y={Math.max(12, pts[idxMax][1] - 8)} textAnchor="middle"
-              style={{ fontSize: 10, fill: '#cbd5e1', fontFamily: 'JetBrains Mono, monospace', pointerEvents: 'none' }}>
-          {fmt(max)}
-        </text>
+        {/* Pontos: TODOS os índices visíveis (ou amostrados se muitos) */}
+        {pts.map((p, i) => {
+          const show = i % dotEvery === 0 || i === values.length - 1;
+          if (!show) return null;
+          const isActive = i === activeIdx;
+          return (
+            <circle key={i} cx={p[0]} cy={p[1]} r={isActive ? 5 : 2.5}
+                    fill={isActive ? '#fff' : color} stroke="#0a0f14" strokeWidth={isActive ? 2 : 1}
+                    vectorEffect="non-scaling-stroke" />
+          );
+        })}
         {/* linha vertical de hover */}
         {hover && (
           <g pointerEvents="none">
-            <line x1={hover.x} y1={P} x2={hover.x} y2={H - P}
-                  stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="3 3"
+            <line x1={hover.x} y1={padT} x2={hover.x} y2={H - padB}
+                  stroke="rgba(255,255,255,0.4)" strokeWidth="1" strokeDasharray="3 3"
                   vectorEffect="non-scaling-stroke" />
             <circle cx={hover.x} cy={hover.y} r={5} fill="#fff" stroke={color} strokeWidth="2"
                     vectorEffect="non-scaling-stroke" />
           </g>
         )}
       </svg>
-      {/* tooltip flutuante */}
       {hover && (
         <div style={{
           position: 'absolute',
@@ -891,8 +903,17 @@ const ChartsTemporais = ({ where, filters, setF }) => {
 // ===========================================================================
 
 const ChartsPerfil = ({ where, filters, setF }) => {
+  // Mensal 18m IGNORA filtro temporal (igual N Vendas Mensal). Mantém cross-filter marca/cat/etc.
+  const whereSemTempo = (where || '')
+    .split(' AND ')
+    .filter((c) => !/strftime\(data_pedido, '%Y-%m'\)/.test(c)
+                && !/EXTRACT\(YEAR FROM data_pedido\)/.test(c)
+                && !/EXTRACT\(MONTH FROM data_pedido\)/.test(c)
+                && !/dayofweek\(data_pedido\)/.test(c))
+    .join(' AND ') || '1=1';
   const sql = React.useMemo(() => `
-    WITH base AS (SELECT * FROM vendas WHERE ${where})
+    WITH base AS (SELECT * FROM vendas WHERE ${where}),
+         base_st AS (SELECT * FROM vendas WHERE ${whereSemTempo})
     SELECT
       (SELECT json_group_array(json_object('tipo', tipo, 'v', v))
         FROM (
@@ -903,7 +924,7 @@ const ChartsPerfil = ({ where, filters, setF }) => {
       (SELECT json_group_array(json_object('am', am, 'v', v))
         FROM (
           SELECT strftime(data_pedido, '%Y-%m') AS am, SUM(valor_rateado)::DOUBLE AS v
-          FROM base GROUP BY 1 ORDER BY 1 DESC LIMIT 18
+          FROM base_st GROUP BY 1 ORDER BY 1 DESC LIMIT 18
         ) t) AS mensal,
       (SELECT json_group_array(json_object('d', d, 'ticket', ticket))
         FROM (
@@ -912,7 +933,7 @@ const ChartsPerfil = ({ where, filters, setF }) => {
                  CAST(data_pedido AS DATE) AS dd
           FROM base GROUP BY 1, 3 ORDER BY 3 DESC LIMIT 60
         ) t) AS ticket_diario
-  `, [where]);
+  `, [where, whereSemTempo]);
   const { data, loading, error } = useDuckDBQuery(sql, [sql]);
   if (error) return <div className="card" style={{ color: 'var(--red-2)' }}>Erro charts perfil: {error}</div>;
 
@@ -948,14 +969,14 @@ const ChartsPerfil = ({ where, filters, setF }) => {
                       onSliceClick={onDonut} activeLabel={activeDonutLabel} />
         </div>
         <div className="card">
-          <div className="card-title-row"><h2 className="card-title">Mensal · 18m (clique = filtrar)</h2></div>
+          <div className="card-title-row"><h2 className="card-title">Mensal · 18m fixo {activeMesIdx >= 0 && <span style={{ fontSize: 10, color: 'var(--cyan)', marginLeft: 6 }}>· filtro destacado</span>}</h2></div>
           <AstroBarV values={mensal.map((x) => x.v)} labels={mensal.map((x) => x.am.slice(2))}
                       color="violet" height={220}
                       onBarClick={onClickMesV} activeIdx={activeMesIdx >= 0 ? activeMesIdx : null} />
         </div>
         <div className="card">
           <div className="card-title-row"><h2 className="card-title">Ticket Diário · 60d</h2></div>
-          <AstroLine values={tk.map((x) => x.ticket || 0)} color="var(--amber)" height={220} />
+          <AstroLine values={tk.map((x) => x.ticket || 0)} labels={tk.map((x) => x.d)} color="var(--amber)" height={220} fmt={_fmtBRL} />
         </div>
       </div>
     </>
