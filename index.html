@@ -34,6 +34,41 @@
   <script src="abc-data.js"></script>
   <!-- data.js + data-extras.js do template (fin40/Omie/etc) — opcionais, BIT vazio se nao gerados -->
   <script>window.BIT = window.BIT || {}; window.BIT_META = window.BIT_META || { empresa: { nome_fantasia: 'Astro Distribuidora', cidade: 'Brasil · BGP GO' } }; window.BIT.fmt = window.BIT.fmt || ((v) => (v||0).toLocaleString('pt-BR', {style:'currency',currency:'BRL'})); window.BIT.fmtK = window.BIT.fmtK || ((v) => { const a=Math.abs(v||0); if(a>=1e6) return 'R$ '+(a/1e6).toFixed(1)+'M'; if(a>=1e3) return 'R$ '+(a/1e3).toFixed(0)+'k'; return 'R$ '+a.toFixed(0); });</script>
+  <!-- DuckDB-WASM via ESM CDN (pra Dash V3 com filtros reativos sobre parquet) -->
+  <script type="module">
+    (async () => {
+      try {
+        const duckdb = await import('https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/+esm');
+        const JSDELIVR = duckdb.getJsDelivrBundles();
+        const bundle = await duckdb.selectBundle(JSDELIVR);
+        const worker_url = URL.createObjectURL(
+          new Blob([`importScripts("${bundle.mainWorker}");`], { type: 'text/javascript' })
+        );
+        const worker = new Worker(worker_url);
+        const logger = new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING);
+        const db = new duckdb.AsyncDuckDB(logger, worker);
+        await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
+        URL.revokeObjectURL(worker_url);
+        // Carrega parquet
+        const resp = await fetch('data/vendas_dash.parquet');
+        if (!resp.ok) throw new Error('parquet ' + resp.status);
+        const buf = new Uint8Array(await resp.arrayBuffer());
+        await db.registerFileBuffer('vendas.parquet', buf);
+        const conn = await db.connect();
+        await conn.query("CREATE OR REPLACE VIEW vendas AS SELECT * FROM read_parquet('vendas.parquet')");
+        await conn.close();
+        window.__duckdb = db;
+        window.__duckdbReady = true;
+        // notifica componentes
+        document.dispatchEvent(new CustomEvent('duckdb-ready'));
+        console.log('DuckDB ready');
+      } catch (e) {
+        console.error('DuckDB init err:', e);
+        window.__duckdbErr = String(e);
+        document.dispatchEvent(new CustomEvent('duckdb-error', { detail: String(e) }));
+      }
+    })();
+  </script>
   <!-- JSX pre-compilado pelo build-jsx.cjs -->
   <script src="app.bundle.js"></script>
 </body>
