@@ -63,6 +63,8 @@ body {
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "ss01", "cv11";
+  /* Zoom out global de BI - 80% pra caber mais tela */
+  zoom: 0.8;
 }
 
 button { font-family: inherit; color: inherit; background: none; border: 0; cursor: pointer; }

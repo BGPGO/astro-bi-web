@@ -96,9 +96,11 @@ const AstroBarV = ({ values, labels, color = 'cyan', height = 220, fmt = _fmtBRL
   );
 };
 
-// ===== Mini chart: line area =====
-const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200 }) => {
+// ===== Mini chart: line area com hover tooltip + marker vertical =====
+const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200, fmt = _fmtBRLk, activeIdx }) => {
   if (!values || !values.length) return <div className="empty">sem dados</div>;
+  const [hover, setHover] = useState(null);
+  const wrapRef = React.useRef(null);
   const W = 600, H = height, P = 22;
   const max = Math.max(...values), min = Math.min(...values);
   const range = max - min || 1;
@@ -110,18 +112,79 @@ const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200 }) => {
   const path = pts.map((p, i) => (i === 0 ? `M ${p[0]} ${p[1]}` : `L ${p[0]} ${p[1]}`)).join(' ');
   const area = `${path} L ${pts[pts.length-1][0]} ${H-P} L ${pts[0][0]} ${H-P} Z`;
   const gradId = `astro-line-grad-${Math.random().toString(36).slice(2,8)}`;
-  // preserveAspectRatio meet com viewBox 600x200 + width 100% se ajusta sem distorcer
+
+  const onMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * W;
+    // acha indice mais perto
+    let bestI = 0, bestD = Infinity;
+    for (let i = 0; i < pts.length; i++) {
+      const d = Math.abs(pts[i][0] - x);
+      if (d < bestD) { bestD = d; bestI = i; }
+    }
+    setHover({ i: bestI, x: pts[bestI][0], y: pts[bestI][1] });
+  };
+
+  // pontos de destaque: máximo, mínimo, último
+  const idxMax = values.indexOf(max);
+  const idxMin = values.indexOf(min);
+  const idxLast = values.length - 1;
+  const markers = new Set([idxMax, idxMin, idxLast]);
+  if (activeIdx != null) markers.add(activeIdx);
+
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ width: '100%', height, display: 'block' }}>
-      <defs>
-        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.35" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d={area} fill={`url(#${gradId})`} />
-      <path d={path} stroke={color} strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
-    </svg>
+    <div ref={wrapRef} style={{ position: 'relative', width: '100%' }}
+         onMouseLeave={() => setHover(null)}>
+      <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none"
+           style={{ width: '100%', height, display: 'block' }}
+           onMouseMove={onMove}>
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.35" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={area} fill={`url(#${gradId})`} />
+        <path d={path} stroke={color} strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
+        {/* marker dots (max/min/last/active) */}
+        {pts.map((p, i) => markers.has(i) && (
+          <circle key={i} cx={p[0]} cy={p[1]} r={i === activeIdx ? 5 : 3}
+                  fill={i === activeIdx ? '#fff' : color} stroke="#0a0f14" strokeWidth="1.5"
+                  vectorEffect="non-scaling-stroke" />
+        ))}
+        {/* valor texto no max */}
+        <text x={pts[idxMax][0]} y={Math.max(12, pts[idxMax][1] - 8)} textAnchor="middle"
+              style={{ fontSize: 10, fill: '#cbd5e1', fontFamily: 'JetBrains Mono, monospace', pointerEvents: 'none' }}>
+          {fmt(max)}
+        </text>
+        {/* linha vertical de hover */}
+        {hover && (
+          <g pointerEvents="none">
+            <line x1={hover.x} y1={P} x2={hover.x} y2={H - P}
+                  stroke="rgba(255,255,255,0.3)" strokeWidth="1" strokeDasharray="3 3"
+                  vectorEffect="non-scaling-stroke" />
+            <circle cx={hover.x} cy={hover.y} r={5} fill="#fff" stroke={color} strokeWidth="2"
+                    vectorEffect="non-scaling-stroke" />
+          </g>
+        )}
+      </svg>
+      {/* tooltip flutuante */}
+      {hover && (
+        <div style={{
+          position: 'absolute',
+          left: `${(hover.x / W) * 100}%`,
+          top: 8,
+          transform: 'translateX(-50%)',
+          background: 'rgba(8,14,18,0.95)', border: '1px solid var(--border-2)',
+          borderRadius: 6, padding: '4px 8px', fontSize: 11, color: '#e6edf3',
+          fontFamily: 'JetBrains Mono, monospace', pointerEvents: 'none',
+          whiteSpace: 'nowrap', zIndex: 5,
+        }}>
+          <div style={{ opacity: 0.7 }}>{labels && labels[hover.i] || `#${hover.i + 1}`}</div>
+          <div style={{ fontWeight: 700, color }}>{fmt(values[hover.i])}</div>
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -524,8 +587,7 @@ const FilterBarAstro = ({ filters, setF }) => {
 
   return (
     <div style={{
-      position: 'sticky', top: 0, zIndex: 20,
-      background: 'rgba(13,18,22,0.92)', backdropFilter: 'blur(8px)',
+      background: 'rgba(13,18,22,0.7)',
       borderBottom: '1px solid var(--border)',
       padding: '12px 0', marginBottom: 16,
     }}>
@@ -696,18 +758,41 @@ const KpiBlock = ({ where }) => {
 // ===========================================================================
 
 const ChartsTemporais = ({ where, filters, setF }) => {
-  const sql = React.useMemo(() => `
-    WITH base AS (SELECT * FROM vendas WHERE ${where})
+  // Detecta se filtros temporais estão restringindo a um mês específico
+  // (todos anoMes selecionados são do mesmo MM)
+  const monthFilter = (() => {
+    if (!filters.anoMes || !filters.anoMes.length) return null;
+    const meses = new Set(filters.anoMes.map((am) => am.slice(5, 7)));
+    return meses.size === 1 ? [...meses][0] : null;
+  })();
+  // 'where' SEM filtro temporal (mantém marca/cat/etc) — pra Anual/N-vendas ignorarem ano-mês.
+  // Removemos as cláusulas de strftime/EXTRACT YEAR/MONTH/dayofweek deixando o resto.
+  const whereSemTempo = (where || '')
+    .split(' AND ')
+    .filter((c) => !/strftime\(data_pedido, '%Y-%m'\)/.test(c)
+                && !/EXTRACT\(YEAR FROM data_pedido\)/.test(c)
+                && !/EXTRACT\(MONTH FROM data_pedido\)/.test(c)
+                && !/dayofweek\(data_pedido\)/.test(c))
+    .join(' AND ') || '1=1';
+  const sql = React.useMemo(() => {
+    // Se há monthFilter, Anual = comparativo same-month-other-years
+    const anualQuery = monthFilter
+      ? `SELECT EXTRACT(YEAR FROM data_pedido)::INT AS y, SUM(valor_rateado)::DOUBLE AS v
+         FROM base WHERE EXTRACT(MONTH FROM data_pedido) = ${parseInt(monthFilter, 10)}
+         GROUP BY 1 ORDER BY 1`
+      : `SELECT EXTRACT(YEAR FROM data_pedido)::INT AS y, SUM(valor_rateado)::DOUBLE AS v
+         FROM base GROUP BY 1 ORDER BY 1`;
+    return `
+    WITH base AS (SELECT * FROM vendas WHERE ${whereSemTempo})
     SELECT
-      (SELECT list_sort(list(DISTINCT y)) FROM (SELECT EXTRACT(YEAR FROM data_pedido)::INT AS y FROM base) t) AS anos,
       (SELECT json_group_array(json_object('y', y, 'v', v))
-        FROM (SELECT EXTRACT(YEAR FROM data_pedido)::INT AS y, SUM(valor_rateado)::DOUBLE AS v
-              FROM base GROUP BY 1 ORDER BY 1) t) AS anual,
+        FROM (${anualQuery}) t) AS anual,
       (SELECT json_group_array(json_object('d', d, 'v', v))
         FROM (
           SELECT strftime(data_pedido, '%d/%m') AS d, SUM(valor_rateado)::DOUBLE AS v, CAST(data_pedido AS DATE) AS dd
-          FROM base GROUP BY 1, 3 ORDER BY 3 DESC LIMIT 60
+          FROM (SELECT * FROM vendas WHERE ${where}) GROUP BY 1, 3 ORDER BY 3 DESC LIMIT 60
         ) t) AS diaria,
+      -- mensal: sempre últimos 18m, sem filtro temporal (so com cross-filter de marca/cat/etc)
       (SELECT json_group_array(json_object('am', am, 'n', n, 'v', v))
         FROM (
           SELECT strftime(data_pedido, '%Y-%m') AS am,
@@ -715,7 +800,8 @@ const ChartsTemporais = ({ where, filters, setF }) => {
                  SUM(valor_rateado)::DOUBLE AS v
           FROM base GROUP BY 1 ORDER BY 1 DESC LIMIT 18
         ) t) AS mensal
-  `, [where]);
+  `;
+  }, [where, whereSemTempo, monthFilter]);
   const { data, loading, error } = useDuckDBQuery(sql, [sql]);
   if (error) return <div className="card" style={{ color: 'var(--red-2)' }}>Erro charts temporais: {error}</div>;
 
@@ -723,9 +809,20 @@ const ChartsTemporais = ({ where, filters, setF }) => {
   const anual = JSON.parse(row.anual || '[]');
   let diaria = JSON.parse(row.diaria || '[]');
   let mensal = JSON.parse(row.mensal || '[]');
-  // ordem cronológica
   diaria = diaria.slice().reverse();
   mensal = mensal.slice().reverse();
+  // Label do anual: se monthFilter, mostra "Mar 2024", "Mar 2025"; senão só ano
+  const MES_PT = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  const anualLabels = anual.map((x) => monthFilter
+    ? `${MES_PT[parseInt(monthFilter, 10)]}/${String(x.y).slice(-2)}`
+    : String(x.y));
+  // mês mais recente do filtro (pra destacar no n-vendas)
+  const activeAnoMesIdx = (() => {
+    if (!filters.anoMes || !filters.anoMes.length) return null;
+    // pega o ultimo mes selecionado mais recente
+    const latest = [...filters.anoMes].sort().reverse()[0];
+    return mensal.findIndex((x) => x.am === latest);
+  })();
 
   // Click handlers reativos
   const onClickAno = async (i, v, lab) => {
@@ -767,18 +864,21 @@ const ChartsTemporais = ({ where, filters, setF }) => {
       </h3>
       <div className="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 22 }}>
         <div className="card">
-          <div className="card-title-row"><h2 className="card-title">Anual (clique = filtrar ano)</h2></div>
-          <AstroBarV values={anual.map((x) => x.v)} labels={anual.map((x) => String(x.y))}
+          <div className="card-title-row"><h2 className="card-title">{monthFilter ? `Anual · ${MES_PT[parseInt(monthFilter, 10)]} ano-a-ano` : 'Anual (clique = filtrar ano)'}</h2></div>
+          <AstroBarV values={anual.map((x) => x.v)} labels={anualLabels}
                       color="cyan" height={220} onBarClick={onClickAno}
                       activeIdx={activeAnoIdx >= 0 ? activeAnoIdx : null} />
         </div>
         <div className="card">
           <div className="card-title-row"><h2 className="card-title">Diária · últ 60d</h2></div>
-          <AstroLine values={diaria.map((x) => x.v)} color="var(--cyan)" height={220} />
+          <AstroLine values={diaria.map((x) => x.v)} labels={diaria.map((x) => x.d)}
+                     color="var(--cyan)" height={220} fmt={_fmtBRLk} />
         </div>
         <div className="card">
-          <div className="card-title-row"><h2 className="card-title">Nº Vendas Mensal · 18m</h2></div>
-          <AstroLine values={mensal.map((x) => x.n)} color="var(--green)" height={220} />
+          <div className="card-title-row"><h2 className="card-title">Nº Vendas Mensal · 18m {activeAnoMesIdx != null && activeAnoMesIdx >= 0 && <span style={{ fontSize: 10, color: 'var(--cyan)', marginLeft: 6 }}>· filtro destacado</span>}</h2></div>
+          <AstroLine values={mensal.map((x) => x.n)} labels={mensal.map((x) => x.am)}
+                     color="var(--green)" height={220} fmt={(v) => _fmtNum(v) + ' vendas'}
+                     activeIdx={activeAnoMesIdx >= 0 ? activeAnoMesIdx : null} />
         </div>
       </div>
     </>
