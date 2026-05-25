@@ -40,50 +40,66 @@ const _fmtPct = (v, d = 1) => {
 };
 
 // ===== Mini chart: bar vertical via SVG =====
+// Renderiza SVG em tamanho NATIVO (W × H px) dentro de wrapper com scroll-x.
+// Sem preserveAspectRatio="none": rx="3" mantém cantos redondos, sem distorcer.
 const AstroBarV = ({ values, labels, color = 'cyan', height = 220, fmt = _fmtBRLk, onBarClick, activeIdx }) => {
   if (!values || !values.length) return <div className="empty">sem dados</div>;
   const max = Math.max(...values, 1);
   const palette = { cyan: '#22d3ee', green: '#10b981', amber: '#f59e0b', violet: '#a78bfa', red: '#ef4444' };
   const color1 = palette[color] || palette.cyan;
   const N = values.length;
-  const W = 600, H = height;
-  const padT = 28, padB = 26, padL = 8, padR = 8;
-  const innerW = W - padL - padR;
+  const padT = 28, padB = 32, padL = 12, padR = 12;
+  // slot por barra: 80 (poucos), 60 (médio), 42 (muitos)
+  const barSlot = N <= 4 ? 90 : (N <= 8 ? 65 : (N <= 14 ? 50 : 42));
+  const W = Math.max(280, padL + padR + N * barSlot);
+  const H = height;
   const innerH = H - padT - padB;
-  const barW = Math.min(48, (innerW / N) * 0.7);
-  const gap = (innerW - barW * N) / Math.max(1, N - 1) || 0;
+  const barW = Math.min(54, barSlot * 0.62);
+  const rotateLabel = N > 8 || labels.some((l) => String(l).length > 5);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ width: '100%', height, display: 'block' }}>
-      {values.map((v, i) => {
-        const h = (v / max) * innerH;
-        const x = padL + i * (barW + gap);
-        const y = padT + (innerH - h);
-        const isActive = activeIdx === i;
-        return (
-          <g key={i} onClick={() => onBarClick && onBarClick(i, v, labels[i])} style={{ cursor: onBarClick ? 'pointer' : 'default' }}>
-            <rect
-              x={x} y={y} width={barW} height={Math.max(2, h)}
-              rx="4"
-              fill={color1}
-              opacity={isActive ? 1 : (activeIdx != null ? 0.45 : 0.9)}
-            >
-              <title>{`${labels[i]}: ${fmt(v)}`}</title>
-            </rect>
-            <text x={x + barW/2} y={y - 6} textAnchor="middle"
-                  style={{ fontSize: 11, fill: '#cbd5e1', fontFamily: 'JetBrains Mono, monospace' }}>{fmt(v)}</text>
-            <text x={x + barW/2} y={H - 8} textAnchor="middle"
-                  style={{ fontSize: 11, fill: '#94a3b8' }}>{labels[i]}</text>
-          </g>
-        );
-      })}
-    </svg>
+    <div style={{ width: '100%', overflowX: 'auto', overflowY: 'hidden' }}>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        {/* baseline */}
+        <line x1={padL} y1={H - padB + 0.5} x2={W - padR} y2={H - padB + 0.5}
+              stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+        {values.map((v, i) => {
+          const h = (v / max) * innerH;
+          const cx = padL + barSlot * (i + 0.5);
+          const x = cx - barW / 2;
+          const y = padT + (innerH - h);
+          const isActive = activeIdx === i;
+          const labelY = H - 12;
+          return (
+            <g key={i} onClick={() => onBarClick && onBarClick(i, v, labels[i])} style={{ cursor: onBarClick ? 'pointer' : 'default' }}>
+              <rect
+                x={x} y={y} width={barW} height={Math.max(2, h)}
+                rx="3"
+                fill={color1}
+                opacity={isActive ? 1 : (activeIdx != null ? 0.4 : 0.92)}
+              >
+                <title>{`${labels[i]}: ${fmt(v)}`}</title>
+              </rect>
+              <text x={cx} y={y - 6} textAnchor="middle"
+                    style={{ fontSize: 11, fill: '#cbd5e1', fontFamily: 'JetBrains Mono, monospace', pointerEvents: 'none' }}>{fmt(v)}</text>
+              {rotateLabel ? (
+                <text x={cx} y={labelY} textAnchor="end" transform={`rotate(-35 ${cx} ${labelY})`}
+                      style={{ fontSize: 10, fill: '#94a3b8', pointerEvents: 'none' }}>{labels[i]}</text>
+              ) : (
+                <text x={cx} y={labelY} textAnchor="middle"
+                      style={{ fontSize: 11, fill: '#94a3b8', pointerEvents: 'none' }}>{labels[i]}</text>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+    </div>
   );
 };
 
 // ===== Mini chart: line area =====
 const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200 }) => {
   if (!values || !values.length) return <div className="empty">sem dados</div>;
-  const W = 600, H = height, P = 30;
+  const W = 600, H = height, P = 22;
   const max = Math.max(...values), min = Math.min(...values);
   const range = max - min || 1;
   const pts = values.map((v, i) => {
@@ -94,6 +110,7 @@ const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200 }) => {
   const path = pts.map((p, i) => (i === 0 ? `M ${p[0]} ${p[1]}` : `L ${p[0]} ${p[1]}`)).join(' ');
   const area = `${path} L ${pts[pts.length-1][0]} ${H-P} L ${pts[0][0]} ${H-P} Z`;
   const gradId = `astro-line-grad-${Math.random().toString(36).slice(2,8)}`;
+  // preserveAspectRatio meet com viewBox 600x200 + width 100% se ajusta sem distorcer
   return (
     <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ width: '100%', height, display: 'block' }}>
       <defs>
@@ -103,7 +120,7 @@ const AstroLine = ({ values, labels, color = 'var(--cyan)', height = 200 }) => {
         </linearGradient>
       </defs>
       <path d={area} fill={`url(#${gradId})`} />
-      <path d={path} stroke={color} strokeWidth="2" fill="none" />
+      <path d={path} stroke={color} strokeWidth="2" fill="none" vectorEffect="non-scaling-stroke" />
     </svg>
   );
 };
@@ -292,24 +309,27 @@ const DEFAULT_FILTERS_ASTRO = {
   transportadora: [],
   recomprador: 'all',    // all | Recompra | Novo
   pessoa: 'all',         // all | F | J
-  // cross-filters por clique
+  // cross-filters por clique (qualquer visual)
   xfUf: null,
   xfPgto: null,
   xfTransp: null,
   xfMarca: null,
+  xfCategoria: null,
+  xfSubcat: null,
+  xfSeo: null,
 };
 
 const buildWhere = (f) => {
   const parts = [];
   parts.push(`situacao IS DISTINCT FROM 'Cancelado'`);
   parts.push(`data_pedido IS NOT NULL`);
-  if (f.anoMes.length) parts.push(`strftime(data_pedido, '%Y-%m') IN (${_sqlList(f.anoMes)})`);
+  if (f.anoMes && f.anoMes.length) parts.push(`strftime(data_pedido, '%Y-%m') IN (${_sqlList(f.anoMes)})`);
   if (f.diaUtil === 'util') parts.push(`dayofweek(data_pedido) BETWEEN 1 AND 5`);
   if (f.diaUtil === 'fds') parts.push(`dayofweek(data_pedido) IN (0, 6)`);
-  if (f.marca.length) parts.push(`marca IN (${_sqlList(f.marca)})`);
-  if (f.categoria.length) parts.push(`categoria_mae IN (${_sqlList(f.categoria)})`);
-  if (f.subcat.length) parts.push(`sub_categoria IN (${_sqlList(f.subcat)})`);
-  if (f.transportadora.length) parts.push(`nome_transportador IN (${_sqlList(f.transportadora)})`);
+  if (f.marca && f.marca.length) parts.push(`marca IN (${_sqlList(f.marca)})`);
+  if (f.categoria && f.categoria.length) parts.push(`categoria_mae IN (${_sqlList(f.categoria)})`);
+  if (f.subcat && f.subcat.length) parts.push(`sub_categoria IN (${_sqlList(f.subcat)})`);
+  if (f.transportadora && f.transportadora.length) parts.push(`nome_transportador IN (${_sqlList(f.transportadora)})`);
   if (f.recomprador === 'Recompra') parts.push(`Recompra = 'Recompra'`);
   if (f.recomprador === 'Novo') parts.push(`(Recompra IS NULL OR Recompra <> 'Recompra')`);
   if (f.pessoa === 'F') parts.push(`cliente_tipo_pessoa = 'F'`);
@@ -318,7 +338,18 @@ const buildWhere = (f) => {
   if (f.xfPgto) parts.push(`forma_pagamento = '${_sqlEsc(f.xfPgto)}'`);
   if (f.xfTransp) parts.push(`nome_transportador = '${_sqlEsc(f.xfTransp)}'`);
   if (f.xfMarca) parts.push(`marca = '${_sqlEsc(f.xfMarca)}'`);
+  if (f.xfCategoria) parts.push(`categoria_mae = '${_sqlEsc(f.xfCategoria)}'`);
+  if (f.xfSubcat) parts.push(`sub_categoria = '${_sqlEsc(f.xfSubcat)}'`);
+  if (f.xfSeo) parts.push(`seo_title = '${_sqlEsc(f.xfSeo)}'`);
   return parts.join(' AND ');
+};
+
+// Mapa col → key xf (pra hierarquia saber qual xf togglar por nível)
+const COL_TO_XF = {
+  marca: 'xfMarca',
+  categoria_mae: 'xfCategoria',
+  sub_categoria: 'xfSubcat',
+  seo_title: 'xfSeo',
 };
 
 // ===========================================================================
@@ -496,21 +527,28 @@ const ActiveChips = ({ filters, setF }) => {
   if (filters.xfPgto) chips.push({ k: 'xfPgto', label: `Pgto: ${filters.xfPgto}` });
   if (filters.xfTransp) chips.push({ k: 'xfTransp', label: `Transp: ${filters.xfTransp}` });
   if (filters.xfMarca) chips.push({ k: 'xfMarca', label: `Marca: ${filters.xfMarca}` });
+  if (filters.xfCategoria) chips.push({ k: 'xfCategoria', label: `Cat: ${filters.xfCategoria}` });
+  if (filters.xfSubcat) chips.push({ k: 'xfSubcat', label: `Sub: ${filters.xfSubcat}` });
+  if (filters.xfSeo) chips.push({ k: 'xfSeo', label: `Produto: ${filters.xfSeo.length > 36 ? filters.xfSeo.slice(0, 36) + '…' : filters.xfSeo}` });
+  if (filters.anoMes && filters.anoMes.length) chips.push({ k: 'anoMes', label: `Ano-Mês: ${filters.anoMes.length === 1 ? filters.anoMes[0] : filters.anoMes.length + ' sel'}` });
   if (!chips.length) return null;
   return (
     <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
-      <span style={{ fontSize: 11, color: 'var(--mute)', textTransform: 'uppercase', letterSpacing: 0.4 }}>Cross-filter:</span>
+      <span style={{ fontSize: 11, color: 'var(--mute)', textTransform: 'uppercase', letterSpacing: 0.4 }}>Filtros ativos:</span>
       {chips.map((c) => (
-        <button key={c.k} onClick={() => setF({ [c.k]: null })}
+        <button key={c.k} onClick={() => setF({ [c.k]: c.k === 'anoMes' ? [] : null })}
+                title={c.label}
                 style={{
                   background: 'rgba(34,211,238,0.12)', border: '1px solid var(--cyan-dim)',
                   color: 'var(--cyan-2)', borderRadius: 999, padding: '4px 10px', fontSize: 11,
                   cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6,
+                  maxWidth: 280, overflow: 'hidden',
                 }}>
-          {c.label} <span style={{ fontSize: 10, opacity: 0.7 }}>×</span>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.label}</span>
+          <span style={{ fontSize: 10, opacity: 0.7 }}>×</span>
         </button>
       ))}
-      <button onClick={() => setF({ xfUf: null, xfPgto: null, xfTransp: null, xfMarca: null })}
+      <button onClick={() => setF({ xfUf: null, xfPgto: null, xfTransp: null, xfMarca: null, xfCategoria: null, xfSubcat: null, xfSeo: null, anoMes: [] })}
               style={{ background: 'transparent', border: 'none', color: 'var(--mute)', fontSize: 11, cursor: 'pointer' }}>
         limpar todos
       </button>
@@ -658,18 +696,37 @@ const ChartsTemporais = ({ where, filters, setF }) => {
   mensal = mensal.slice().reverse();
 
   // Click handlers reativos
-  const onClickAno = (i, v, lab) => {
-    // Filtra ano-mes pelo ano clicado
+  const onClickAno = async (i, v, lab) => {
     const ano = String(lab);
-    // Toggle: se todos os ano_mes do ano selecionado já estão setados, limpa
-    setF((prev) => ({ anoMes: (prev.anoMes && prev.anoMes.length && prev.anoMes.every((am) => am.startsWith(ano))) ? [] : (window.__astroAmAll || []).filter((am) => am.startsWith(ano)) }));
+    // Garante que temos a lista de YYYY-MM (se não, carrega on-demand).
+    let amAll = window.__astroAmAll;
+    if (!amAll || !amAll.length) {
+      try {
+        const rows = await _runQuery(`SELECT DISTINCT strftime(data_pedido, '%Y-%m') AS am FROM vendas WHERE data_pedido IS NOT NULL`);
+        amAll = rows.map((r) => r.am).sort();
+        window.__astroAmAll = amAll;
+      } catch (e) { amAll = []; }
+    }
+    const matched = amAll.filter((am) => am.startsWith(ano));
+    setF((prev) => {
+      const allSet = prev.anoMes && prev.anoMes.length && matched.every((am) => prev.anoMes.includes(am)) && prev.anoMes.length === matched.length;
+      return { anoMes: allSet ? [] : matched };
+    });
   };
   const onClickMes = (i, v, lab) => {
-    // lab vem como 'YYYY-MM' (slice 2 = MM) — usamos o am do mensal[i] direto
     const am = mensal[i] && mensal[i].am;
     if (!am) return;
     setF((prev) => ({ anoMes: prev.anoMes.includes(am) ? prev.anoMes.filter((x) => x !== am) : [...prev.anoMes, am] }));
   };
+
+  // marca ano ativo (todos os ano-mes filtrados pertencem ao mesmo ano)
+  const activeAnoIdx = (() => {
+    if (!filters.anoMes || !filters.anoMes.length) return null;
+    const anos = new Set(filters.anoMes.map((am) => am.slice(0, 4)));
+    if (anos.size !== 1) return null;
+    const ano = [...anos][0];
+    return anual.findIndex((x) => String(x.y) === ano);
+  })();
 
   return (
     <>
@@ -680,7 +737,8 @@ const ChartsTemporais = ({ where, filters, setF }) => {
         <div className="card">
           <div className="card-title-row"><h2 className="card-title">Anual (clique = filtrar ano)</h2></div>
           <AstroBarV values={anual.map((x) => x.v)} labels={anual.map((x) => String(x.y))}
-                      color="cyan" height={220} onBarClick={onClickAno} />
+                      color="cyan" height={220} onBarClick={onClickAno}
+                      activeIdx={activeAnoIdx >= 0 ? activeAnoIdx : null} />
         </div>
         <div className="card">
           <div className="card-title-row"><h2 className="card-title">Diária · últ 60d</h2></div>
@@ -775,7 +833,7 @@ const ChartsPerfil = ({ where, filters, setF }) => {
 // Hierarquia drill-down (queries lazy por nó expandido)
 // ===========================================================================
 
-const HierarchyRow = ({ levels, depth, parentPath, where, topN }) => {
+const HierarchyRow = ({ levels, depth, parentPath, where, topN, filters, setF }) => {
   // Cada componente faz sua própria query no nível atual + filtros parent.
   const col = levels[depth];
   const extra = parentPath.map((p) => `${p.col} = '${_sqlEsc(p.val)}'`).join(' AND ');
@@ -816,20 +874,31 @@ const HierarchyRow = ({ levels, depth, parentPath, where, topN }) => {
           parentPath={parentPath}
           where={where}
           topN={topN}
+          filters={filters}
+          setF={setF}
         />
       ))}
     </>
   );
 };
 
-const HierarchyNode = ({ row, col, depth, hasChildren, levels, parentPath, where, topN }) => {
+const HierarchyNode = ({ row, col, depth, hasChildren, levels, parentPath, where, topN, filters, setF }) => {
   const [open, setOpen] = React.useState(false);
   const marg = row.margem || 0;
   const margColor = marg >= 0.3 ? 'var(--green-2)' : (marg >= 0 ? 'var(--text-2)' : 'var(--red-2)');
+  const xfKey = COL_TO_XF[col];
+  const activeXf = xfKey && filters && filters[xfKey] === row.k;
+
+  const toggleXf = (e) => {
+    e.stopPropagation();
+    if (!xfKey || !setF) return;
+    setF((prev) => ({ [xfKey]: prev[xfKey] === row.k ? null : row.k }));
+  };
+  const toggleOpen = () => { if (hasChildren) setOpen((v) => !v); };
+
   return (
     <>
       <div
-        onClick={() => hasChildren && setOpen((v) => !v)}
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 110px 70px 110px 70px 64px',
@@ -837,23 +906,41 @@ const HierarchyNode = ({ row, col, depth, hasChildren, levels, parentPath, where
           padding: '6px 4px',
           paddingLeft: 6 + depth * 18,
           fontSize: 12,
-          cursor: hasChildren ? 'pointer' : 'default',
-          background: open ? 'var(--surface-2)' : 'transparent',
+          background: activeXf ? 'rgba(34,211,238,0.08)' : (open ? 'var(--surface-2)' : 'transparent'),
           borderBottom: '1px solid rgba(255,255,255,0.04)',
+          borderLeft: activeXf ? '2px solid var(--cyan)' : '2px solid transparent',
           color: depth === 0 ? 'var(--text)' : 'var(--text-2)',
           fontWeight: depth === 0 ? 600 : 400,
         }}
-        onMouseEnter={(e) => { if (!open && hasChildren) e.currentTarget.style.background = 'rgba(255,255,255,0.02)'; }}
-        onMouseLeave={(e) => { if (!open) e.currentTarget.style.background = 'transparent'; }}
       >
-        <span style={{ display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4, overflow: 'hidden' }}>
           {hasChildren ? (
-            <span style={{
-              display: 'inline-block', width: 12, color: 'var(--mute)', fontSize: 10,
-              transform: open ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 160ms',
-            }}>▶</span>
-          ) : <span style={{ width: 12 }} />}
-          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={row.k}>{row.k}</span>
+            <span
+              onClick={toggleOpen}
+              title="expandir"
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                width: 16, height: 16, color: 'var(--mute)', fontSize: 10,
+                transform: open ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 160ms',
+                cursor: 'pointer', borderRadius: 3,
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            >▶</span>
+          ) : <span style={{ width: 16 }} />}
+          <span
+            onClick={toggleXf}
+            title={`${row.k} · clique p/ filtrar`}
+            style={{
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              cursor: xfKey ? 'pointer' : 'default',
+              color: activeXf ? 'var(--cyan-2)' : 'inherit',
+              padding: '2px 4px', borderRadius: 3,
+              flex: 1,
+            }}
+            onMouseEnter={(e) => { if (xfKey) e.currentTarget.style.background = 'rgba(34,211,238,0.06)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+          >{row.k}</span>
         </span>
         <span style={{ textAlign: 'right', fontFamily: 'var(--font-mono)' }}>{_fmtBRLk(row.venda)}</span>
         <span style={{ textAlign: 'right', color: 'var(--mute)' }}>{_fmtPct(row.pct)}</span>
@@ -868,18 +955,20 @@ const HierarchyNode = ({ row, col, depth, hasChildren, levels, parentPath, where
           parentPath={[...parentPath, { col, val: row.k }]}
           where={where}
           topN={topN}
+          filters={filters}
+          setF={setF}
         />
       )}
     </>
   );
 };
 
-const HierarchyTable = ({ title, levels, where, topN = 15 }) => {
+const HierarchyTable = ({ title, levels, where, topN = 15, filters, setF }) => {
   return (
     <div className="card" style={{ padding: 14 }}>
       <div className="card-title-row" style={{ marginBottom: 10 }}>
         <h2 className="card-title">{title}</h2>
-        <span style={{ fontSize: 10, color: 'var(--mute)', fontFamily: 'var(--font-mono)' }}>top {topN}</span>
+        <span style={{ fontSize: 10, color: 'var(--mute)', fontFamily: 'var(--font-mono)' }}>top {topN} · ▶ expande · nome filtra</span>
       </div>
       <div style={{
         display: 'grid', gridTemplateColumns: '1fr 110px 70px 110px 70px 64px',
@@ -894,7 +983,7 @@ const HierarchyTable = ({ title, levels, where, topN = 15 }) => {
         <span style={{ textAlign: 'right' }}>N°</span>
       </div>
       <div style={{ maxHeight: 540, overflow: 'auto' }}>
-        <HierarchyRow levels={levels} depth={0} parentPath={[]} where={where} topN={topN} />
+        <HierarchyRow levels={levels} depth={0} parentPath={[]} where={where} topN={topN} filters={filters} setF={setF} />
       </div>
     </div>
   );
@@ -904,10 +993,15 @@ const HierarchyTable = ({ title, levels, where, topN = 15 }) => {
 // Top 30 SEO flat (sortable + busca)
 // ===========================================================================
 
-const TopSeoFlat = ({ where }) => {
+const TopSeoFlat = ({ where, filters, setF }) => {
   const [sortKey, setSortKey] = React.useState('venda');
   const [sortDir, setSortDir] = React.useState('desc');
   const [q, setQ] = React.useState('');
+  const activeSeo = filters && filters.xfSeo;
+  const toggleSeo = (produto) => {
+    if (!setF) return;
+    setF((prev) => ({ xfSeo: prev.xfSeo === produto ? null : produto }));
+  };
   const sql = React.useMemo(() => `
     SELECT seo_title AS produto,
            SUM(valor_rateado)::DOUBLE AS venda,
@@ -964,15 +1058,25 @@ const TopSeoFlat = ({ where }) => {
             </tr>
           </thead>
           <tbody>
-            {rows.map((r, i) => (
-              <tr key={i}>
-                <td style={{ maxWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={r.produto}>{r.produto}</td>
-                <td className="num">{_fmtBRLk(r.venda)}</td>
-                <td className="num">{_fmtBRLk(r.resultado)}</td>
-                <td className="num" style={{ color: r.margem >= 0.3 ? 'var(--green-2)' : (r.margem >= 0 ? 'var(--text-2)' : 'var(--red-2)') }}>{_fmtPct(r.margem)}</td>
-                <td className="num" style={{ color: 'var(--mute)' }}>{_fmtNum(r.n)}</td>
-              </tr>
-            ))}
+            {rows.map((r, i) => {
+              const active = activeSeo === r.produto;
+              return (
+                <tr key={i}
+                    onClick={() => toggleSeo(r.produto)}
+                    style={{
+                      cursor: 'pointer',
+                      background: active ? 'rgba(34,211,238,0.10)' : 'transparent',
+                      borderLeft: active ? '2px solid var(--cyan)' : '2px solid transparent',
+                    }}
+                    title={active ? 'remover filtro' : `filtrar por ${r.produto}`}>
+                  <td style={{ maxWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: active ? 'var(--cyan-2)' : 'inherit' }} title={r.produto}>{r.produto}</td>
+                  <td className="num">{_fmtBRLk(r.venda)}</td>
+                  <td className="num">{_fmtBRLk(r.resultado)}</td>
+                  <td className="num" style={{ color: r.margem >= 0.3 ? 'var(--green-2)' : (r.margem >= 0 ? 'var(--text-2)' : 'var(--red-2)') }}>{_fmtPct(r.margem)}</td>
+                  <td className="num" style={{ color: 'var(--mute)' }}>{_fmtNum(r.n)}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       )}
@@ -1137,13 +1241,13 @@ const PageAstroDash = () => {
           <div className="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginBottom: 22 }}>
             <HierarchyTable title="Marca → Categoria → Sub → Produto"
                               levels={['marca', 'categoria_mae', 'sub_categoria', 'seo_title']}
-                              where={where} topN={15} />
+                              where={where} topN={15} filters={filters} setF={setF} />
             <HierarchyTable title="Categoria → Sub → Produto"
                               levels={['categoria_mae', 'sub_categoria', 'seo_title']}
-                              where={where} topN={15} />
+                              where={where} topN={15} filters={filters} setF={setF} />
           </div>
 
-          <TopSeoFlat where={where} />
+          <TopSeoFlat where={where} filters={filters} setF={setF} />
 
           <BottomBars where={where} filters={filters} setF={setF} />
 

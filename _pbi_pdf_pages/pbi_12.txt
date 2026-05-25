@@ -1,0 +1,89 @@
+2026 (Ano) + abr… 
+Ano, Mês
+Todos 
+Dia útil
+Todos 
+CATEGORIA RECOMPRA/NOVO
+Todos 
+MARCA
+Todos  Todos 
+TRANSPORTADORA
+Evolução das vendas diárias
+Ano
+05 de abr 12 de abr 19 de abr 26 de abr
+0,36 Mil 0,54 Mil 0,6 Mil
+0,2 Mil
+0,17 Mil 0,14 Mil 0,29 Mil 0,53 Mil 0,03 Mil 0,23 Mil 0,11 Mil 0,04 Mil 0,67 Mil
+89,9 Mil
+52,85 Mil
+97,44 Mil 94,18 Mil
+3,66 Mil
+87,87 Mil
+92,31 Mil 87,56 Mil
+48,05 Mil
+65,8 Mil
+65 Mil 60 Mil
+72,11 Mil
+60,28 Mil
+71,46 Mil
+4,55 Mil
+46,4 Mil
+58,26 Mil 56,02 Mil
+57,4 Mil
+50,27 Mil 44,57 Mil 42,19 Mil
+26,33 Mil 29,64 Mil 26,26 Mil
+58,07 Mil
+30,61 Mil
+41,32 Mil
+46,68 Mil
+34,26 Mil
+0,14 Mil
+9,69 Mil
+29,63 Mil
+10,71 Mil 11,12 Mil
+categoria_mae Vendas/dia útil
+
+Vendas PYTD
+(DiaÚtil)
+Crescimento %
+YTD vs PYTD
+Delta Vendas
+YTD vs PYTD
+Tendência Linear
+(vendas/mês)
+Tendência % Mensal (log)
+ Calçados 83.358,97 66.166,07 25,98% 17.192,90 285,72 1,15%
+ Luvas 43.962,49 31.739,38 38,51% 12.223,11 331,64 3,09%
+ Protetores Auditivos 10.068,37 8.073,05 24,72% 1.995,32 13,34 1,81%
+ Protetores Respiratórios 7.806,20 4.794,35 62,82% 3.011,85 122,67 4,48%
+ Óculos 5.070,93 3.867,81 31,11% 1.203,12 -30,75 0,71%
+ Capacetes 3.430,16 2.457,27 39,59% 972,89 47,11 1,75%
+ Trabalho em Altura 2.510,16 2.279,03 10,14% 231,13 30,82 0,73%
+ Macacões de Segurança 1.816,50 1.116,95 62,63% 699,56 39,16 5,16%
+ Coletes Refletivos 1.515,55 941,61 60,95% 573,95 -1,13 4,52%
+ 1.228,47 1.228,47 -7,03 0,91%
+ Aventais 1.150,29 710,64 61,87% 439,65 21,41 0,47%
+ Cintas Ergonômicas 974,66 559,31 74,26% 415,35 10,17 0,77%
+ Capas de Chuva 723,05 549,13 31,67% 173,92 10,51 -1,75%
+ Bloqueadores Solares 671,97 402,95 66,76% 269,02 -3,58 -2,44%
+ Protetores Faciais 637,29 410,52 55,24% 226,78 17,32 -0,33%
+ Fitas Adesivas 551,52 394,94 39,65% 156,58 -10,87 -1,28%
+ Creme para Mãos 463,63 326,25 42,11% 137,38 0,72 -2,39%
+Total 167.936,06 126.311,47 32,95% 41.624,58 818,26 1,66%
+DASH
+DASH - FATURAMENTO
+Vendas/Dia úitl
+CFV
+GERAL
+CAMPANHAS
+CAMPANHA <> ESTADO
+GERAL - FATURAMENTO
+ANALISE DE VENDAS
+TENDENCIA COMPOSIÇÃO
+TENDENCIA TEMPORAL
+TENDENCIA PRODUTOS
+TENDENCIAS MARCAS
+COMPOSIÇÃO DE VENDA
+COMPOSIÇÃO DE VENDA…
+COHORT VALOR
+COHORT VENDAS

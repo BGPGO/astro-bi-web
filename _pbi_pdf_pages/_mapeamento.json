@@ -1,0 +1,221 @@
+{
+  "fonte": "Astro EPI Power BI - 17 telas (PDF export)",
+  "moeda": "BRL",
+  "periodo_padrao": "Ano + Mês (2026 abril) com toggle Dia Útil",
+  "sidebar_ordem": [
+    "DASH",
+    "DASH - FATURAMENTO",
+    "Vendas/Dia útil",
+    "CFV",
+    "GERAL",
+    "CAMPANHAS",
+    "CAMPANHA <> ESTADO",
+    "GERAL - FATURAMENTO",
+    "ANALISE DE VENDAS",
+    "TENDENCIA COMPOSIÇÃO",
+    "TENDENCIA TEMPORAL",
+    "TENDENCIA PRODUTOS",
+    "TENDENCIAS MARCAS",
+    "COMPOSIÇÃO DE VENDA",
+    "COMPOSIÇÃO DE VENDA (TOTAL)",
+    "COHORT VALOR",
+    "COHORT VENDAS"
+  ],
+  "filtros_globais": [
+    "Ano, Mês (default 2026 + abril)",
+    "Dia útil (toggle)",
+    "Marca (multi)",
+    "Categoria Recompra/Novo",
+    "Transportadora (multi)",
+    "RECOMPRA/NOVO"
+  ],
+  "telas": [
+    {
+      "page_n": 1,
+      "slug": "dash",
+      "nome": "Dash",
+      "descricao": "Visão executiva mega-densa do mês atual: 8 KPIs financeiros no topo (CMV, CFV, Valor venda, Valor Líquido, Resultado bruto/líquido %, CFV %, Total de vendas, ticket médio, Resultado Bruto), 3 linhas temporais diárias lado a lado (Venda Bruta, Ticket Médio, Nº de vendas), donuts/barras de composição (Categoria mãe, Marca, Estado, Região, Recorrência PJ/PF/IE, Tipo de pagamento), tabela Categoria Mãe e Marca com % e CVM, tabela Produto Pai e Produto detalhada com Vendas/dia útil, ticket médio e ticket carrinho, evolução mensal e anual de venda bruta, e mapa do Brasil + Cidade ranking. Tela 'tudo em uma'.",
+      "dimensoes": ["data_pedido", "categoria_mae", "marca", "subcategoria", "uf", "regiao", "cidade", "transportadora", "cliente_tipo_pessoa", "tem_ie", "meio_pagamento", "produto_pai", "produto", "recorrencia_novo"],
+      "metricas": ["Valor venda", "CMV", "CFV", "CFV %", "Valor Líquido", "Resultado Bruto", "Resultado bruto %", "Resultado líquido %", "Vendas/Dia útil", "ticket médio", "ticket médio carrinho", "% novos", "% recorrentes", "Total de vendas"],
+      "visuais": ["kpi-card", "line", "bar-horizontal", "donut", "table", "treemap", "map-brasil"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "cross-filter forte: clicar em uma barra de marca refiltra TODAS as outras visuais; drill por subcategoria; chip-stack lateral mostra filtros ativos (Categoria, Marca, SubCategoria, UF, Transportadora)"
+    },
+    {
+      "page_n": 2,
+      "slug": "dash-faturamento",
+      "nome": "Dash - Faturamento",
+      "descricao": "Variante da Dash com foco em faturamento e comparação ano vs ano. Mesmos KPIs (CMV, CFV, Resultado bruto/líquido) mas com Comparação de venda bruta do mês atual entre 2024/2025/2026, e Evolução mensal cobrindo maio-2025 a abril-2026 (12 meses rolling). Mantém os 3 line charts diários, donuts de composição e tabelas Categoria Mãe / Marca / Estado / Produto Pai / Produto.",
+      "dimensoes": ["data_pedido", "categoria_mae", "marca", "subcategoria", "uf", "cidade", "transportadora", "meio_pagamento", "forma_pagamento", "produto", "produto_pai", "recorrencia_novo"],
+      "metricas": ["Valor venda", "CMV", "CFV", "Resultado Bruto", "Resultado bruto %", "Resultado líquido %", "Vendas/Dia útil", "ticket médio", "Total de vendas", "% novos", "% recorrentes"],
+      "visuais": ["kpi-card", "line", "bar-horizontal", "donut", "table", "bar-vertical-comparativo-anual"],
+      "filtros": ["ano-mes", "dia-util", "marca", "categoria-recompra-novo", "transportadora"],
+      "interatividade": "cross-filter; comparativo ano sobre ano (YTD vs PYTD); drill em hierarquia data (ano → mês → dia)"
+    },
+    {
+      "page_n": 3,
+      "slug": "vendas-dia-util",
+      "nome": "Vendas/Dia Útil",
+      "descricao": "Matriz/heatmap Marca × Mês com valor médio vendas por dia útil. Linha do tempo no topo (linha) com evolução de vendas diárias agrupadas por mês ao longo de 17 meses (jan/2025 a mai/2026). Tabela principal exibe top marcas (Cartom, Volk, Marluvas, 3M...) linha a linha, colunas mês (mai-2025 a abr-2026) e total.",
+      "dimensoes": ["marca", "ano_mes"],
+      "metricas": ["Vendas/Dia útil", "Valor venda médio dia útil"],
+      "visuais": ["line", "matrix-heatmap", "table-pivot"],
+      "filtros": ["ano-mes", "marca", "categoria-recompra-novo", "transportadora"],
+      "interatividade": "filtros laterais (Último/Selecionar/LIMPAR); seleção de período redesenha matriz; clicar em marca cross-filtra a linha temporal"
+    },
+    {
+      "page_n": 4,
+      "slug": "cfv",
+      "nome": "CFV",
+      "descricao": "Custo Financeiro de Venda: donut com decomposição do CFV em Taxa Fixa (7,63%), Taxa Variável (31,98%) e Descontos (60,39%). Tabela mensal completa com Venda Bruta, Taxa Variável, Taxa Fixa, Desconto, CFV total e CFV % ajustado por mês. Donuts complementares: % do total de vendas por Meio de Pagamento (Cartão 35,76%, Boleto Vista 31,95%, Pix 28,69%) e % por número de parcelas (1x 68,21%, 10x 12,82%, 3x 5,54%...). Tabela detalhada Forma Pagamento × Parcelas × CFV total × % CFV × Valor total × Vendas.",
+      "dimensoes": ["ano_mes", "meio_pagamento", "forma_pagamento", "parcelas"],
+      "metricas": ["Venda Bruta", "Taxa Variável", "Taxa Fixa", "Desconto", "CFV total", "CFV % ajustado", "% CFV", "Valor total", "Vendas"],
+      "visuais": ["donut", "table-pivot", "bar-horizontal"],
+      "filtros": ["categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "drill forma pagamento → parcelas; clicar em parcela filtra tabela e donut de CFV"
+    },
+    {
+      "page_n": 5,
+      "slug": "geral",
+      "nome": "Geral",
+      "descricao": "Dashboard de marketing/comercial do mês atual (abril/2026). 3 blocos de KPIs (Recompra: 2655 vendas, 73%, R$ 2,58M valor recorrente, R$ 974 ticket; Novos: 970 vendas, 27%, R$ 634k valor novo, R$ 653 ticket; ADS: gasto, CAC R$ 26,44, ROAS). 4 KPIs financeiros gerais (CMV, CFV, Valor venda, Resultado Bruto). 3 barras horizontais: Vendas por Estado (top 16), por Marca (top 11) e por Categoria Mãe (top 11) com % e valor.",
+      "dimensoes": ["uf", "marca", "categoria_mae"],
+      "metricas": ["Valor venda", "valor recorrente", "valor novo", "% recompra", "% novo", "ticket médio", "Gasto com ADS", "CAC", "ROAS", "Total de vendas"],
+      "visuais": ["kpi-card", "bar-horizontal"],
+      "filtros": ["ano-mes", "marca", "categoria-recompra-novo", "transportadora", "recompra-novo"],
+      "interatividade": "filtro Recompra/Novo no topo recalcula todos os KPIs"
+    },
+    {
+      "page_n": 6,
+      "slug": "campanhas",
+      "nome": "Campanhas",
+      "descricao": "Dashboard de mídia paga: 3 line charts comparando Clicks × Conversões × Vendas novas (diário do mês atual, mensal histórico 2025, mensal CAC). KPIs no rodapé: Gasto (R$ 150.698,96), CFV, Vendas novas (970), Valor Líquido, CAC (R$ 155,36), Resultado Bruto. Mostra evolução temporal de eficiência de ads.",
+      "dimensoes": ["data_pedido", "ano_mes"],
+      "metricas": ["Clicks", "Conversões", "Vendas novas", "Gasto", "CAC", "CFV", "Valor Líquido", "Resultado Bruto", "Resultado bruto %", "CFV %"],
+      "visuais": ["line", "kpi-card"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "linhas múltiplas sobrepostas no mesmo eixo; tooltip com 3 séries no hover"
+    },
+    {
+      "page_n": 7,
+      "slug": "campanha-estado",
+      "nome": "Campanha <> Estado",
+      "descricao": "Cruza performance de ads × geografia × marca. Tabela detalhada por UF com 13 colunas (Clicks, Conversões, Taxa Conversão, Valor clientes novos, Cost/Spend, Vendas novas, CAC, Ticket novo, Ticket recompra, Taxa recompra %, Valor recompra, Receita Total, ROAS). Tabela equivalente por Marca. 3 combo charts: ROAS × Cost por UF, ROAS × Cost por Marca, e ROAS por (Ano,Mês) × Marca + ROAS por (Ano,Mês) × UF.",
+      "dimensoes": ["uf", "marca", "ano_mes"],
+      "metricas": ["Clicks", "Conversões", "Taxa de Conversão", "Cost (Spend)", "Vendas novas", "CAC", "Ticket médio novos", "Ticket médio recompra", "Taxa de recompra", "Valor clientes novos", "Valor recompra", "Receita Total", "ROAS"],
+      "visuais": ["table", "combo-bar-line", "bar-line-overlay"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "tabelas com sort por qualquer coluna; cross-filter UF × Marca; legenda multi-marca clicável"
+    },
+    {
+      "page_n": 8,
+      "slug": "geral-faturamento",
+      "nome": "Geral - Faturamento",
+      "descricao": "Mesmo layout da tela GERAL mas com seleção histórica (snapshot novembro/2025). Permite comparar Recompra (2134, 75%) / Novos (694, 25%) / ADS (CAC R$ 316,65, ROAS 1,74) e KPIs financeiros do período passado vs atual. As 3 barras Vendas por Estado/Marca/Categoria mostram composição daquele mês histórico.",
+      "dimensoes": ["uf", "marca", "categoria_mae"],
+      "metricas": ["Valor venda", "valor recorrente", "valor novo", "% recompra", "% novo", "ticket médio", "Gasto com ADS", "CAC", "ROAS", "Total de vendas", "CMV", "CFV", "Resultado Bruto"],
+      "visuais": ["kpi-card", "bar-horizontal"],
+      "filtros": ["ano-mes (histórico)", "marca", "categoria-recompra-novo", "transportadora"],
+      "interatividade": "snapshot de período passado para comparação cross-temporal"
+    },
+    {
+      "page_n": 9,
+      "slug": "analise-vendas",
+      "nome": "Análise de Vendas",
+      "descricao": "Análise consolidada: barras horizontais Valor total por Estado (16 UFs com % e valor absoluto), linha de Evolução das vendas diárias do mês atual, e tabela detalhada por Categoria (Vendas, % novos, % recorrentes, Vendas/Dia útil, venda absoluta). Tela de 'leitura' menos densa que a Dash.",
+      "dimensoes": ["uf", "data_pedido", "categoria_mae"],
+      "metricas": ["Valor venda", "Vendas/Dia útil", "% novos", "% recorrentes", "Total de vendas"],
+      "visuais": ["bar-horizontal", "line", "table"],
+      "filtros": ["ano-mes", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "clicar em UF filtra a linha temporal e a tabela de categorias"
+    },
+    {
+      "page_n": 10,
+      "slug": "tendencia-composicao",
+      "nome": "Tendência Composição",
+      "descricao": "Matriz Tendência: 2 tabelas pivot lado a lado, Vendas por Marca e Vendas por Categoria, ambas com colunas mês (do ano filtrado) e total. Foco em ver como cada marca/categoria evolui mês a mês dentro do ano.",
+      "dimensoes": ["marca", "categoria_mae", "ano_mes"],
+      "metricas": ["Valor venda"],
+      "visuais": ["table-pivot"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "expandir/colapsar por hierarquia ano → mês; sort por mês mais recente"
+    },
+    {
+      "page_n": 11,
+      "slug": "tendencia-temporal",
+      "nome": "Tendência Temporal",
+      "descricao": "3 line charts empilhados verticalmente cobrindo o mês: Evolução das vendas diárias (R$), Evolução do número de vendas por dia segmentado em Recorrente/Novo/Recompra (barras empilhadas ou linhas múltiplas) e Ticket médio diário.",
+      "dimensoes": ["data_pedido", "recorrencia_novo"],
+      "metricas": ["Valor venda", "Total de vendas", "ticket médio"],
+      "visuais": ["line", "stacked-bar", "line"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "zoom temporal; cross-filter Recorrente/Novo/Recompra muda as 3 visuais"
+    },
+    {
+      "page_n": 12,
+      "slug": "tendencia-produtos",
+      "nome": "Tendência Produtos",
+      "descricao": "Análise de tendência por Categoria com YTD vs PYTD (year-to-date vs prior-year-to-date). Line chart no topo com várias séries de categoria. Tabela principal: Categoria × Vendas/dia útil (DiaÚtil), Vendas PYTD (DiaÚtil), Crescimento % YTD vs PYTD, Delta Vendas YTD vs PYTD, Tendência Linear (vendas/mês), Tendência % Mensal (log). Total Calçados +25,98% YTD vs PYTD.",
+      "dimensoes": ["categoria_mae", "data_pedido"],
+      "metricas": ["Vendas/dia útil", "Vendas PYTD", "Crescimento % YTD vs PYTD", "Delta Vendas", "Tendência Linear", "Tendência % Mensal (log)"],
+      "visuais": ["line", "table-rich"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "tabela rankeável por crescimento; clicar em categoria realça série no line chart"
+    },
+    {
+      "page_n": 13,
+      "slug": "tendencias-marcas",
+      "nome": "Tendências Marcas",
+      "descricao": "Mesma estrutura da Tendência Produtos mas pivotada por Marca. Line chart com múltiplas marcas (Cartom +7,66%, Volk +66,09%, Marluvas +42,58%...). Tabela principal: Marca × Vendas YTD, Vendas PYTD, Crescimento %, Delta Vendas, Tendência Linear, Tendência % Mensal (log).",
+      "dimensoes": ["marca", "data_pedido"],
+      "metricas": ["Vendas YTD", "Vendas PYTD", "Crescimento % YTD vs PYTD", "Delta Vendas", "Tendência Linear (vendas/mês)", "Tendência % Mensal (log)"],
+      "visuais": ["line", "table-rich"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "destaque YTD vs PYTD; ordenar por delta absoluto ou %"
+    },
+    {
+      "page_n": 14,
+      "slug": "composicao-venda",
+      "nome": "Composição de Venda",
+      "descricao": "Painel de drill encadeado: KPI 'Valor/Dia útil' (R$ 161.039,23 com aaaaa_categoria_mae) à esquerda + 5 listas verticais (Categoria, Marca, SubCategoria, UF, Transportadora) cada uma exibindo top valores Vendas/Dia útil. Estado de filtros ativos visível no rodapé como chips (Categoria=Calçados, Marca=Cartom, SubCategoria=Botinas de Segurança, UF=SP).",
+      "dimensoes": ["categoria_mae", "marca", "subcategoria", "uf", "transportadora"],
+      "metricas": ["Vendas/Dia útil"],
+      "visuais": ["kpi-card", "list-ranked"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "DRILL ENCADEADO: clicar em Categoria filtra Marca → filtra SubCategoria → filtra UF → filtra Transportadora. Chips no rodapé mostram caminho atual"
+    },
+    {
+      "page_n": 15,
+      "slug": "composicao-venda-total",
+      "nome": "Composição de Venda (Total)",
+      "descricao": "KPI 'Valor total' R$ 3.220.784,69 + treemap/tabela hierárquica com top marcas (Cartom, Marluvas, 3M, Delta Plus, Soft Works, Camper, Danny) e dentro de cada marca os SEO titles / produtos (SAPATO BIDENSIDADE..., MANGOTE..., ÓCULOS SKY CINZA...). Filtro lateral por seo_title.",
+      "dimensoes": ["marca", "seo_title", "produto"],
+      "metricas": ["Valor total (Preço total ajustado)"],
+      "visuais": ["treemap", "kpi-card", "table-hierarquica"],
+      "filtros": ["ano-mes", "dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "expandir marca para ver produtos; clicar em produto isola o subset; mesmo padrão de chips de filtros ativos"
+    },
+    {
+      "page_n": 16,
+      "slug": "cohort-valor",
+      "nome": "Cohort Valor",
+      "descricao": "Cohort triangular do valor de vendas: cada linha é o mês de aquisição do cliente (janeiro/2024, fevereiro/2024...), colunas são os meses subsequentes mostrando quanto aquele cohort gastou. Diagonal mostra valor recorrente ao longo do tempo. Cobre 2024, 2025 e início de 2026.",
+      "dimensoes": ["mes_primeira_compra (cohort)", "mes_atividade (ano,mes)"],
+      "metricas": ["Valor de Vendas (R$)"],
+      "visuais": ["table-cohort-triangular", "heatmap"],
+      "filtros": ["dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "color scale por intensidade do valor; sort por cohort ou por mês de atividade"
+    },
+    {
+      "page_n": 17,
+      "slug": "cohort-vendas",
+      "nome": "Cohort Vendas",
+      "descricao": "Variante do cohort com contagem de pedidos (não valor). Linhas = mês de aquisição, colunas = mês de atividade subsequente, células = nº de vendas daquele cohort. Cobre 2024 completo, 2025 e 2026. Total 2024 = 26.904 vendas.",
+      "dimensoes": ["mes_primeira_compra (cohort)", "mes_atividade (ano,mes)"],
+      "metricas": ["Nº de Vendas (count)"],
+      "visuais": ["table-cohort-triangular", "heatmap"],
+      "filtros": ["dia-util", "categoria-recompra-novo", "marca", "transportadora"],
+      "interatividade": "color scale por contagem; comparar retenção entre cohorts visualmente"
+    }
+  ]
+}

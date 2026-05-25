@@ -1,0 +1,83 @@
+2026 (Ano) + abr… 
+Ano, Mês
+Todos 
+Dia útil
+Todos 
+CATEGORIA RECOMPRA/NOVO
+Todos 
+MARCA
+Todos  Todos 
+TRANSPORTADORA
+Evolução das vendas diárias
+date
+05 de abr 12 de abr 19 de abr 26 de abr
+169,86 Mil
+107,16 Mil
+217,17 Mil
+4,74 Mil
+201,94 Mil
+5,37 Mil 6,11 Mil 12,28 Mil
+179,59 Mil
+13,63 Mil
+168,65 Mil 168,81 Mil
+95,08 Mil
+134,81 Mil
+165,11 Mil
+Evolução do número de vendas
+date
+05 de abr 12 de abr 19 de abr 26 de abr
+57 43
+7 3 4
+45 57 55 53
+5
+33 21
+7
+39
+49
+127
+164 90
+5 5
+7
+141
+153
+159
+8
+20
+153
+147 75
+115
+Recorrente Novo Recompra
+Ticket médio
+date
+05 de abr 12 de abr 19 de abr 26 de abr
+923
+806
+1158
+413 436
+1052
+431
+491
+1043
+667
+929
+843
+437
+990
+869
+DASH
+DASH - FATURAMENTO
+Vendas/Dia úitl
+CFV
+GERAL
+CAMPANHAS
+CAMPANHA <> ESTADO
+GERAL - FATURAMENTO
+ANALISE DE VENDAS
+TENDENCIA COMPOSIÇÃO
+TENDENCIA TEMPORAL
+TENDENCIA PRODUTOS
+TENDENCIAS MARCAS
+COMPOSIÇÃO DE VENDA
+COMPOSIÇÃO DE VENDA…
+COHORT VALOR
+COHORT VENDAS

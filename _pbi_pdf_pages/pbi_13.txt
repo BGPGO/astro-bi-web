@@ -1,0 +1,113 @@
+2026 (Ano) + abr… 
+Ano, Mês
+Todos 
+Dia útil
+Todos 
+CATEGORIA RECOMPRA/NOVO
+Todos 
+MARCA
+Todos  Todos 
+TRANSPORTADORA
+Evolução das vendas diárias
+Ano
+05 de abr 12 de abr 19 de abr 26 de abr
+8,19 Mil
+12,54 Mil
+34,01 Mil
+0,14 Mil 0,1 Mil
+25,09 Mil
+0,62 Mil
+10,12 Mil
+17,87 Mil
+0,5 Mil
+18,98 Mil
+0,2 Mil
+17,09 Mil 13,81 Mil
+6,32 Mil
+0,05 Mil
+1,6 Mil
+0,1 Mil 7,27 Mil 3,77 Mil 3,2 Mil 2,25 Mil
+2,52 Mil
+8,37 Mil
+5,3 Mil 0,16 Mil
+5,18 Mil
+21,9 Mil
+8,66 Mil 9,81 Mil 13,63 Mil
+53,46 Mil 49,14 Mil
+31,06 Mil
+27,19 Mil
+41,32 Mil
+34,83 Mil 38,62 Mil
+26,88 Mil
+21,09 Mil
+25,58 Mil
+24,93 Mil
+22,31 Mil
+33,9 Mil
+5,85 Mil
+29,05 Mil
+30,97 Mil
+6,47 Mil
+9,39 Mil
+30,02 Mil 28,69 Mil
+12,7 Mil
+17,82 Mil
+6,18 Mil
+22,59 Mil
+41,47 Mil
+52,58 Mil
+43,6 Mil
+36,48 Mil 49,76 Mil
+31,65 Mil
+16,82 Mil
+43,57 Mil 45,42 Mil
+2,7 Mil
+36,48 Mil
+28,17 Mil
+37,95 Mil
+marca Vendas YTD
+
+Vendas PYTD
+(DiaÚtil)
+Crescimento %
+YTD vs PYTD
+Delta Vendas
+YTD vs PYTD
+Tendência Linear
+(vendas/mês)
+Tendência % Mensal (log)
+ Cartom 38.812,29 36.049,68 7,66% 2.762,61 34,50 -1,04%
+ Volk 32.360,19 19.483,26 66,09% 12.876,93 253,49 2,48%
+ Marluvas 21.423,46 15.025,97 42,58% 6.397,49 -4,68 -2,50%
+ 3M 13.229,91 10.264,43 28,89% 2.965,47 133,33 2,69%
+ Delta Plus 8.637,98 5.080,30 70,03% 3.557,68 4,66 5,04%
+ Soft Works 7.584,22 3.472,99 118,38% 4.111,23 -6,40 2,26%
+ Camper 6.605,63 4.825,80 36,88% 1.779,82 129,54 4,75%
+ Danny 5.824,82 5.837,92 -0,22% -13,10 36,31 -1,15%
+ Innpro 4.827,26 4.309,31 12,02% 517,95 51,53 2,35%
+ Bracol 3.907,36 2.796,41 39,73% 1.110,95 34,64 -1,01%
+ Super Safety 3.752,23 4.391,30 -14,55% -639,07 14,04 1,16%
+ Fujiwara 3.745,20 2.793,76 34,06% 951,44 88,28 0,32%
+ Arclan 2.985,70 2.239,89 33,30% 745,81 19,12 -0,03%
+ Medix 2.869,15 2.869,15 -46,59 -0,45%
+ Imbat 2.804,91 2.469,28 13,59% 335,64 50,39 4,90%
+ Kalipso 2.521,69 3.771,12 -33,13% -1.249,43 -7,27 -1,49%
+ MG Cinto 1.326,34 514,31 157,89% 812,03 -4,42 -3,54%
+Total 167.936,06 126.311,47 32,95% 41.624,58 818,26 1,66%
+DASH
+DASH - FATURAMENTO
+Vendas/Dia úitl
+CFV
+GERAL
+CAMPANHAS
+CAMPANHA <> ESTADO
+GERAL - FATURAMENTO
+ANALISE DE VENDAS
+TENDENCIA COMPOSIÇÃO
+TENDENCIA TEMPORAL
+TENDENCIA PRODUTOS
+TENDENCIAS MARCAS
+COMPOSIÇÃO DE VENDA
+COMPOSIÇÃO DE VENDA…
+COHORT VALOR
+COHORT VENDAS

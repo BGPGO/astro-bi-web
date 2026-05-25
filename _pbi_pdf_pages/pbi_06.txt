@@ -1,0 +1,122 @@
+2026 (Ano) + abr… 
+Ano, Mês
+Todos 
+Dia útil
+Clicks X Conversões X Vendas novas
+0
+20
+40
+60
+date
+05 de abr 12 de abr 19 de abr 26 de abr
+10168
+5319
+281
+701
+7919 7628
+7420
+1538
+4952
+9154
+4295
+1178
+7516
+747
+992 715
+994
+90 52
+835 560 615
+123
+838 877 928
+102 91
+57
+43
+3
+4
+45
+55
+57
+53
+5
+33
+21
+39
+49
+34
+13
+39
+51
+6
+50
+9
+49
+Clicks Conversões Vendas novas
+Clicks X Conversões X Vendas novas
+Mês
+janeiro fevereiro março abril maio junho julho agosto setembro outubro novembro dezembro
+2025
+851
+888
+830
+714
+748 720
+909
+653
+775
+898
+713
+610
+R$0,02 Mil R$0,02 Mil
+R$0,20 Mil
+R$0,25 Mil
+R$0,29 Mil
+R$0,19 Mil R$0,19 Mil R$0,21 Mil
+R$0,29 Mil R$0,28 Mil
+R$0,34 Mil
+R$0,39 Mil
+Vendas novas cac
+Clicks X Conversões X Vendas novas
+Mês
+Todos 
+CATEGORIA RECOMPRA/NOVO
+Todos 
+MARCA
+Todos  Todos 
+TRANSPORTADORA
+150.698,96
+Gasto
+195.273,20
+Soma de CFV
+634.271,76
+Vendas novas
+880.486,43
+Valor Líquido
+33,40%
+Resultado bruto%
+6,06%
+CFV %
+27,34%
+Resultado líquido %
+970
+Vendas novas
+R$155,36
+cac
+1.075.759,64
+Resultado Bruto
+DASH
+DASH - FATURAMENTO
+Vendas/Dia úitl
+CFV
+GERAL
+CAMPANHAS
+CAMPANHA <> ESTADO
+GERAL - FATURAMENTO
+ANALISE DE VENDAS
+TENDENCIA COMPOSIÇÃO
+TENDENCIA TEMPORAL
+TENDENCIA PRODUTOS
+TENDENCIAS MARCAS
+COMPOSIÇÃO DE VENDA
+COMPOSIÇÃO DE VENDA (TOTAL)
+COHORT VALOR
+COHORT VENDAS

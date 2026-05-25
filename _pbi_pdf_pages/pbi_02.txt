@@ -1,0 +1,392 @@
+Evolução diária do ticket médio
+Data
+08 de mar 15 de mar 22 de mar 29 de mar
+860
+824
+1106
+662
+693
+997
+745
+1017
+ANO, MÊS
+Todos 
+DIA ÚTIL
+Vendas por Categoria aaaaa_categoria_mae
+Calçados
+Luvas
+Protetores Auditivos
+Protetores Respiratórios
+Óculos
+Capacetes
+Trabalho em Altura
+Macacões de Segurança
+Coletes Refletivos
+Cintas Ergonômicas
+Aventais
+50,72% 1.808,43 Mil
+26,20% 934,30 Mil
+5,95% 211,97 Mil
+4,58% 163,36 Mil
+2,75% 97,91 Mil
+1,77% 63,20 Mil
+0,94% 33,69 Mil
+1,09% 38,77 Mil
+0,85% 30,17 Mil
+0,50% 17,83 Mil
+0,74% 26,24 Mil
+Vendas por Categoria Mãe
+categoria_mae venda % venda Vendas/Dia útil
+
+% valor novo % valor recorrente CVM % Vendas % no
+ Calçados 1.808.428,64 50,72% 3.019,08 21,34% 78,66% 1.237.885,14 68,45% 2396 2
+ Luvas 934.298,76 26,20% 1.559,76 18,68% 81,32% 616.464,61 65,98% 1756 2
+ Protetores Auditivos 211.969,57 5,95% 353,87 25,81% 74,19% 145.497,39 68,64% 584 2
+ Protetores Respiratórios 163.361,13 4,58% 272,72 20,10% 79,90% 111.576,60 68,30% 430 2
+ Óculos 97.905,33 2,75% 163,45 17,98% 82,02% 65.184,73 66,58% 603 2
+ Capacetes 63.196,91 1,77% 105,50 17,00% 83,00% 43.096,32 68,19% 210 2
+ 47.996,50 1,35% 80,13 41,76% 58,24% 119 5
+ Macacões de Segurança 38.766,06 1,09% 64,72 15,32% 84,68% 25.971,58 67,00% 92 1
+ Trabalho em Altura 33.686,85 0,94% 56,24 23,42% 76,58% 22.133,69 65,70% 50 2
+ Coletes Refletivos 30.168,06 0,85% 50,36 21,98% 78,02% 20.624,46 68,37% 99 2
+ Aventais 26.242,28 0,74% 43,81 17,04% 82,96% 16.154,89 61,56% 134 1
+ Cintas Ergonômicas 17.832,78 0,50% 29,77 24,41% 75,59% 11.170,05 62,64% 54 2
+ Capas de Chuva 15.239,39 0,43% 25,44 33,13% 66,87% 9.495,90 62,31% 64 2
+ Bloqueadores Solares 12.218,09 0,34% 20,40 24,02% 75,98% 7.939,06 64,98% 53 2
+ Protetores Faciais 11.460,63 0,32% 19,13 17,41% 82,59% 7.566,67 66,02% 48 1
+TTotal 3.565.424,28 5,10% 5.952,29 20,92% 79,08% 2.375.172,54 66,62% 4102 28
+Ticket médio por Transportadora nome_transportador
+Jadlog
+Braspress
+Patrus Transportes Ltda
+Rodonaves
+Destak
+Patrus
+Retirada Na Astro
+1,79 Mi
+0,85 Mi
+0,37 Mi
+0,26 Mi
+0,24 Mi
+0,04 Mi
+0,01 Mi
+0,00 Mi
+Vendas por tipo de comprador
+(83,14%)
+(16,86%)
+2,96 Mi
+0,6 Mi
+cliente_tipo_pessoa
+J
+F
+Vendas para CNPJ IE
+2,37 Mi (79,79%)
+0,6 Mi (20,21%)
+tem ie
+Sim
+Não
+Vendas por tipo de pagamento
+(36,78%)
+1,13 Mi (31,78%)
+(29,06%)
+1,04 Mi (2,32%) 1,31 Mi
+0,08 Mi
+meio_pagamento forma_p…
+Paypal Cartão de crédito
+Pagar.me Novo Boleto
+Pagar.me Novo Pix
+Itaú - Astro Boleto
+Itaú - Astro Depósito
+Vendas/dia útil
+5.952,29
+Calçados
+3.019,08
+Luvas
+1.559,76
+Protetores Auditivos
+353,87
+Protetores Respiratórios
+272,72
+Óculos
+163,45
+Capacetes
+105,50
+(Em branco)
+80,13
+Cartom
+1.366,33
+Marluvas
+788,32
+Soft Works
+289,72
+Innpro
+182,69
+Bracol
+145,70
+Fujiwara
+137,83
+Delta Plus
+70,51
+Botinas de Segurança
+910,72
+Sapatos de Segurança
+263,46
+Botinas Nobuck
+98,62
+Botas de Segurança
+89,56
+Tênis de Segurança
+3,96
+SP
+398,40
+RS
+102,74
+RJ
+95,72
+SC
+86,06
+MG
+73,96
+PR
+63,18
+PE
+18,11
+Jadlog
+159,07
+Braspress
+129,21
+Patrus Transportes Ltda
+65,68
+Destak
+44,36
+Rodonaves
+0,08
++
++
++
++
++
+  
+Categoria ×
+Calçados
+Marca ×
+Cartom
+SubCategoria ×
+Botinas de Segurança
+UF ×
+SP
+Transportadora ×
+Vendas por Marca marca
+Cartom
+Volk
+Marluvas
+3M
+Soft Works
+Delta Plus
+Camper
+Danny
+Innpro
+Medix
+Super Safety
+23,47% 836,97 Mil
+17,95% 639,99 Mil
+13,24% 472,20 Mil
+8,14% 290,21 Mil
+5,17% 184,50 Mil
+3,99% 142,39 Mil
+3,55% 126,69 Mil
+3,26% 116,09 Mil
+3,07% 109,43 Mil
+2,90% 103,31 Mil
+2,77% 98,83 Mil
+Vendas por estado
+uf Vendas % novos % Recorrentes Vendas/Dia útil venda
+
+% venda % valor novo % valor
+ SP 1979 28% 72% 2.747,96 1.646.028,92 2,35% 21,77%
+ SC 446 22% 78% 674,06 403.762,66 0,58% 17,03%
+ RS 414 22% 78% 598,91 358.749,19 0,51% 13,53%
+ MG 348 34% 66% 518,15 310.371,76 0,44% 18,98%
+ RJ 293 31% 69% 483,53 289.632,72 0,41% 25,71%
+ PR 274 30% 70% 422,81 253.264,65 0,36% 26,65%
+ BA 60 30% 70% 94,95 56.873,87 0,08% 12,21%
+ ES 48 33% 67% 84,75 50.766,62 0,07% 22,57%
+ MS 26 31% 69% 56,98 34.133,76 0,05% 14,85%
+ PE 40 15% 85% 53,08 31.793,17 0,05% 7,48%
+ GOTotal 4102 28% 72% 5.952,29 3.565.424,28 5,10% 20,92%
+Vendas Produto Pai
+Produto Pai Vendas % novos % Recorrentes Vendas/Dia útil venda
+
+% venda % valor novo % valor recorrente ticket médio ticket médio carrinho
+ BOTINA BIDENSIDADE C/ ELÁSTICO C/ BIQUEIRA DE PVC - VULCAFLEX 137 12% 88% 195,64 117.187,41 3,29% 8,27% 91,73% 855,38 1.675,69
+ BOTINA BIDENSIDADE C/ ELÁSTICO C/ BIQUEIRA DE PVC - CARTOM 143 16% 84% 190,81 114.293,55 3,21% 10,93% 89,07% 799,26 1.365,18
+ BOTINA MONODENSIDADE C/ ELÁSTICO - CARTOM 171 31% 69% 186,27 111.576,88 3,13% 27,36% 72,64% 652,50 1.194,79
+ LUVA DE PROCEDIMENTO NITRÍLICA DESCARTÁVEL ANVISA AZUL SEM PÓ (100 UNID) - MEDIX 128 44% 56% 135,09 80.916,55 2,27% 55,81% 44,19% 632,16 903,44
+ BOTINA BIDENSIDADE COM BICO DE PVC 026PVC - CARTOM 95 19% 81% 112,93 67.643,18 1,90% 9,97% 90,03% 712,03 1.377,20
+ BOTINA BIDENSIDADE EM MICROFIBRA COM BICO DE PVC 70B19EBP ELETRICISTA - MARLUVAS 77 48% 52% 104,60 62.654,88 1,76% 33,49% 66,51% 813,70 1.260,62
+ BOTINA BIDENSIDADE C/ ELÁSTICO C/ BIQUEIRA DE COMPOSITE - CARTOM 77 21% 79% 99,01 59.305,30 1,66% 14,83% 85,17% 770,20 1.482,25
+ ABAFADOR TIPO CONCHA POMP - 3M (23 DB) 98 22% 78% 96,35 57.712,02 1,62% 25,47% 74,53% 588,90 1.269,06
+ SAPATO BIDENSIDADE DE POLIURETANO PRETO - CARTOM 76 25% 75% 92,06 55.142,72 1,55% 15,71% 84,29% 725,56 1.244,29
+ BOTINA BIDENSIDADE C/ ELASTICO C/ BIQUEIRA DE AÇO - CARTOM 80 13% 88% 84,51 50.622,21 1,42% 8,86% 91,14% 632,78 1.012,64
+ BOTINA BIDENSIDADE NOBUCK MARROM - MARLUVAS 106 31% 69% 79,71 47.747,79 1,34% 28,85% 71,15% 450,45 968,45
+Total 4102 28% 72% 5.952,29 3.565.424,28 5,10% 20,92% 79,08% 869,19 869,19
+Soma de Preço total (ajustado) por UF
+© 2026 Microsoft Corporation
+Vendas por Marca
+marca venda % Hierarquia (Marca) Vendas/Dia útil
+
+% valor novo % valor recorrente CV
+ Cartom 836.966,86 23,47% 1.397,27 17,95% 82,05%
+ Volk 639.988,33 17,95% 1.068,43 17,22% 82,78%
+ Marluvas 472.201,29 13,24% 788,32 16,38% 83,62%
+ 3M 290.214,33 8,14% 484,50 24,62% 75,38%
+ Soft Works 184.501,07 5,17% 308,02 43,48% 56,52%
+ Delta Plus 142.385,71 3,99% 237,71 27,64% 72,36%
+ Camper 126.689,10 3,55% 211,50 17,30% 82,70%
+ Danny 116.090,43 3,26% 193,81 12,80% 87,20%
+ Innpro 109.429,57 3,07% 182,69 29,02% 70,98%
+ Medix 103.311,86 2,90% 172,47 54,10% 45,90%
+ S S f t Total 3.565.424,28 5,10% 5.952,29 20,92% 79,08% 2.3
+Vendas por Transportadora
+nome_transportador venda
+
+% venda Vendas/Dia útil % valor novo % valor recorrente CVM
+ Jadlog 1.787.151,39 2,55% 2.983,56 23,42% 76,58% 1.185.336
+ Braspress 850.055,56 1,22% 1.419,12 22,55% 77,45% 567.034
+ Patrus Transportes Ltda 368.804,06 0,53% 615,70 8,88% 91,12% 249.563
+ Rodonaves 259.817,30 0,37% 433,75 12,30% 87,70% 171.787
+ Destak 244.663,50 0,35% 408,45 27,00% 73,00% 164.185
+ Patrus 37.308,83 0,05% 62,29 10,25% 89,75% 25.215
+ Retirada Na Astro 14.491,48 0,02% 24,19 7,31% 92,69% 9.886
+ 3.132,16 0,00% 5,23 100,00% 2.163
+Total 3.565.424,28 5,10% 5.952,29 20,92% 79,08% 2.375.172
+Evolução Mensal da Venda Bruta
+Mês
+maio junho julho agosto setembro outubro novembro dezembro janeiro fevereiro março abril
+2025 2026
+2652,51 Mil
+2901,33 Mil
+2625,11 Mil
+3205,3 Mil
+2440,98 Mil
+1654,92 Mil
+2813,78 Mil
+3187,5 Mil
+3565,42 Mil
+2506,2 Mil
+Vendas por recorrencia
+(79,08%)
+0,75 Mi (20,92%)
+2,82 Mi
+Recorrente
+Recompra
+Novo
+Vendas por Região
+Sudeste Sul
+Nordeste Centr…
+2,30 Mi
+1,02 Mi
+0,13 Mi 0,08 …
+Regiao Sudeste Sul Nordeste Centro-Oeste Norte
+Vendas por Cidade
+cliente_cidade Vendas % novos % Recorrentes Vendas/Dia útil venda
+
+ São Paulo 666 35% 65% 830,26 497.32
+ Rio de Janeiro 148 34% 66% 185,79 111.29
+ Curitiba 70 29% 71% 112,17 67.18
+ Guarulhos 77 19% 81% 111,82 66.97
+ Santo André 45 29% 71% 86,05 51.54
+ Duque de Caxias 20 20% 80% 81,94 49.08
+ Porto Alegre 59 39% 61% 81,16 48.61
+ São Bernardo do Campo 44 27% 73% 67,32 40.32
+ Osasco 43 23% 77% 63,66 38.13
+ São José 24 29% 71% 60,61 36.30
+ It j í Total 4102 28% 72% 5.952,29 3.565.42
+Vendas Produto
+Produto Vendas % novos % Recorrentes Vendas/Dia útil venda
+
+% venda % valor novo % valor recorrente ticket médio ticket médio carrinho
+ABAFADOR TIPO CONCHA POMP - 3M (23 DB) 98 22% 78% 96,35 57.712,02 0,08% 25,47% 74,53% 588,90 1.269,06
+LUVA DE PROCEDIMENTO NITRÍLICA DESCARTÁVEL ANVISA AZUL SEM PÓ - MEDIX (M) 71 45% 55% 47,29 28.323,86 0,04% 65,29% 34,71% 398,93 1.153,15
+RESPIRADOR PFF2 - CAMPER (C/ VÁLVULA) 91 20% 80% 43,30 25.935,23 0,04% 13,79% 86,21% 285,00 1.317,08
+BOTINA MONODENSIDADE C/ ELÁSTICO - CARTOM (42) 116 30% 70% 42,02 25.168,28 0,04% 31,43% 68,57% 216,97 1.323,56
+BOTINA BIDENSIDADE C/ ELÁSTICO C/ BIQUEIRA DE PVC - VULCAFLEX (42) 96 13% 88% 40,74 24.400,59 0,03% 12,10% 87,90% 254,17 2.001,55
+BOTINA BIDENSIDADE C/ ELÁSTICO C/ BIQUEIRA DE PVC - CARTOM (42) 101 14% 86% 40,73 24.396,98 0,03% 11,04% 88,96% 241,55 1.617,22
+ABAFADOR TIPO CONCHA ACOPLÁVEL - 3M (23 DB) 43 47% 53% 38,85 23.271,30 0,03% 41,87% 58,13% 541,19 1.152,88
+BOTINA BIDENSIDADE C/ ELÁSTICO C/ BIQUEIRA DE PVC - CARTOM (40) 98 17% 83% 37,54 22.486,44 0,03% 12,64% 87,36% 229,45 1.636,20
+BOTINA BIDENSIDADE C/ ELÁSTICO C/ BIQUEIRA DE PVC - CARTOM (41) 96 11% 89% 37,29 22.339,40 0,03% 10,53% 89,47% 232,70 1.620,67
+LUVA DE PROCEDIMENTO NITRÍLICA DESCARTÁVEL ANVISA AZUL SEM PÓ - MEDIX (G) 68 43% 57% 36,86 22.077,46 0,03% 35,90% 64,10% 324,67 1.141,28
+PROTETOR AURICULAR TIPO PLUG SILICONE - 3M (16 DB) 134 20% 80% 36,47 21.843,37 0,03% 20,92% 79,08% 163,01 1.189,25
+Total 4102 28% 72% 5.952,29 3.565.424,28 5,10% 20,92% 79,08% 869,19 869,19
+2026 (Ano) + ma… 
+2.375.172,54
+CMV
+219.637,92
+Soma de CFV
+3.565.424,28
+Valor venda
+970.613,82
+Valor Líquido
+33,38%
+Resultado bruto%
+6,16%
+CFV %
+27,22%
+Resultado líquido %
+4102
+Total de vendas
+869,19
+ticket médio
+1.190.251,74
+Resultado Bruto
+Evolução da Venda Bruta diárias
+Data
+08 de mar 15 de mar 22 de mar 29 de mar
+109,23 Mil
+170,67 Mil
+206,61 Mil
+173,35 Mil
+158,4 Mil
+178,94 Mil
+133,31 Mil
+150,83 Mil
+Evolução do número de vendas
+Data
+08 de mar 15 de mar 22 de mar 29 de mar
+127
+207
+274
+150
+241
+180
+203
+153
+Comparação de venda bruta do mês atual
+Ano
+2024 2025 2026
+1646,35 Mil
+876,84 Mil
+2652,51 Mil
+DASH
+DASH - FATURAMENTO
+Vendas/Dia úitl
+CFV
+GERAL
+CAMPANHAS
+CAMPANHA <> ESTADO
+GERAL - FATURAMENTO
+ANALISE DE VENDAS
+TENDENCIA COMPOSIÇÃO
+TENDENCIA TEMPORAL
+TENDENCIA PRODUTOS
+TENDENCIAS MARCAS
+COMPOSIÇÃO DE VENDA
+COMPOSIÇÃO DE VENDA (TOTAL)
+COHORT VALOR
+COHORT VENDAS
+Todos 
+CATEGORIA RECOMPRA/NOVO
+Todos 
+MARCA
+Todos  Todos 
+TRANSPORTADORA

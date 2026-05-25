@@ -1,0 +1,102 @@
+Valor/Dia útil
+vendas media dia util
+161.039,23
+Calçados
+75.385,71
+Luvas
+43.979,00
+Protetores Auditivos
+10.843,68
+Protetores Respiratórios
+7.536,62
+Óculos
+4.999,02
+Capacetes
+3.934,46
+Trabalho em Altura
+3.057,12
+Cartom
+31.784,89
+Marluvas
+19.017,72
+Soft Works
+9.101,66
+Innpro
+4.035,33
+Fujiwara
+3.814,81
+Delta Plus
+3.340,15
+Bracol
+3.185,71
+Botinas de Segurança
+21.264,69
+Sapatos de Segurança
+5.576,37
+Botinas Nobuck
+2.937,73
+Botas de Segurança
+1.756,43
+Tênis de Segurança
+249,67
+SP
+10.093,54
+RJ
+2.284,35
+SC
+2.146,83
+RS
+1.982,31
+MG
+1.142,58
+PR
+1.132,49
+ES
+491,49
+Braspress
+5.510,37
+Jadlog
+3.316,20
+Patrus Transportes Ltda
+1.101,97
+Rodonaves
+88,30
+Patrus
+76,71
+  
+Categoria ×
+Calçados
+Marca ×
+Cartom
+SubCategoria ×
+Botinas de Segurança
+UF ×
+SP
+Transportadora ×
+2026 (Ano) + abr… 
+Ano, Mês
+Todos 
+Dia útil
+Todos 
+CATEGORIA RECOMPRA/NOVO
+Todos 
+MARCA
+Todos  Todos 
+TRANSPORTADORA
+DASH
+DASH - FATURAMENTO
+Vendas/Dia úitl
+CFV
+GERAL
+CAMPANHAS
+CAMPANHA <> ESTADO
+GERAL - FATURAMENTO
+ANALISE DE VENDAS
+TENDENCIA COMPOSIÇÃO
+TENDENCIA TEMPORAL
+TENDENCIA PRODUTOS
+TENDENCIAS MARCAS
+COMPOSIÇÃO DE…
+COMPOSIÇÃO DE VENDA…
+COHORT VALOR
+COHORT VENDAS

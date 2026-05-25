@@ -1,0 +1,56 @@
+2026 (Ano) + abr… 
+Ano, Mês
+Todos 
+Dia útil
+Tendência de Vendas por Marca
+Ano 2026 Total
+
+marca abril Total
+ Volk 34.463,57 34.463,57 34.463,57
+ Cartom 31.800,17 31.800,17 31.800,17
+ Marluvas 19.017,72 19.017,72 19.017,72
+ 3M 13.581,96 13.581,96 13.581,96
+ Delta Plus 9.312,50 9.312,50 9.312,50
+ Soft Works 9.105,87 9.105,87 9.105,87
+ Camper 8.304,74 8.304,74 8.304,74
+ Danny 5.842,88 5.842,88 5.842,88
+ Innpro 4.035,33 4.035,33 4.035,33
+ Fujiwara 3.814,81 3.814,81 3.814,81
+Total 161.039,23 161.039,23 161.039,23
+Tendência de Vendas por Categoria
+Ano 2026 Total
+
+categoria_mae abril Total
+ Calçados 75.385,71 75.385,71 75.385,71
+ Luvas 43.979,00 43.979,00 43.979,00
+ Protetores Auditivos 10.843,68 10.843,68 10.843,68
+ Protetores Respiratórios 7.536,62 7.536,62 7.536,62
+ Óculos 4.999,02 4.999,02 4.999,02
+ Capacetes 3.934,46 3.934,46 3.934,46
+ Trabalho em Altura 3.057,12 3.057,12 3.057,12
+ Macacões de Segurança 2.138,70 2.138,70 2.138,70
+ Coletes Refletivos 1.925,07 1.925,07 1.925,07
+Total 161.039,23 161.039,23 161.039,23
+Todos 
+CATEGORIA RECOMPRA/NOVO
+Todos 
+MARCA
+Todos  Todos 
+TRANSPORTADORA
+DASH
+DASH - FATURAMENTO
+Vendas/Dia úitl
+CFV
+GERAL
+CAMPANHAS
+CAMPANHA <> ESTADO
+GERAL - FATURAMENTO
+ANALISE DE VENDAS
+TENDENCIA COMPOSIÇÃO
+TENDENCIA TEMPORAL
+TENDENCIA PRODUTOS
+TENDENCIAS MARCAS
+COMPOSIÇÃO DE VENDA
+COMPOSIÇÃO DE VENDA…
+COHORT VALOR
+COHORT VENDAS

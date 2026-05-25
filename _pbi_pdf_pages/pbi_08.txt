@@ -1,0 +1,134 @@
+INDICADORES PRINCIPAIS - ADS
+Gasto com ADS
+Ano, Mês
+2134
+Recompra
+694
+Novo
+75%
+%
+25%
+%
+2.059.399,09
+valor recorrente
+965,04
+ticket médio
+84,37%
+%
+INDICADORES PRINCIPAIS - RECOMPRA
+381.580,92
+valor novo
+965,04
+ticket médio
+15,63%
+valor novo %
+INDICADORES PRINCIPAIS - NOVOS
+10,67%
+%
+219.757,80
+Google
+316,65
+CAC
+1,74
+ROAS
+2025 (Ano) + novembro (Mês)  Todos 
+CATEGORIA RECOMPRA/NOVO
+Todos 
+MARCA
+Todos  Todos 
+TRANSPORTADORA
+Vendas por Categoria aaaaa_categoria_mae
+Calçados
+Luvas
+Protetores Auditivos
+Protetores Respiratórios
+Óculos
+Capacetes
+Trabalho em Altura
+Macacões de Segurança
+Coletes Refletivos
+Cintas Ergonômicas
+Aventais
+Vendas por Marca marca
+Cartom
+Volk
+Marluvas
+3M
+Danny
+Innpro
+Delta Plus
+Camper
+Soft Works
+Super Safety
+Imbat
+21,69% 529,53 Mil
+20,14% 491,67 Mil
+13,76% 335,88 Mil
+8,40% 205,07 Mil
+5,06% 123,49 Mil
+3,91% 95,36 Mil
+3,82% 93,16 Mil
+3,28% 80,17 Mil
+3,19% 77,92 Mil
+3,15% 76,86 Mil
+2,62% 63,92 Mil
+Vendas por Estado cliente_uf
+SP
+SC
+RS
+PR
+MG
+RJ
+PE
+ES
+BA
+MS
+GO
+49,37% 1.205,11 Mil
+11,48% 280,21 Mil
+9,75% 237,94 Mil
+7,54% 184,08 Mil
+6,76% 165,12 Mil
+6,67% 162,71 Mil
+1,45% 35,36 Mil
+1,37% 33,52 Mil
+1,33% 32,40 Mil
+0,77% 18,73 Mil
+0,69% 16,92 Mil
+1.637.943,36
+CMV
+148.080,13
+Soma de CFV
+2.440.980,01
+Valor venda
+654.956,52
+Valor Líquido
+32,90%
+Resultado bruto%
+6,07%
+CFV %
+26,83%
+Resultado líquido %
+2828
+Total de vendas
+863,15
+ticket médio
+803.036,65
+Resultado Bruto
+DASH
+DASH - FATURAMENTO
+Vendas/Dia úitl
+CFV
+GERAL
+CAMPANHAS
+CAMPANHA <> ESTADO
+GERAL - FATURAMENTO
+ANALISE DE VENDAS
+TENDENCIA COMPOSIÇÃO
+TENDENCIA TEMPORAL
+TENDENCIA PRODUTOS
+TENDENCIAS MARCAS
+COMPOSIÇÃO DE VENDA
+COMPOSIÇÃO DE VENDA (TOTAL)
+COHORT VALOR
+COHORT VENDAS
