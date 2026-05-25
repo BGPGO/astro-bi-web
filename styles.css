@@ -211,7 +211,7 @@ input, select { font-family: inherit; color: inherit; }
 .sb-user .who span { font-size: 11px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ============== MAIN ============== */
-.main { display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.main { display: flex; flex-direction: column; min-width: 0; overflow: auto; min-height: 125vh; background: var(--bg); }
 
 .header {
   height: 70px;
