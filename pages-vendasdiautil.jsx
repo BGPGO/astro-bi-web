@@ -52,7 +52,7 @@ const DEFAULT_FILTERS_VDU = {
 
 const _buildWhereVDU = (f) => {
   const parts = [];
-  parts.push(`situacao IS DISTINCT FROM 'Cancelado'`);
+  // parquet slim ja filtrou Cancelado no build (sem coluna situacao)
   parts.push(`data_pedido IS NOT NULL`);
   if (f.diaUtil === 'util') parts.push(`dayofweek(data_pedido) BETWEEN 1 AND 5`);
   if (f.anoMes && f.anoMes.length) parts.push(`strftime(data_pedido, '%Y-%m') IN (${_sqlList(f.anoMes)})`);
@@ -174,7 +174,7 @@ const PageVendasDiaUtil = () => {
   const optsQ = useDuckDBQuery(`
     WITH base AS (
       SELECT * FROM vendas
-      WHERE situacao IS DISTINCT FROM 'Cancelado' AND data_pedido IS NOT NULL
+      WHERE data_pedido IS NOT NULL
     )
     SELECT
       (SELECT json_group_array(am) FROM (
