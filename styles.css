@@ -54,10 +54,10 @@
 
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100vh; }
-html { background: var(--bg); }
+html { background: #05080a; }
 body {
   margin: 0; padding: 0;
-  background: var(--bg);
+  background: #05080a;
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 14px;
@@ -65,12 +65,12 @@ body {
   -webkit-font-smoothing: antialiased;
   font-feature-settings: "ss01", "cv11";
 }
-/* Zoom out global - aplicado no #root, com min-height 125vh pra preencher
-   verticalmente quando zoom=0.8 (100/0.8) */
+/* Zoom out global: zoom 0.8 no #root => conteúdo precisa ter 125vh (=100/0.8)
+   pra preencher 100% do viewport real. */
 #root {
   zoom: 0.8;
   min-height: 125vh;
-  background: var(--bg);
+  background: #05080a;
 }
 
 button { font-family: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
@@ -81,7 +81,8 @@ input, select { font-family: inherit; color: inherit; }
 .app {
   display: grid;
   grid-template-columns: 244px 1fr;
-  height: 100vh;
+  /* Compensa o zoom 0.8 do #root: 100vh visual = 125vh no layout interno */
+  min-height: 125vh;
   background: var(--bg);
 }
 
@@ -93,7 +94,8 @@ input, select { font-family: inherit; color: inherit; }
   flex-direction: column;
   overflow: hidden;
   min-width: 0;
-  height: 100vh;
+  /* Sidebar acompanha altura do .app pra ocupar 100% visual sob zoom 0.8 */
+  min-height: 125vh;
 }
 .sidebar .sb-scroll {
   flex: 1;
