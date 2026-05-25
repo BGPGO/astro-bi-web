@@ -16,12 +16,11 @@ FROM nginx:alpine
 # Obrigatórios
 COPY index.html /usr/share/nginx/html/
 COPY styles.css /usr/share/nginx/html/
-COPY data.js /usr/share/nginx/html/
 COPY app.bundle.js /usr/share/nginx/html/
 
-# Opcionais (placeholder vazio criado por bgp-bi.cjs init)
-COPY data-extras.js /usr/share/nginx/html/
-COPY saldos.json /usr/share/nginx/html/
+# Astro: dados pre-calculados via scripts/build_astro_data.py
+COPY astro-data.js /usr/share/nginx/html/
+COPY data /usr/share/nginx/html/data
 COPY assets /usr/share/nginx/html/assets
 
 # Config nginx
