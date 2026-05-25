@@ -2,12 +2,12 @@
 .env
 .env.local
 
-# Build artifacts
-data/
+# Build artifacts (template fin40 default — Astro overrides com '!' abaixo)
 data-extras/
 data.js
 data-extras.js
-app.bundle.js
+# Astro: app.bundle.js + data/* + astro-data.js precisam ir no build Docker
+# (geramos local com node build-jsx.cjs + python build_astro_data.py antes do push)
 
 # Reports cacheados (gerados por write-reports.cjs do cliente, ou por API on-the-fly)
 report.json

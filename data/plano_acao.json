@@ -1,0 +1,550 @@
+{
+  "gerado_em": "2026-05-20",
+  "metodologia": "Comitê multi-agente Claude Code: 22 fatos quantitativos validados contra parquet (413k pedidos, 12m) + 15 preocupações extraídas das 2 últimas reuniões de Controladoria Semanal (02/04/2026 e 29/04/2026). Cada ação cruza dado + fala + recomendação concreta. Tom BGP — direto, com R$ e prazo, sem consultoria-speak.",
+  "fontes": {
+    "quant": [
+      {"arquivo": "vendas_tiny_bu.parquet", "registros": 413529, "janela": "2025-05-13 a 2026-05-12"},
+      {"arquivo": "frete_empresa_rj.csv", "registros": 5013, "janela": "out/2025 a mai/2026"},
+      {"arquivo": "astro_ads.xlsx", "registros": "Google Pmax", "janela": "mar/2025 a fev/2026"},
+      {"arquivo": "engine_output/kpis.json", "snapshot": "2026-05-13"},
+      {"arquivo": "engine_output/plano_acao.json", "skus": 5}
+    ],
+    "qual": [
+      {"data": "2026-04-02", "arquivo": "sales-coach/02_BGP GO __ Astro - Controladoria Semanal.txt", "duracao_min": 52},
+      {"data": "2026-04-29", "arquivo": "finhub-insight/scripts/reunioes/astro_2026-04-29_BGP-GO-Controladoria-Semanal.md", "speakers": ["Filipe Miranda", "Vítor Bertuzzi", "Thomas"]}
+    ]
+  },
+  "resumo_executivo": {
+    "titulo": "R$ 2,5M+ de upside em 12 meses cruzando dados quantitativos com falas das 2 últimas reuniões",
+    "destaques": [
+      {"label": "Frete RJ", "valor": "R$ 280k/ano de prejuízo absorvido", "fonte": "frete_empresa_rj.csv"},
+      {"label": "Pedidos <R$ 500", "valor": "44% dos pedidos, só 12% da receita; LTV 27x menor", "fonte": "parquet"},
+      {"label": "Estoque parado", "valor": "R$ 4,59M (31% do total) gerando R$ 27k/mês de CDI", "fonte": "engine_output"},
+      {"label": "Recebíveis travados", "valor": "R$ 900k-1M de R$ não conciliados (checkout PayPal/Omni)", "fonte": "reunião 02/04"},
+      {"label": "Cancelamento boleto", "valor": "18,5% cancela vs 7,7% crédito — R$ 2,8M evaporados/ano", "fonte": "parquet"},
+      {"label": "Concentração", "valor": "Cartom 24% / Calçados 50% — risco de marca/categoria", "fonte": "parquet"}
+    ]
+  },
+  "temas": [
+    {"id": "logistica", "label": "Logística & Frete", "color": "#ff7a90", "icon": "Truck"},
+    {"id": "comercial", "label": "Comercial", "color": "#4fc3f7", "icon": "ShoppingCart"},
+    {"id": "estoque", "label": "Estoque", "color": "#ffb86b", "icon": "Package"},
+    {"id": "marketing", "label": "Marketing", "color": "#a78bfa", "icon": "TrendingUp"},
+    {"id": "operacao", "label": "Operação", "color": "#5dd99f", "icon": "Settings"},
+    {"id": "financeiro", "label": "Financeiro", "color": "#f87171", "icon": "DollarSign"},
+    {"id": "tecnologia", "label": "Tecnologia", "color": "#7dd3fc", "icon": "Cpu"}
+  ],
+  "acoes": [
+    {
+      "id": "A01",
+      "titulo": "Cortar frete grátis RJ + renegociar tabela Braspress",
+      "tema": "logistica",
+      "prioridade": 1,
+      "severidade": "alta",
+      "esforco": "medio",
+      "impacto_score": 9,
+      "esforco_score": 4,
+      "impacto_anual_brl": 280000,
+      "tipo_impacto": "anual",
+      "diagnostico": {
+        "headline": "Astro absorve R$ 270k em frete RJ contra R$ 105k cobrado — gap de R$ 166k em 7 meses (anualizado ~R$ 280k)",
+        "detalhe": "Em 5.013 envios RJ entre out/2025 e mai/2026, 1.866 (37%) saíram com frete zero — subsídio puro de R$ 165k. Braspress sozinho responde por 63% do gap: cobra R$ 17, custa R$ 137 (ratio 8,3x). Pedidos RJ acima de R$ 1.000 têm frete cobrado médio R$ 3,76 contra custo real R$ 108 — frete é praticamente dado de graça nesta faixa. Faixa <R$ 100 tem custo de frete = 28,5% do valor do pedido, quase a margem bruta inteira (33%).",
+        "numero_principal": "R$ 280k/ano",
+        "fonte_quant": ["Q03", "Q04", "Q05", "Q17", "Q22"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Filipe Miranda",
+        "fala": "Frete grátis para o Rio de Janeiro. Cara, eu eliminaria. O cliente compra R$ 1.700 quando ele vê que o cliente tá pagando frete de R$ 600. Olha o percentual de frete no Twix. É área de risco, as transportadoras não querem entregar, o custo de frete lá é alto.",
+        "contexto_caso": "Pedido R$ 1.700 (60 capacetes Camper) com frete real R$ 600. Cliente devolveu por cor errada — transportadora cobrou R$ 200/caixa × 5 caixas no retorno. Prejuízo total no pedido."
+      },
+      "hipotese": "Política de frete grátis sem teto + ausência de exceção pra área de risco + tabela Braspress desalinhada (provável erro de classificação de peso/cubagem).",
+      "recomendacao": [
+        "Suspender frete grátis RJ acima de qualquer valor de pedido — passar a cobrar tabela real Jadlog/Braspress (RJ 6,8% da receita, não justifica subsídio).",
+        "Renegociar tabela Braspress especificamente — ratio 8,3x é anômalo. Pedir nova tabela ou trocar transportador pra pedidos volumosos.",
+        "Para faixa <R$ 700 RJ, exigir frete pago integral (mínimo R$ 700 pra ter direito a desconto).",
+        "Validar caso a caso a política de RJ pedidos >R$ 1k (1.303 pedidos/ano nessa faixa, gap R$ 135k)."
+      ],
+      "responsavel_sugerido": "Filipe (decisão comercial) + Zinho (negociação Braspress) + BGP (config regras de frete)",
+      "kpi_alvo": "% custo frete / receita RJ < 8% em 90 dias (hoje 11,4%)",
+      "prazo_dias": 30
+    },
+    {
+      "id": "A02",
+      "titulo": "Instituir pedido mínimo R$ 500 (R$ 700 para RJ)",
+      "tema": "comercial",
+      "prioridade": 2,
+      "severidade": "alta",
+      "esforco": "baixo",
+      "impacto_score": 8,
+      "esforco_score": 2,
+      "impacto_anual_brl": 200000,
+      "tipo_impacto": "anual",
+      "diagnostico": {
+        "headline": "44% dos pedidos são <R$ 500 mas representam só 12,5% da receita. LTV do cliente que só compra <R$ 200 é R$ 157 (vs R$ 4.224 de quem já passou R$ 500) — 27x menor",
+        "detalhe": "17.151 pedidos <R$ 500 em 12m. Ticket médio geral R$ 893, mediana R$ 542. 4.937 clientes nunca passaram de R$ 200 — fazem em média 1,12 pedido (essencialmente 1 compra só). Versus 14.974 clientes que já fizeram pedido >R$ 500 — LTV R$ 4.224, média 3,89 compras. Pedido pequeno = curioso PF de baixa fidelidade + custo de servir alto (em RJ chega a 28,5% só de frete). Filipe fez essa conta na empresa anterior: corte em R$ 500 perde 0,3% e elimina muito custo operacional.",
+        "numero_principal": "44% pedidos | 12% receita | LTV 27x menor",
+        "fonte_quant": ["Q01", "Q02", "Q17"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Filipe Miranda",
+        "fala": "Bom, se eu delimito um pedido mínimo de R$ 500, quanto que eu deixo de vender se eu analisar os últimos meses? Chegar a 0,3%. Pô, vale a pena eu continuar pegando esses clientes pequenos? Porque às vezes o custo disso, eu tô deixando às vezes de tratar clientes de maior ticket médio.",
+        "contexto_caso": "Discussão sobre custo por linha de pedido — cada pedido tem custo fixo de picking, embalagem, taxa, atendimento. Vítor pediu pra cruzar com LTV pra não descartar cliente que recompra muito. Análise atual valida: cliente <R$ 200 não recompra mesmo."
+      },
+      "hipotese": "Pedido pequeno PF = compra única (necessidade pontual, evento de vida). Eliminar essa cauda não fere recompra (recompra vem de PJ com ticket alto). Custo de servir consome margem inteira em faixa lt100.",
+      "recomendacao": [
+        "Instituir mínimo R$ 500 geral no checkout, com mensagem amigável ('adicione mais produtos pra fechar pedido').",
+        "Para RJ: mínimo R$ 700 (custo de frete impede margem em faixa menor — vide A01).",
+        "Excepcionalidade: cliente PJ com >2 compras prévias pode pedir abaixo do mínimo (manter base PJ fiel).",
+        "Acompanhar por 60 dias: % receita perdida vs custo eliminado. Esperado: ganho líquido R$ 200k/ano em margem + redução de complexidade operacional."
+      ],
+      "responsavel_sugerido": "Filipe (regra) + BGP (config checkout + acompanhamento KPI)",
+      "kpi_alvo": "Ticket médio +15% em 60 dias; pedidos <R$ 200 → <5% do volume",
+      "prazo_dias": 14
+    },
+    {
+      "id": "A03",
+      "titulo": "Liquidar Encalhado + Morto a 25% off (lista pronta — 19 SKUs classe A/B)",
+      "tema": "estoque",
+      "prioridade": 3,
+      "severidade": "alta",
+      "esforco": "baixo",
+      "impacto_score": 9,
+      "esforco_score": 3,
+      "impacto_anual_brl": 977000,
+      "tipo_impacto": "one_shot",
+      "diagnostico": {
+        "headline": "R$ 4,59M (31% do estoque) está em Encalhado + Morto + Excesso, gerando R$ 27k/mês de CDI perdido",
+        "detalhe": "Engine de Giro identifica: R$ 269k Encalhado (>90d sem venda), R$ 709k Morto (>180d), R$ 3,62M Excesso (cobertura >180d). DIO total 157 dias = 5,2 meses de estoque parado. Engine já produziu lista de 19 SKUs prioritários — 'campeões caídos' classe A/B com >90d parado. Liquidação 25% off recupera ~R$ 977k em caixa (receita_12m alvo R$ 137k, valor parado R$ 62k apenas dos top 19) + libera CDI. Caso anedótico: fita 3M com validade pra março ficou na mesa, foi pro chão, venceu.",
+        "numero_principal": "R$ 977k em caixa",
+        "fonte_quant": ["Q20", "engine_output/plano_acao.json"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Vítor Bertuzzi",
+        "fala": "Essa análise [giro de estoque], de tudo que a gente tá falando aqui, isso aí tem um valor muito, muito grande. Se tu tem 5 milhões em estoque, é 50 mil de CDI que tu perde todo mês. Então, giro de estoque é essencial. Dependendo aí, o que adianta tu comprar com desconto se tu toma 100 mil por ano em CDI.",
+        "contexto_caso": "Decisão: BGP montou o estudo de giro (entregue 13/05) e o engine já tem o JSON de ações. Falta executar a campanha."
+      },
+      "hipotese": "Compras agressivas em 2024 (botina, capacete) sem velocidade proporcional de venda. Marca tem demanda (já foi A/B) mas tamanhos/cores específicos encalharam. E-mail mkt + ads pra base já recompradora resolve.",
+      "recomendacao": [
+        "Top 19 SKUs Classe A/B encalhados — campanha 25% off via e-mail marketing + Pmax dedicado. Lista no engine_output/plano_acao.json.",
+        "Corte de 50 SKUs com score >0.65 (PF dominante, ticket baixo, LTV baixo, giro baixo) — não repor, liberar prateleira.",
+        "Renegociar com top 3 fornecedores de encalhe (VCH R$ 39k, Delta Plus R$ 35k): devolução/troca/desconto no próximo pedido.",
+        "Cortar próxima reposição de 20 SKUs com cobertura >180d (botinas Bracol específicas)."
+      ],
+      "responsavel_sugerido": "Filipe + Zinho (decisão promo) + Lucinha (e-mail mkt) + BGP (Pmax)",
+      "kpi_alvo": "Liquidar R$ 350k em 90 dias (60% do Encalhado+Morto). Reduzir DIO de 157 pra 130 em 6 meses.",
+      "prazo_dias": 30
+    },
+    {
+      "id": "A04",
+      "titulo": "Cobrar restauração do ID Omni Checkout (R$ 900k-1M em recebíveis travados)",
+      "tema": "financeiro",
+      "prioridade": 4,
+      "severidade": "alta",
+      "esforco": "baixo",
+      "impacto_score": 9,
+      "esforco_score": 2,
+      "impacto_anual_brl": 950000,
+      "tipo_impacto": "one_shot",
+      "diagnostico": {
+        "headline": "Mudança no checkout (PayPal → Omni Checkout) removeu identificador da automação de conciliação. R$ 900k-1M de recebíveis não reconhecidos",
+        "detalhe": "PayPal forçou migração de Magento 1.0 pra Omni Checkout por questões de taxa/funcionalidade — Astro tinha planejado Magento 2.0. A nova plataforma não passa mais o ID que a automação usava. Resultado: 2 semanas sem dados de tagueamento + R$ 900k-1M em recebíveis sem conciliar com pedidos. Bloqueia fechamento semanal do André. Não há dado quantitativo verificável (dependeria de query no financeiro Astro), mas a faixa veio direto da reunião.",
+        "numero_principal": "R$ 900k-1M travados",
+        "fonte_quant": ["reunião 02/04 (não há tabela quant local)"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-02",
+        "quem": "Eduardo Lasacoski / Vítor Bertuzzi",
+        "fala": "A mudança no checkout removeu um identificador usado na automação e causou o não reconhecimento de aproximadamente R$ 900-1.000k em recebíveis. Astro Distribuidora: Exigir que o fornecedor do checkout restaure o ID ou contratar integração alternativa até data fim a ser definida.",
+        "contexto_caso": "Tópico recorrente de 02/04. Fornecedor Omni Checkout ainda não restaurou. Filipe vai cobrar via Bitrix; Vítor topou convocar fornecedor pra reunião técnica."
+      },
+      "hipotese": "Fornecedor Omni Checkout não priorizou o pedido. Resolução técnica é simples (re-passar o campo), bloqueio é comercial/atenção.",
+      "recomendacao": [
+        "Esta semana: e-mail formal ao Omni Checkout exigindo SLA de 30 dias pra restauração do ID, com escalação se não houver retorno.",
+        "Paralelo: Thomas mapear automação de conciliação pra entender quais campos alternativos podem suprir (CPF/CNPJ + valor + data).",
+        "Se Omni não responder em 14 dias: avaliar troca pra Magento 2.0 ou outro checkout (custo estimado vs R$ 1M parado).",
+        "Conciliação manual emergencial de R$ 900k-1M com André + braço-direito (vide A09)."
+      ],
+      "responsavel_sugerido": "Filipe (cobrança) + Thomas (técnico) + André (conciliação manual)",
+      "kpi_alvo": "R$ recebíveis não conciliados → 0 em 60 dias",
+      "prazo_dias": 60
+    },
+    {
+      "id": "A05",
+      "titulo": "Reduzir taxa de cancelamento de boleto (18,5% → 10%)",
+      "tema": "operacao",
+      "prioridade": 5,
+      "severidade": "alta",
+      "esforco": "medio",
+      "impacto_score": 8,
+      "esforco_score": 5,
+      "impacto_anual_brl": 400000,
+      "tipo_impacto": "anual",
+      "diagnostico": {
+        "headline": "14,5% de todos os pedidos cancelam — R$ 6,63M evaporados em 12m. Boleto cancela 2,4x mais que crédito (18,5% vs 7,7%)",
+        "detalhe": "De 45.315 pedidos, 6.584 cancelados. Por forma de pagamento: Boleto 18,5% (R$ 2,77M cancelado), Pix 16,6% (R$ 1,99M), Crédito 7,7% (R$ 1,09M). Por UF longe: PB 28,2%, BA 24,7%, PA 22,9%, PE 22,9% (~3x SP). Por marca: Volk lidera com R$ 2,67M cancelados (40% do total) — possível atrito de estoque/prazo. Reduzir boleto pra 10% recupera ~R$ 1,2M em GMV (margem 33% = ~R$ 400k).",
+        "numero_principal": "R$ 6,63M evaporados/ano | R$ 400k recuperáveis",
+        "fonte_quant": ["Q06", "Q07", "Q19"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Filipe Miranda (implícito via Q05 validade)",
+        "fala": "A gente também está com erros de estoque frequentes. De inventário também isso é muito complicado porque existe às vezes ter que tratar com a cliente e dar volume de trabalho com o pessoal interno às vezes o cliente não aceita e quer cancelar o pedido.",
+        "contexto_caso": "Cancelamento por inconsistência de estoque (cliente compra, não tem físico, cancela). Boleto agrava pq tem prazo de vencimento — quando estoque some ou demora, cliente desiste antes de pagar."
+      },
+      "hipotese": "Boleto cancela mais por (a) prazo de pagamento atrasa, cliente desiste; (b) estoque sistemico ≠ físico (inventário 2024 ruim — vide A06) gera pedido sem ter o produto. Volk lidera em valor cancelado: provável bug específico de estoque dessa marca.",
+      "recomendacao": [
+        "Auditoria específica Volk: rodar query de cancelamento por SKU pra identificar produtos com taxa anômala — provavelmente problema de estoque sistêmico.",
+        "Reduzir prazo do boleto de X dias pra 3 dias (menos tempo pra desistir).",
+        "Aviso automático ao cliente no momento do pedido boleto: 'pague em até 3 dias pra garantir estoque'.",
+        "Pra UFs com cancelamento >20% (PB, BA, PA, PE): exigir Pix ou crédito (não oferecer boleto)."
+      ],
+      "responsavel_sugerido": "Filipe + Zinho (auditoria Volk) + Thomas (regras checkout)",
+      "kpi_alvo": "Taxa cancelamento global <10% em 90 dias (hoje 14,5%); boleto <10%",
+      "prazo_dias": 60
+    },
+    {
+      "id": "A06",
+      "titulo": "Terceirizar inventário + instituir bifagem 100% na entrada",
+      "tema": "estoque",
+      "prioridade": 6,
+      "severidade": "alta",
+      "esforco": "medio",
+      "impacto_score": 7,
+      "esforco_score": 5,
+      "impacto_anual_brl": 150000,
+      "tipo_impacto": "one_shot",
+      "diagnostico": {
+        "headline": "Último inventário (2024) foi fraudado/mal-executado; 2025 não teve inventário. Erros frequentes de estoque sistêmico vs físico geram cancelamentos e perda de vendas",
+        "detalhe": "Inventário 2024 conduzido por Renan foi reportado por Zinho como 'enrolado' — contagem errada, produtos não achados, registros sem rigor. Em 2025 não houve contagem. Resultado prático: pedidos cancelados por falta de produto (vide A05), produtos no 'depósito de varia' sem aparecer no site, mercadoria entregue com etiqueta errada de outra empresa não detectada por bifagem. Caso concreto: produto com 480 no sistema, 180 físico, 480 - 180 = perda silenciosa.",
+        "numero_principal": "R$ 8,6M custo em estoque sem acurácia verificada",
+        "fonte_quant": ["Q20"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Vítor Bertuzzi (acordo) / Filipe (preocupação)",
+        "fala": "Vítor: 'Por isso que eu sugeri da empresa terceira, porque eu acho que a gente mata, por mais que custe, é muito dinheiro parado. Eu tenho muito medo de a gente perder dinheiro.' / Filipe: 'O ideal e o processo e o sistema que a gente tem aqui é bifagem. Teria que bifar 100% dos produtos na entrada a gente resolve a entrada, porque o fornecedor pode ter mandado o seu cabulo errado dentro da caixa.'",
+        "contexto_caso": "Filipe já pediu ao André pra buscar cotações de empresas de inventário. Decisão tomada, falta executar."
+      },
+      "hipotese": "Cultura interna não comporta inventário rigoroso (16 pessoas no depósito, contagem em 2 dias é insuficiente). Inventário cíclico só funciona com estoque já redondo — primeiro precisa do baseline.",
+      "recomendacao": [
+        "Contratar empresa terceirizada de inventário cíclico — Filipe + André já pedindo cotações. Custo provável R$ 50-100k mas paga em achados.",
+        "Bifagem 100% na entrada do CD — não conferir só volume, conferir etiqueta x etiqueta (caso Bracol já provou que volume basta não).",
+        "Após inventário base: ciclo permanente cobrindo 100% do estoque a cada 90 dias (marca por marca).",
+        "Painel BI: % acurácia de estoque (físico vs sistema) por marca / categoria, atualizado por ciclos."
+      ],
+      "responsavel_sugerido": "André (cotação empresa) + Filipe (execução bifagem) + BGP (painel acurácia)",
+      "kpi_alvo": "Acurácia de estoque ≥98% em 6 meses (hoje desconhecida — provável <90%)",
+      "prazo_dias": 90
+    },
+    {
+      "id": "A07",
+      "titulo": "Contratar analista de pricing R$ 7k OU IA com supervisão (Zinho é bottleneck estratégico)",
+      "tema": "tecnologia",
+      "prioridade": 7,
+      "severidade": "alta",
+      "esforco": "medio",
+      "impacto_score": 8,
+      "esforco_score": 5,
+      "impacto_anual_brl": 200000,
+      "tipo_impacto": "anual",
+      "diagnostico": {
+        "headline": "Pricing 100% manual no Zinho — 2 dias após cada nota de fornecedor (30-40 itens × 30 fornecedores). Empresa refém de uma pessoa pra função mais estratégica do negócio",
+        "detalhe": "Cada atualização envolve: produto + kit + revisão de margem + promocional. Atraso de 1-2 dias em repasse de aumento de fornecedor = margem comprida no estoque atual. Vítor cita cliente dele que pagou US$ 1,5M só pra estudo de pricing — 'não tem nada mais estratégico'. Subestimar isso = perder margem silenciosa em todos os 6.040 SKUs. Conservador: 2% de margem perdida em repasses atrasados = ~R$ 200k/ano.",
+        "numero_principal": "R$ 200k/ano de margem otimizável",
+        "fonte_quant": ["Q11 (gasto Ads R$ 2,5M sugere escala que merece pricing dedicado)"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Vítor Bertuzzi",
+        "fala": "Não tem nada mais estratégico dentro de uma empresa que pricing. 3 mil, 4 mil, o cara é complicado. Tá, paga 7. Porque isso é, sei lá, isso aí vai custar menos de 1% do faturamento da empresa. Eu lembro quando a gente fazia na Ipiranga, a gente faturava 2 bi por ano a minha gerência de vendas. Eu tinha um analista só pra mim do Rio de Janeiro, cuidando de pricing, pra que... Porque, cara, cada mexida, pelo volume que é, é muito dinheiro.",
+        "contexto_caso": "Vítor pressiona, Filipe pondera receio do Zinho de socializar (medo de cagada das pessoas). Foco: empresa não pode ser refém ('não negocio com terrorista')."
+      },
+      "hipotese": "Zinho não delega por medo histórico + sobrecarga. Bottleneck: ele para de fazer outras coisas estratégicas pra fazer pricing manual. Solução: IA assistente (Anthropic API ou similar) que sugere ajustes baseado em nota de fornecedor + margem-alvo + concorrência, com Zinho aprovando em batch.",
+      "recomendacao": [
+        "Opção A (BGP topa): construir agente IA de pricing — lê nota de fornecedor (PDF), sugere novos preços com base em margem-alvo histórica, Zinho aprova em batch (10 min vs 2 dias). Stack: Anthropic API + Tiny ERP API.",
+        "Opção B (humana): contratar analista R$ 5-7k + capacitação em ferramentas Astro (Tiny, Magento).",
+        "Em qualquer cenário: instituir backup do Zinho — alguém capacitado pra fazer pricing emergencial se ele faltar.",
+        "Painel BI: tempo médio entre nota de fornecedor recebida e preço atualizado no site (hoje desconhecido — provável 2+ dias)."
+      ],
+      "responsavel_sugerido": "Vítor + Thomas (arquitetura IA) ou Filipe (RH analista) + Zinho (aprovação)",
+      "kpi_alvo": "Tempo nota-preço atualizado <24h em 60 dias",
+      "prazo_dias": 90
+    },
+    {
+      "id": "A08",
+      "titulo": "Programa de assinatura/recorrência nas marcas com 80%+ recompra (Arclan, Super Safety, Imbat, Volk)",
+      "tema": "marketing",
+      "prioridade": 8,
+      "severidade": "media",
+      "esforco": "medio",
+      "impacto_score": 7,
+      "esforco_score": 5,
+      "impacto_anual_brl": 300000,
+      "tipo_impacto": "anual",
+      "diagnostico": {
+        "headline": "10 marcas têm >80% de taxa de recompra (luvas, descartáveis, EPI consumível). 74% da receita já vem de recompra. Programa de assinatura formaliza o que já acontece informalmente",
+        "detalhe": "Marcas com >500 pedidos e recompra >80%: Arclan (85%), Super Safety (84%), Imbat (83%), Fujiwara (82%), Luvex (82%), Nutriex (81%), Camper (81%), Danny (81%), Kalipso (80%), Volk (80%). Versus Cartom (botina, 12+ meses de vida útil) que tem recompra naturalmente menor. Cliente PJ tem LTV R$ 3.046 e 3,2 compras médias — alvo perfeito pra assinatura mensal. Incremento conservador de 5% em recompra dessas marcas = ~R$ 300k/ano.",
+        "numero_principal": "R$ 300k/ano com +5% recompra",
+        "fonte_quant": ["Q09", "Q10", "Q18"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Filipe Miranda",
+        "fala": "Aqui a gente já viu que não [tem cliente fiel], a gente tem um cliente que faz uma recompra, mas a gente tem um grande volume de clientes novos. Aí como que a gente pega esses clientes, analisa pra gente poder fazer mais recompra, pra gente poder deixar ele mais fiel, ou recupera os clientes que não compraram. A gente tá fazendo trabalho lá na IA pra gente poder evoluir com isso.",
+        "contexto_caso": "Filipe quer trabalho de retenção via IA. Astro já tem base de e-mail marketing atualizada (diferente da empresa anterior dele)."
+      },
+      "hipotese": "Marcas de consumível (luva, abafador descartável) têm cadência natural mensal/bimestral. Cliente PJ que comprou Arclan há 60 dias provavelmente precisa de novo. Lembrete + desconto progressivo (5% no 3º pedido, 10% no 6º) consolida a recompra que iria pra concorrente.",
+      "recomendacao": [
+        "Identificar clientes PJ que compraram cada marca >80% de recompra nos últimos 60d e não voltaram em 30d. Disparar e-mail/WhatsApp 'hora de repor'.",
+        "Lançar programa 'Astro Plus' — desconto progressivo por nº de pedidos no semestre (5% / 10% / 15%) restrito a marcas-âncora.",
+        "Pmax dedicado a recompra (audiência: clientes >2 compras nos últimos 180d) — separar do Pmax de aquisição.",
+        "Painel: taxa de recompra 30/60/90 dias por marca + tempo médio entre compras."
+      ],
+      "responsavel_sugerido": "Filipe + Lucinha (mkt) + Thomas (segmentação + automação)",
+      "kpi_alvo": "Taxa de recompra +5pp nas 10 marcas-alvo em 6 meses",
+      "prazo_dias": 90
+    },
+    {
+      "id": "A09",
+      "titulo": "Contratar braço-direito do André para conciliação semanal",
+      "tema": "financeiro",
+      "prioridade": 9,
+      "severidade": "alta",
+      "esforco": "baixo",
+      "impacto_score": 6,
+      "esforco_score": 3,
+      "impacto_anual_brl": 0,
+      "tipo_impacto": "desbloqueador",
+      "diagnostico": {
+        "headline": "André não fecha conciliação semanal sozinho — vira bottleneck para reunião de fechamento. Conectado a R$ 900k-1M de checkout quebrado (A04)",
+        "detalhe": "Reunião 02/04: 'pendências significativas de lançamentos e transferências que podem alterar o resultado de março'. Reunião 29/04: 'só ver um quando é que o André entrega a conciliação feita pra daí ter uma sugestão de data quinta ou sexta-feira pra poder fazer esse fechamento'. André é gargalo crítico de cadência. Mudança no checkout (A04) só piora — mais lançamentos manuais.",
+        "numero_principal": "Desbloqueia fechamento semanal",
+        "fonte_quant": ["reunião 02/04"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-02",
+        "quem": "Vítor Bertuzzi",
+        "fala": "Foi recomendada a contratação de um apoio operacional para o André para viabilizar fechamentos semanais e conciliações. Vítor Bertuzzi: Alocar ou contratar um 'braço direito' para apoiar o André nas conciliações semanais, buscando recursos na Contabits se necessário.",
+        "contexto_caso": "Astro tem fechamento semanal como cadência da BGP. André sozinho não dá conta + checkout quebrado piorou."
+      },
+      "hipotese": "Volume de transações + automação quebrada > capacidade do André. Junior/estagiário de contabilidade resolve sem precisar de R$ 10k.",
+      "recomendacao": [
+        "Contratação R$ 3-4k OU alocação interna via Contabits (Vítor já mencionou).",
+        "Foco: conciliação semanal + lançamento manual durante período de checkout quebrado.",
+        "Critério de saída: quando checkout for restaurado (A04), reavaliar necessidade do braço-direito ou realocar pra outras áreas."
+      ],
+      "responsavel_sugerido": "Vítor (decisão custo) + André (perfil) + Filipe (operação)",
+      "kpi_alvo": "Fechamento semanal entregue até quarta-feira (hoje desliza)",
+      "prazo_dias": 30
+    },
+    {
+      "id": "A10",
+      "titulo": "Painel de validade + processo de campanha automatizado",
+      "tema": "estoque",
+      "prioridade": 10,
+      "severidade": "media",
+      "esforco": "baixo",
+      "impacto_score": 5,
+      "esforco_score": 2,
+      "impacto_anual_brl": 50000,
+      "tipo_impacto": "anual",
+      "diagnostico": {
+        "headline": "Produtos com validade próxima passam despercebidos — caso fita 3M virou perda total. Falta painel + processo definido de campanha",
+        "detalhe": "Caso 3M: Filipe sinalizou fita com 15-20 dias pra vencer, pediu ação ao Zinho, perdeu prazo. Não temos volume quant exato (não há campo de validade no parquet), mas Encalhado (R$ 269k) e Morto (R$ 709k) provavelmente incluem produtos vencidos. Estimativa conservadora: R$ 50-100k/ano em produtos vencidos hoje não detectados.",
+        "numero_principal": "R$ 50k+/ano de validade perdida",
+        "fonte_quant": ["Q20 (Encalhado+Morto), caso fita 3M"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Filipe Miranda",
+        "fala": "Fita tem um prazo curto de validade. Comecei a olhar as validades dos produtos. Achei uma fita que estava com validade para março, entregue em fevereiro. E aí, com 15, 20 dias de antecedência, eu falei, essa fita aqui vai vencer agora em março. Quer fazer uma campanha? Atrás eu boto na minha mesa. Só que assim, tanta demanda, caralho. Primeira semana ficou na mesa dele, depois eu já vi que tava lá no chão, nem sei mais onde tá. E a fita venceu.",
+        "contexto_caso": "Processo manual + pessoa única (Zinho) cria buraco. Precisa virar fluxo automático."
+      },
+      "hipotese": "Tiny ERP tem campo de validade por lote mas não está sendo exposto no BI. Alerta visual + decisão default (promo 30%) resolve sem depender de aprovação manual.",
+      "recomendacao": [
+        "Importar campo de validade do Tiny pro parquet diário.",
+        "Painel BI: produtos com validade <90 dias + valor em risco + sugestão de % desconto (30% se <60d, 50% se <30d).",
+        "E-mail/WhatsApp automático pra Filipe toda segunda-feira com a lista (não depende do Zinho).",
+        "Política default: produto <30d vencimento entra em queima automática (banner site + Pmax)."
+      ],
+      "responsavel_sugerido": "Thomas (painel) + Filipe (operação) + Lucinha (campanha)",
+      "kpi_alvo": "R$ produtos vencidos no estoque → 0 em 60 dias",
+      "prazo_dias": 45
+    },
+    {
+      "id": "A11",
+      "titulo": "Auditar pico de gasto Pmax Jan/26 (+51%) — possível CAC subindo com PF de baixo LTV",
+      "tema": "marketing",
+      "prioridade": 11,
+      "severidade": "media",
+      "esforco": "baixo",
+      "impacto_score": 5,
+      "esforco_score": 2,
+      "impacto_anual_brl": 100000,
+      "tipo_impacto": "anual",
+      "diagnostico": {
+        "headline": "Em Jan/26, gasto Pmax explodiu pra R$ 320k (60% acima da média mensal R$ 200k). PF cresceu 33% em 90d vs 23% PJ — possível mídia atraindo curiosos PF",
+        "detalhe": "ROAS global 12,7x é saudável, mas razão entre PF e PJ está descolando. Cliente PF tem LTV R$ 1.163 (2,6x menor que PJ R$ 3.046). Se Pmax tá convertendo PF de uma compra só, CAC efetivo é maior do que aparenta. Sem dado de fontes/UTM, é hipótese — mas peso indica auditoria.",
+        "numero_principal": "Possível R$ 100k/ano em mídia desperdiçada",
+        "fonte_quant": ["Q11", "Q21"]
+      },
+      "evidencia_reuniao": {
+        "data": "n/a (insight quant)",
+        "quem": "BGP",
+        "fala": "Pmax queimou R$ 320k em Jan/26 e o crescimento PF foi 9pp acima do PJ — vale checar.",
+        "contexto_caso": "Não houve discussão direta na reunião sobre mídia. Insight emergiu do cruzamento parquet × Ads xlsx."
+      },
+      "hipotese": "Pmax otimiza por conversão (compra), não por LTV. Se algoritmo está achando PF que compra capacete único de R$ 200, ROAS imediato parece ok mas LTV não materializa. Ajustar conversão pra 'pedido >R$ 500' ou 'novo cliente PJ' realinha.",
+      "recomendacao": [
+        "Pedir relatório de Pmax detalhado por audiência (PF vs PJ, novo vs recompra).",
+        "Testar ajuste de meta de conversão: contar só pedidos >R$ 500 OU clientes PJ.",
+        "Segmentar campanha: Pmax aquisição PJ separado de remarketing recompra.",
+        "Validar pelo menos 3 meses pra confirmar tendência (Jan pode ser sazonal)."
+      ],
+      "responsavel_sugerido": "Thomas + fornecedor Pmax (auditoria)",
+      "kpi_alvo": "ROAS Pmax mantém 12x+ E ticket médio dos novos clientes >R$ 500",
+      "prazo_dias": 60
+    },
+    {
+      "id": "A12",
+      "titulo": "Verba mensal R$ 1k para gerentes (destravar Filipe e André)",
+      "tema": "operacao",
+      "prioridade": 12,
+      "severidade": "media",
+      "esforco": "baixo",
+      "impacto_score": 4,
+      "esforco_score": 1,
+      "impacto_anual_brl": 0,
+      "tipo_impacto": "desbloqueador",
+      "diagnostico": {
+        "headline": "Filipe e André não podem comprar nem R$ 30 sem autorização do Zinho — todo cartão da empresa está com ele. Bottleneck operacional silencioso",
+        "detalhe": "Toda pequena despesa operacional (material de escritório, urgências) passa por Zinho. Pra um pedido de R$ 30 precisa: pedir cartão, liberar cartão, comprar, devolver cartão. Filipe estima horas/mês perdidas em pequenas burocracias. Vítor topou na reunião — só falta executar.",
+        "numero_principal": "Destravar tempo de 2 gerentes",
+        "fonte_quant": ["n/a"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Filipe Miranda",
+        "fala": "Se eu for fazer qualquer compra, seja ela de R$ 20, R$ 30, R$ 50, a gente tem que passar pelo SNIB [Zinho], passar pela aprovação dele para poder comprar. A gente não pode comprar antes disso. E é pela limitação de tempo dele, muitas coisas a gente tem que se antecipar demais para poder fazer. Se ele quer delegar as coisas, agora ele tem pessoas que ele pode confiar, a gente precisa ter essa liberdade.",
+        "contexto_caso": "Vítor topa: 'Dá para botar uma verba de escritório, material de escritório, alguma coisa assim, botar lá para os gerentes aprovarem e gostos de controlar isso.'"
+      },
+      "hipotese": "Zinho centraliza por reflexo histórico (já se queimou antes). Verba pequena + prestação de contas mensal resolve sem risco financeiro real.",
+      "recomendacao": [
+        "Verba R$ 1k/mês cada para Filipe e André (R$ 24k/ano = irrelevante vs R$ 35M de faturamento).",
+        "Prestação de contas mensal por planilha simples (cabe no Tiny ou Conta Azul).",
+        "Cartão da empresa nominal pra cada gerente, limite R$ 1k.",
+        "Conversa direta Vítor-Zinho pra avalizar."
+      ],
+      "responsavel_sugerido": "Vítor (conversa com Zinho) + André (cartão e prestação)",
+      "kpi_alvo": "Verba implementada em 30 dias",
+      "prazo_dias": 30
+    },
+    {
+      "id": "A13",
+      "titulo": "Construir tela 'Visão Filipe' no BI Astro (top fornecedores, top clientes, top produtos)",
+      "tema": "tecnologia",
+      "prioridade": 13,
+      "severidade": "media",
+      "esforco": "baixo",
+      "impacto_score": 4,
+      "esforco_score": 2,
+      "impacto_anual_brl": 0,
+      "tipo_impacto": "desbloqueador",
+      "diagnostico": {
+        "headline": "Filipe é macro, Zinho é micro. BI atual é a visão Zinho. Filipe vai desenhar (papel/PPT) os indicadores que ele quer ver — Thomas constrói",
+        "detalhe": "Filipe vem de empresa onde olhava top 10/20 fornecedores filtráveis, principais clientes, principais produtos por unidade de negócio. Astro hoje não tem essa visão hierárquica clara. Filipe sem essa tela = consultoria reduzida, decisões mais lentas.",
+        "numero_principal": "Habilita decisão de Filipe",
+        "fonte_quant": ["n/a"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-29",
+        "quem": "Vítor Bertuzzi",
+        "fala": "Tu desenha num papel, num PowerPoint, especial, dados que você gostaria de olhar. A gente começa com uma tela Filipe. Quero ver a venda da última semana, quero ver o custo disso, o custo daquilo. Cinco indicadores, dez, quinze, coisas que você quer ver. A gente bota uma página pra ti.",
+        "contexto_caso": "Vítor topou, Filipe vai desenhar. Thomas constrói no astro-giro-bi (Streamlit legacy) ou na SPA nova."
+      },
+      "hipotese": "Tela executiva semanal com 10-15 KPIs do jeito do Filipe = decisão mais rápida na controladoria semanal.",
+      "recomendacao": [
+        "Aguardar Filipe entregar wireframe (papel/PPT) — combinado na reunião 29/04.",
+        "Construir como nova aba da SPA Astro BI (mesmo stack DuckDB-WASM) — 'Visão Filipe' ou 'Executivo Semanal'.",
+        "Indicadores prováveis: vendas semanais, top 10 fornecedores filtráveis, top clientes PJ, principais produtos por categoria.",
+        "Iterativo: Filipe usa, pede ajustes, Thomas refina."
+      ],
+      "responsavel_sugerido": "Filipe (wireframe) + Thomas (construção)",
+      "kpi_alvo": "Tela no ar em 30 dias após wireframe entregue",
+      "prazo_dias": 60
+    },
+    {
+      "id": "A14",
+      "titulo": "Cobrar cronograma + entregas pendentes dos fornecedores de IA via Bitrix",
+      "tema": "tecnologia",
+      "prioridade": 14,
+      "severidade": "media",
+      "esforco": "baixo",
+      "impacto_score": 5,
+      "esforco_score": 3,
+      "impacto_anual_brl": 0,
+      "tipo_impacto": "operacional",
+      "diagnostico": {
+        "headline": "Múltiplos projetos de IA/automação com fornecedores externos atrasados ou parciais. Webhook entregue, mas réguas de ativação e outras integrações pendentes",
+        "detalhe": "Reunião 02/04: 'projetos de IA e automação existem, mas estão atrasados e com entregas parciais; stakeholders pedem maior pressão e visibilidade sobre cronogramas'. Filipe vai mapear projetos+fornecedores+cronogramas no Bitrix. Vítor topou convocar fornecedor AVA pra reunião técnica com BGP.",
+        "numero_principal": "Visibilidade + cobrança",
+        "fonte_quant": ["n/a"]
+      },
+      "evidencia_reuniao": {
+        "data": "2026-04-02",
+        "quem": "Filipe Miranda",
+        "fala": "Filipe Miranda: Cobrar atualização de cronograma e alimentar o Bitrix com status dos projetos e justificativas técnicas. Vítor: Marcar a reunião com o fornecedor AVA para segunda-feira às 17h30 e solicitar atualização técnica de cada demanda.",
+        "contexto_caso": "Compromisso operacional já tomado. Falta executar."
+      },
+      "hipotese": "Fornecedores de IA atrasam quando não há cobrança formal. Bitrix com cronograma + reunião semanal de status alinha expectativa.",
+      "recomendacao": [
+        "Filipe mapeia projetos x fornecedores x prazo prometido no Bitrix esta semana.",
+        "Reunião semanal de 30 min Filipe + Thomas + fornecedores (Whatsapp grupo + Bitrix).",
+        "Threshold: projeto atrasado >30 dias → escalar (substituir fornecedor ou repactuar).",
+        "Convocar AVA com Thomas pra auditoria técnica (combinado, falta agendar)."
+      ],
+      "responsavel_sugerido": "Filipe (Bitrix) + Vítor (escalação) + Thomas (auditoria técnica)",
+      "kpi_alvo": "Todos os projetos com cronograma atualizado no Bitrix em 14 dias",
+      "prazo_dias": 14
+    },
+    {
+      "id": "A15",
+      "titulo": "Norte (AC/AM/AP/PA/RO/RR/TO): manter com regras de margem, NÃO cortar",
+      "tema": "comercial",
+      "prioridade": 15,
+      "severidade": "media",
+      "esforco": "baixo",
+      "impacto_score": 4,
+      "esforco_score": 2,
+      "impacto_anual_brl": 40000,
+      "tipo_impacto": "anual",
+      "diagnostico": {
+        "headline": "Norte é 1,12% da receita (R$ 388k/ano) e tem margem bruta 38,8% — MAIOR que SP (32%). Cortar destrói R$ 100-130k/ano de margem operacional sem ganho compensatório",
+        "detalhe": "420 pedidos/ano em 7 UFs. PA lidera (R$ 172k), RO (R$ 94k), AM (R$ 56k), TO (R$ 33k), AC (R$ 18k), AP (R$ 11k), RR (R$ 1k). Ticket médio R$ 600-1.400 (vs SP R$ 882). 73% da receita é PJ (LTV R$ 2.362, ticket R$ 1.350). Frete cobrado médio R$ 62-226 (cliente Norte já paga frete — diferente do RJ subsidiado). Norte Remoto puro (AC+AM+AP+RR) é apenas 88 pedidos/ano e R$ 87k — cortar é simbólico, não econômico. O problema real é cancelamento 20,2% (vs SP 14%) — 85 pedidos cancelados/ano que são pura perda operacional (provável causa: estoque sistêmico ≠ físico, ligado a A06 e A05).",
+        "numero_principal": "R$ 388k (1,1%) | margem 38,8% > SP | cancel 20%",
+        "fonte_quant": ["vendas_tiny_bu.parquet (análise UF jan-mai/26)"]
+      },
+      "evidencia_reuniao": {
+        "data": "n/a",
+        "quem": "Vítor (pedido pontual 21/05/2026)",
+        "fala": "Pergunta exploratória: faz sentido deixar de vender para Acre/Roraima/Amazonas? Análise mostrou que cortar destrói margem em vez de proteger.",
+        "contexto_caso": "Hipótese inicial era de que Norte seria 'cauda tóxica'. Dados contradizem: cliente Norte é PJ que recompra, paga frete alto, ticket alto, margem maior. Problema é operacional (cancelamento), não comercial."
+      },
+      "hipotese": "Cliente Norte é PJ de obra/indústria com pouca opção local de EPI — paga o que custar. Quem reclama é o cliente PF curioso (160 pedidos, 27% da receita Norte, LTV R$ 986). Cortar elimina o bom junto com o ruim.",
+      "recomendacao": [
+        "NÃO cortar Norte. Mesmo Norte Remoto (AC/AM/AP/RR) é só R$ 87k, não vale o gesto.",
+        "Aplicar piso R$ 500 ao Norte (igual A02 global) — perde só R$ 5k mas elimina cauda <R$ 200.",
+        "Bloquear boleto no Norte Remoto (AC/AM/AP/RR) — boleto cancela 18-23%, crédito menos.",
+        "Pedir ao Filipe levantar CSV de custo de frete real do Norte (igual fez pro RJ) — validar se há subsídio escondido em pedidos >R$ 1.000.",
+        "Zero mídia paga pra UFs Norte (não rodar Pmax). Pedido espontâneo é bem-vindo, mas CAC não compensa LTV nessas UFs.",
+        "Atacar cancelamento 20,2% — auditar estoque sistêmico vs físico (ligado a A05/A06). Reduzir pra 14% (média Astro) recupera ~R$ 30-50k/ano."
+      ],
+      "responsavel_sugerido": "Filipe (validação frete real + regras) + Zinho (config checkout)",
+      "kpi_alvo": "Cancelamento Norte <15% em 90 dias (hoje 20,2%); zero mídia paga Norte",
+      "prazo_dias": 45
+    }
+  ]
+}
