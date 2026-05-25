@@ -37,28 +37,35 @@ const Icon = ({ name, ...props }) => {
   );
 };
 
+const ASTRO_LEGACY_BASE = "https://astro-bi-legacy.187.77.238.125.sslip.io";
 const Sidebar = ({ active, onSelect, open }) => {
+  // === Power BI — telas migradas (1 ativa, 13 em breve) ===
   const general = [
-    { id: "overview", icon: "home", label: "Visão Geral" },
-    { id: "receita", icon: "money", label: "Receita" },
-    { id: "despesa", icon: "expense", label: "Despesa" },
-    { id: "fluxo", icon: "flow", label: "Fluxo de Caixa" },
-    { id: "tesouraria", icon: "treasury", label: "Tesouraria" },
-    { id: "comparativo", icon: "compare", label: "Comparativo" },
-    { id: "relatorio", icon: "fileText", label: "Relatório IA" },
-    { id: "valuation", icon: "invest", label: "Valuation" },
-    { id: "diary", icon: "diary", label: "Diário", badge: "EM BREVE" },
+    { id: "astro_dash", icon: "home", label: "Dash" },
+    { id: "pbi_variacao_uf", icon: "chart", label: "Variação UF", badge: "EM BREVE" },
+    { id: "pbi_ltv", icon: "user", label: "LTV", badge: "EM BREVE" },
+    { id: "pbi_coorte", icon: "chart", label: "Coorte", badge: "EM BREVE" },
+    { id: "pbi_campanhas", icon: "invest", label: "Campanhas", badge: "EM BREVE" },
+    { id: "pbi_mapa_uf", icon: "chart", label: "Mapa UF", badge: "EM BREVE" },
+    { id: "pbi_analise_vendas", icon: "money", label: "Análise Vendas", badge: "EM BREVE" },
+    { id: "pbi_tend_composicao", icon: "chart", label: "Tend. Composição", badge: "EM BREVE" },
+    { id: "pbi_tend_vendas", icon: "chart", label: "Tend. Vendas", badge: "EM BREVE" },
+    { id: "pbi_tend_temporais", icon: "chart", label: "Tend. Temporais", badge: "EM BREVE" },
+    { id: "pbi_tend_produtos", icon: "chart", label: "Tend. Produtos", badge: "EM BREVE" },
+    { id: "pbi_composicao_vendas", icon: "chart", label: "Composição Vendas", badge: "EM BREVE" },
+    { id: "pbi_composicao_total", icon: "chart", label: "Composição Total", badge: "EM BREVE" },
+    { id: "pbi_const_venda", icon: "chart", label: "Const. Venda", badge: "EM BREVE" },
   ];
+  // === Outras Análises — Plano de Ação interno + links externos pro Streamlit legacy ===
   const others = [
-    { id: "indicators", icon: "chart", label: "Indicadores" },
-    { id: "faturamento_produto", icon: "money", label: "Faturamento" },
-    { id: "curva_abc", icon: "chart", label: "Curva ABC" },
-    { id: "marketing", icon: "invest", label: "Marketing ADS" },
-    { id: "hierarquia", icon: "chart", label: "Hierarquia ADS" },
-    { id: "detalhado", icon: "report", label: "Detalhado" },
-    { id: "profunda_cliente", icon: "user", label: "Profunda Cliente" },
-    { id: "crm", icon: "money", label: "CRM" },
-    { id: "settings", icon: "settings", label: "Configurações", badge: "EM BREVE" },
+    { id: "plano_acao", icon: "report", label: "Plano de Ação" },
+    { id: "ext:giro", icon: "chart", label: "Giro Estoque", href: ASTRO_LEGACY_BASE + "/Giro_Estoque" },
+    { id: "ext:frete", icon: "expense", label: "Frete RJ", href: ASTRO_LEGACY_BASE + "/Frete_RJ" },
+    { id: "ext:pedido_min", icon: "money", label: "Pedido Mínimo", href: ASTRO_LEGACY_BASE + "/Pedido_Minimo" },
+    { id: "ext:recompra", icon: "user", label: "Recompra", href: ASTRO_LEGACY_BASE + "/Recompra" },
+    { id: "ext:campanhas", icon: "invest", label: "Campanhas (legacy)", href: ASTRO_LEGACY_BASE + "/Campanhas" },
+    { id: "ext:agressividade", icon: "chart", label: "Agressividade", href: ASTRO_LEGACY_BASE + "/Agressividade" },
+    { id: "ext:curva_abc", icon: "chart", label: "Curva ABC", href: ASTRO_LEGACY_BASE + "/Curva_ABC" },
   ];
   // Modo da page (active/upsell/hidden) injetado pelo build-jsx.cjs a partir do bi.config.js
   const pageMode = (id) => (window.BI_PAGE_MODE && window.BI_PAGE_MODE[id]) || 'active';
@@ -68,13 +75,30 @@ const Sidebar = ({ active, onSelect, open }) => {
   const renderItem = (it) => {
     if (isHidden(it.id)) return null;
     const upsell = isUpsell(it.id);
+    // Item externo (link pra Streamlit legacy)
+    if (it.href) {
+      return (
+        <a
+          key={it.id}
+          href={it.href}
+          target="_blank"
+          rel="noreferrer"
+          className="sb-item"
+          title={"Abrir em " + it.href}
+        >
+          <Icon name={it.icon} />
+          <span className="label">{it.label}</span>
+          <span className="badge" style={{ background: "transparent", border: "1px solid var(--border-2)", fontSize: 9, padding: "1px 5px", color: "var(--mute-2)" }}>↗</span>
+        </a>
+      );
+    }
     return (
       <button
         key={it.id}
         className={`sb-item ${active === it.id ? "active" : ""} ${upsell ? "sb-item-upsell" : ""}`}
         onClick={() => !it.badge && onSelect(it.id)}
         disabled={!!it.badge}
-        style={it.badge ? { opacity: 0.55, cursor: "default" } : {}}
+        style={it.badge ? { opacity: 0.45, cursor: "default" } : {}}
         title={upsell ? "Funcionalidade PRO — clique pra ver detalhes" : it.label}
       >
         <Icon name={it.icon} />
@@ -89,16 +113,17 @@ const Sidebar = ({ active, onSelect, open }) => {
       <div className="sb-brand">
         <img src="assets/bgp-logo-white.png" alt="BGP" className="sb-logo-img" />
       </div>
-      <div className="sb-section">Geral</div>
-      {general.map(renderItem)}
-      <div className="sb-section">Outros</div>
-      {others.map(renderItem)}
-      <div className="sb-spacer" />
+      <div className="sb-scroll">
+        <div className="sb-section">Power BI</div>
+        {general.map(renderItem)}
+        <div className="sb-section">Outras Análises</div>
+        {others.map(renderItem)}
+      </div>
       <div className="sb-user">
-        <div className="avatar">RK</div>
+        <div className="avatar">AS</div>
         <div className="who">
-          <b>{(window.BIT_META && window.BIT_META.empresa && window.BIT_META.empresa.nome_fantasia) || "Cliente"}</b>
-          <span>{(window.BIT_META && window.BIT_META.empresa && window.BIT_META.empresa.cidade) || "Cliente · BGP GO"}</span>
+          <b>Astro Distribuidora</b>
+          <span>Cliente · BGP GO</span>
         </div>
       </div>
     </aside>

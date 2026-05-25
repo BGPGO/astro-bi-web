@@ -24,6 +24,7 @@ const SOURCES = [
   'pages-3.jsx',
   'pages-4.jsx',
   'upsell-pages.jsx',
+  'pages-astro.jsx',
 ];
 
 // Lê bi.config.js (se existir) pra injetar BI_PAGE_MODE
@@ -77,9 +78,11 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
     detalhado: '14 Detalhado',
     profunda_cliente: '15 Profunda Cliente',
     crm: '16 CRM',
+    astro_dash: 'Astro · Dash',
+    plano_acao: 'Astro · Plano de Ação',
   };
   function App() {
-    var p = useState('overview'); var page = p[0], setPage = p[1];
+    var p = useState('astro_dash'); var page = p[0], setPage = p[1];
     var f = useState(Object.assign({}, DEFAULT_FILTERS)); var filters = f[0], setFilters = f[1];
     var fo = useState(false); var filtersOpen = fo[0], setFiltersOpen = fo[1];
     var so = useState(false); var sidebarOpen = so[0], setSidebarOpen = so[1];
@@ -208,6 +211,8 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
       detalhado: PageDetalhado,
       profunda_cliente: PageProfundaCliente,
       crm: PageCRM,
+      astro_dash: typeof PageAstroDash !== 'undefined' ? PageAstroDash : null,
+      plano_acao: typeof PagePlanoAcao !== 'undefined' ? PagePlanoAcao : null,
     };
     // Modo da page atual: 'active' (default), 'upsell' (mostra UpsellPage), 'hidden' (não renderiza)
     var pageMode = (window.BI_PAGE_MODE && window.BI_PAGE_MODE[page]) || 'active';

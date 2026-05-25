@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>BGP GO BI — Cliente</title>
+  <title>Astro Distribuidora · BI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,9 +23,11 @@
     // como fallback quando o report-{year}-{month}.json estatico nao existe.
     window.BI_REPORT_API = "https://<api-url-do-bi-config-via-coolify>";
   </script>
-  <script src="data.js"></script>
-  <script src="data-extras.js"></script>
-  <!-- JSX pre-compilado pelo build-jsx.cjs. Sem Babel-standalone runtime. -->
+  <!-- Astro: dados pre-calculados via scripts/build_astro_data.py -->
+  <script src="astro-data.js"></script>
+  <!-- data.js + data-extras.js do template (fin40/Omie/etc) — opcionais, BIT vazio se nao gerados -->
+  <script>window.BIT = window.BIT || {}; window.BIT_META = window.BIT_META || { empresa: { nome_fantasia: 'Astro Distribuidora', cidade: 'Brasil · BGP GO' } }; window.BIT.fmt = window.BIT.fmt || ((v) => (v||0).toLocaleString('pt-BR', {style:'currency',currency:'BRL'})); window.BIT.fmtK = window.BIT.fmtK || ((v) => { const a=Math.abs(v||0); if(a>=1e6) return 'R$ '+(a/1e6).toFixed(1)+'M'; if(a>=1e3) return 'R$ '+(a/1e3).toFixed(0)+'k'; return 'R$ '+a.toFixed(0); });</script>
+  <!-- JSX pre-compilado pelo build-jsx.cjs -->
   <script src="app.bundle.js"></script>
 </body>
 </html>

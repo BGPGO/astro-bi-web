@@ -85,7 +85,20 @@ input, select { font-family: inherit; color: inherit; }
   flex-direction: column;
   overflow: hidden;
   min-width: 0;
+  height: 100vh;
 }
+.sidebar .sb-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 8px;
+  min-height: 0;
+}
+.sidebar .sb-scroll::-webkit-scrollbar { width: 6px; }
+.sidebar .sb-scroll::-webkit-scrollbar-track { background: transparent; }
+.sidebar .sb-scroll::-webkit-scrollbar-thumb { background: rgba(34,211,238,0.15); border-radius: 3px; }
+.sidebar .sb-scroll::-webkit-scrollbar-thumb:hover { background: rgba(34,211,238,0.35); }
+.sidebar a.sb-item { text-decoration: none; }
 
 .sb-brand {
   height: 70px;
