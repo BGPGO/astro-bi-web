@@ -296,6 +296,33 @@ const useDuckDBStatus = () => {
   return status;
 };
 
+// ===== Hook: escuta filtro global year/month do Header do template =====
+// App.jsx (em build-jsx.cjs) dispatch event 'bgpgo-period-changed' com {year, month}.
+// Retorna SQL fragment pronto pra adicionar no WHERE. month=0 = ano todo.
+const useGlobalPeriod = () => {
+  const [period, setPeriod] = useState(() => (typeof window !== 'undefined' && window.BGPGO_PERIOD) || { year: 0, month: 0 });
+  useEffect(() => {
+    const h = (e) => setPeriod(e.detail || { year: 0, month: 0 });
+    window.addEventListener('bgpgo-period-changed', h);
+    return () => window.removeEventListener('bgpgo-period-changed', h);
+  }, []);
+  return period;
+};
+const periodSql = (p) => {
+  if (!p || !p.year) return null;
+  if (p.month && p.month >= 1 && p.month <= 12) {
+    return `EXTRACT(YEAR FROM data_pedido) = ${p.year} AND EXTRACT(MONTH FROM data_pedido) = ${p.month}`;
+  }
+  return `EXTRACT(YEAR FROM data_pedido) = ${p.year}`;
+};
+const periodAnoMesList = (p) => {
+  if (!p || !p.year) return null;
+  if (p.month && p.month >= 1 && p.month <= 12) {
+    return [`${p.year}-${String(p.month).padStart(2, '0')}`];
+  }
+  return Array.from({length: 12}, (_, i) => `${p.year}-${String(i+1).padStart(2, '0')}`);
+};
+
 // ===========================================================================
 // Filtros: estado + builder WHERE
 // ===========================================================================
@@ -319,10 +346,15 @@ const DEFAULT_FILTERS_ASTRO = {
   xfSeo: null,
 };
 
-const buildWhere = (f) => {
+const buildWhere = (f, globalPeriod) => {
   const parts = [];
   // NOTA: parquet slim ja filtrou Cancelado no build, nao tem coluna situacao
   parts.push(`data_pedido IS NOT NULL`);
+  // Filtro global do Header (year/month) — sobrescrito se user filtrou ano-mes na page
+  if ((!f.anoMes || !f.anoMes.length) && globalPeriod) {
+    const ps = periodSql(globalPeriod);
+    if (ps) parts.push(ps);
+  }
   if (f.anoMes && f.anoMes.length) parts.push(`strftime(data_pedido, '%Y-%m') IN (${_sqlList(f.anoMes)})`);
   if (f.diaUtil === 'util') parts.push(`dayofweek(data_pedido) BETWEEN 1 AND 5`);
   if (f.diaUtil === 'fds') parts.push(`dayofweek(data_pedido) IN (0, 6)`);
@@ -1181,7 +1213,8 @@ const PageAstroDash = () => {
     });
   }, []);
   const status = useDuckDBStatus();
-  const where = React.useMemo(() => buildWhere(filters), [filters]);
+  const globalPeriod = useGlobalPeriod();
+  const where = React.useMemo(() => buildWhere(filters, globalPeriod), [filters, globalPeriod]);
 
   // Cache "todos os ano_mes" pra click no chart Anual saber quais YYYY-MM existem.
   React.useEffect(() => {

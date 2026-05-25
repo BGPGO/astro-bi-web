@@ -50,10 +50,17 @@ const DEFAULT_FILTERS_VDU = {
   diaUtil: 'util', // util | all (essa tela ESPERA dia util; deixamos toggle pra inspecao)
 };
 
-const _buildWhereVDU = (f) => {
+const _buildWhereVDU = (f, gp) => {
   const parts = [];
-  // parquet slim ja filtrou Cancelado no build (sem coluna situacao)
   parts.push(`data_pedido IS NOT NULL`);
+  // Filtro global Header (year/month)
+  if ((!f.anoMes || !f.anoMes.length) && gp && gp.year) {
+    if (gp.month && gp.month >= 1 && gp.month <= 12) {
+      parts.push(`EXTRACT(YEAR FROM data_pedido) = ${gp.year} AND EXTRACT(MONTH FROM data_pedido) = ${gp.month}`);
+    } else {
+      parts.push(`EXTRACT(YEAR FROM data_pedido) = ${gp.year}`);
+    }
+  }
   if (f.diaUtil === 'util') parts.push(`dayofweek(data_pedido) BETWEEN 1 AND 5`);
   if (f.anoMes && f.anoMes.length) parts.push(`strftime(data_pedido, '%Y-%m') IN (${_sqlList(f.anoMes)})`);
   if (f.marca && f.marca.length) parts.push(`marca IN (${_sqlList(f.marca)})`);
@@ -151,10 +158,11 @@ const VduHeatmap = ({ rows, marcas, meses, onCellClick, activeCell }) => {
   );
 };
 
-// ===== Sparkline mes-a-mes (top do heatmap) =====
+// ===== Sparkline mes-a-mes (MEDIA por dia util, nao total) =====
 const VduSparkMensal = ({ rows }) => {
   if (!rows || !rows.length) return <div className="empty">sem dados</div>;
-  const values = rows.map((r) => r.v_total);
+  // rs_dia_util = SUM(valor_rateado) / DISTINCT(dias_uteis_mes)
+  const values = rows.map((r) => r.rs_dia_util || 0);
   const labels = rows.map((r) => _vduFmtAm(r.am));
   return <AstroBarV values={values} labels={labels} color="cyan" height={200} fmt={_fmtBRLk} />;
 };
@@ -166,7 +174,8 @@ const PageVendasDiaUtil = () => {
   const status = useDuckDBStatus();
   const setF = React.useCallback((np) => setFilters((prev) => ({ ...prev, ...np })), []);
 
-  const where = React.useMemo(() => _buildWhereVDU(filters), [filters]);
+  const gpVDU = (typeof useGlobalPeriod === 'function') ? useGlobalPeriod() : null;
+  const where = React.useMemo(() => _buildWhereVDU(filters, gpVDU), [filters, gpVDU]);
 
   // === Opcoes de filtro (DISTINCT global; nao depende dos filtros) ===
   // VDU_DATA pode existir como fallback; se nao, query 1x via DuckDB.

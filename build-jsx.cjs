@@ -223,11 +223,16 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
     useEffect(function () {
       try { localStorage.setItem('bi.year', String(year)); } catch (e) {}
       setDrilldown(null);
+      // Expose pra pages Astro lerem (ano-mes filter implicito)
+      window.BGPGO_PERIOD = { year: year, month: month };
+      window.dispatchEvent(new CustomEvent('bgpgo-period-changed', { detail: { year: year, month: month } }));
     }, [year]);
 
     useEffect(function () {
       try { localStorage.setItem('bi.month', String(month)); } catch (e) {}
       setDrilldown(null);
+      window.BGPGO_PERIOD = { year: year, month: month };
+      window.dispatchEvent(new CustomEvent('bgpgo-period-changed', { detail: { year: year, month: month } }));
     }, [month]);
 
     var handleSetPage = function (newPage) {
