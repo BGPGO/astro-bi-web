@@ -34,6 +34,19 @@ const SOURCES = [
   'pages-campanhas.jsx',
   'pages-agressividade.jsx',
   'pages-abc.jsx',
+  'pages-tendcomp.jsx',
+  'pages-composicaovenda.jsx',
+  'pages-tendprod.jsx',
+  'pages-tendtemp.jsx',
+  'pages-tendmarcas.jsx',
+  'pages-cohort.jsx',
+  'pages-compvendatotal.jsx',
+  'pages-analisevendas.jsx',
+  'pages-dashfatur.jsx',
+  'pages-campest.jsx',
+  'pages-vendasdiautil.jsx',
+  'pages-cfv.jsx',
+  'pages-geral.jsx',
 ];
 
 // Lê bi.config.js (se existir) pra injetar BI_PAGE_MODE
@@ -88,6 +101,7 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
     profunda_cliente: '15 Profunda Cliente',
     crm: '16 CRM',
     astro_dash: 'Astro · Dash',
+    astro_dashfatur: 'Astro · Dash Faturamento',
     plano_acao: 'Astro · Plano de Ação',
     astro_giro: 'Astro · Giro Estoque',
     astro_frete: 'Astro · Frete RJ',
@@ -96,6 +110,18 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
     astro_campanhas: 'Astro · Campanhas Ads',
     astro_agressividade: 'Astro · Agressividade',
     astro_abc: 'Astro · Curva ABC',
+    pbi_tend_composicao: 'Astro · Tendência Composição',
+    pbi_composicao_vendas: 'Astro · Composição de Venda',
+    pbi_tend_produtos: 'Astro · Tendência Produtos',
+    pbi_tend_marcas: 'Astro · Tendências Marcas',
+    pbi_tend_temporais: 'Astro · Tendência Temporal',
+    pbi_composicao_total: 'Astro · Composição de Venda (Total)',
+    pbi_coorte: 'Astro · Cohort (Valor + Vendas)',
+    pbi_analise_vendas: 'Astro · Análise de Vendas',
+    pbi_campest: 'Astro · Campanha × Estado',
+    pbi_vendas_dia_util: 'Astro · Vendas / Dia Útil',
+    pbi_cfv: 'Astro · CFV (Custo Financeiro Venda)',
+    pbi_geral: 'Astro · Visão Comercial Geral',
   };
   function App() {
     var p = useState('astro_dash'); var page = p[0], setPage = p[1];
@@ -228,6 +254,7 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
       profunda_cliente: PageProfundaCliente,
       crm: PageCRM,
       astro_dash: typeof PageAstroDash !== 'undefined' ? PageAstroDash : null,
+      astro_dashfatur: typeof PageDashFaturamento !== 'undefined' ? PageDashFaturamento : null,
       plano_acao: typeof PagePlanoAcao !== 'undefined' ? PagePlanoAcao : null,
       astro_giro: typeof PageGiroEstoque !== 'undefined' ? PageGiroEstoque : null,
       astro_frete: typeof PageFreteRJ !== 'undefined' ? PageFreteRJ : null,
@@ -236,6 +263,18 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
       astro_campanhas: typeof PageCampanhasAds !== 'undefined' ? PageCampanhasAds : null,
       astro_agressividade: typeof PageAgressividade !== 'undefined' ? PageAgressividade : null,
       astro_abc: typeof PageCurvaABCAstro !== 'undefined' ? PageCurvaABCAstro : null,
+      pbi_tend_composicao: typeof PageTendenciaComposicao !== 'undefined' ? PageTendenciaComposicao : null,
+      pbi_composicao_vendas: typeof PageComposicaoVenda !== 'undefined' ? PageComposicaoVenda : null,
+      pbi_tend_produtos: typeof PageTendenciaProdutos !== 'undefined' ? PageTendenciaProdutos : null,
+      pbi_tend_marcas: typeof PageTendenciaMarcas !== 'undefined' ? PageTendenciaMarcas : null,
+      pbi_tend_temporais: typeof PageTendenciaTemporal !== 'undefined' ? PageTendenciaTemporal : null,
+      pbi_composicao_total: typeof PageComposicaoVendaTotal !== 'undefined' ? PageComposicaoVendaTotal : null,
+      pbi_coorte: typeof PageCohort !== 'undefined' ? PageCohort : null,
+      pbi_analise_vendas: typeof PageAnaliseVendas !== 'undefined' ? PageAnaliseVendas : null,
+      pbi_campest: typeof PageCampanhaEstado !== 'undefined' ? PageCampanhaEstado : null,
+      pbi_vendas_dia_util: typeof PageVendasDiaUtil !== 'undefined' ? PageVendasDiaUtil : null,
+      pbi_cfv: typeof PageCFV !== 'undefined' ? PageCFV : null,
+      pbi_geral: typeof PageGeralComercial !== 'undefined' ? PageGeralComercial : null,
     };
     // Modo da page atual: 'active' (default), 'upsell' (mostra UpsellPage), 'hidden' (não renderiza)
     var pageMode = (window.BI_PAGE_MODE && window.BI_PAGE_MODE[page]) || 'active';

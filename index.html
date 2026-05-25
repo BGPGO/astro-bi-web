@@ -25,6 +25,7 @@
   </script>
   <!-- Astro: dados pre-calculados pelos scripts/build_*_data.py -->
   <script src="astro-data.js"></script>
+  <script src="dashfatur-data.js"></script>
   <script src="giro-data.js"></script>
   <script src="frete-data.js"></script>
   <script src="pedmin-data.js"></script>
@@ -32,6 +33,17 @@
   <script src="campanhas-data.js"></script>
   <script src="agressividade-data.js"></script>
   <script src="abc-data.js"></script>
+  <script src="tendcomp-data.js"></script>
+  <script src="tendtemp-data.js"></script>
+  <script src="tendprod-data.js"></script>
+  <script src="tendmarcas-data.js"></script>
+  <script src="cohort-data.js"></script>
+  <script src="compvendatotal-data.js"></script>
+  <script src="analisevendas-data.js"></script>
+  <script src="campest-data.js"></script>
+  <script src="vendasdiautil-data.js"></script>
+  <script src="cfv-data.js"></script>
+  <script src="geral-data.js"></script>
   <!-- data.js + data-extras.js do template (fin40/Omie/etc) — opcionais, BIT vazio se nao gerados -->
   <script>window.BIT = window.BIT || {}; window.BIT_META = window.BIT_META || { empresa: { nome_fantasia: 'Astro Distribuidora', cidade: 'Brasil · BGP GO' } }; window.BIT.fmt = window.BIT.fmt || ((v) => (v||0).toLocaleString('pt-BR', {style:'currency',currency:'BRL'})); window.BIT.fmtK = window.BIT.fmtK || ((v) => { const a=Math.abs(v||0); if(a>=1e6) return 'R$ '+(a/1e6).toFixed(1)+'M'; if(a>=1e3) return 'R$ '+(a/1e3).toFixed(0)+'k'; return 'R$ '+a.toFixed(0); });</script>
   <!-- DuckDB-WASM via ESM CDN (pra Dash V3 com filtros reativos sobre parquet) -->

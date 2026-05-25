@@ -27,6 +27,18 @@ COPY recompra-data.js /usr/share/nginx/html/
 COPY campanhas-data.js /usr/share/nginx/html/
 COPY agressividade-data.js /usr/share/nginx/html/
 COPY abc-data.js /usr/share/nginx/html/
+COPY tendcomp-data.js /usr/share/nginx/html/
+COPY tendtemp-data.js /usr/share/nginx/html/
+COPY tendprod-data.js /usr/share/nginx/html/
+COPY tendmarcas-data.js /usr/share/nginx/html/
+COPY cohort-data.js /usr/share/nginx/html/
+COPY compvendatotal-data.js /usr/share/nginx/html/
+COPY analisevendas-data.js /usr/share/nginx/html/
+COPY dashfatur-data.js /usr/share/nginx/html/
+COPY campest-data.js /usr/share/nginx/html/
+COPY vendasdiautil-data.js /usr/share/nginx/html/
+COPY cfv-data.js /usr/share/nginx/html/
+COPY geral-data.js /usr/share/nginx/html/
 COPY data /usr/share/nginx/html/data
 COPY assets /usr/share/nginx/html/assets
 

@@ -42,19 +42,25 @@ const Sidebar = ({ active, onSelect, open }) => {
   // === Power BI — telas migradas (1 ativa, 13 em breve) ===
   const general = [
     { id: "astro_dash", icon: "home", label: "Dash" },
+    { id: "astro_dashfatur", icon: "chart", label: "Dash · Faturamento" },
     { id: "pbi_variacao_uf", icon: "chart", label: "Variação UF", badge: "EM BREVE" },
     { id: "pbi_ltv", icon: "user", label: "LTV", badge: "EM BREVE" },
-    { id: "pbi_coorte", icon: "chart", label: "Coorte", badge: "EM BREVE" },
+    { id: "pbi_coorte", icon: "chart", label: "Cohort" },
     { id: "pbi_campanhas", icon: "invest", label: "Campanhas", badge: "EM BREVE" },
+    { id: "pbi_campest", icon: "invest", label: "Campanha × Estado" },
     { id: "pbi_mapa_uf", icon: "chart", label: "Mapa UF", badge: "EM BREVE" },
-    { id: "pbi_analise_vendas", icon: "money", label: "Análise Vendas", badge: "EM BREVE" },
-    { id: "pbi_tend_composicao", icon: "chart", label: "Tend. Composição", badge: "EM BREVE" },
+    { id: "pbi_analise_vendas", icon: "money", label: "Análise Vendas" },
+    { id: "pbi_tend_composicao", icon: "chart", label: "Tend. Composição" },
     { id: "pbi_tend_vendas", icon: "chart", label: "Tend. Vendas", badge: "EM BREVE" },
-    { id: "pbi_tend_temporais", icon: "chart", label: "Tend. Temporais", badge: "EM BREVE" },
-    { id: "pbi_tend_produtos", icon: "chart", label: "Tend. Produtos", badge: "EM BREVE" },
-    { id: "pbi_composicao_vendas", icon: "chart", label: "Composição Vendas", badge: "EM BREVE" },
-    { id: "pbi_composicao_total", icon: "chart", label: "Composição Total", badge: "EM BREVE" },
+    { id: "pbi_tend_temporais", icon: "chart", label: "Tend. Temporais" },
+    { id: "pbi_tend_produtos", icon: "chart", label: "Tend. Produtos" },
+    { id: "pbi_tend_marcas", icon: "chart", label: "Tend. Marcas" },
+    { id: "pbi_composicao_vendas", icon: "chart", label: "Composição Venda" },
+    { id: "pbi_composicao_total", icon: "chart", label: "Composição Total" },
     { id: "pbi_const_venda", icon: "chart", label: "Const. Venda", badge: "EM BREVE" },
+    { id: "pbi_vendas_dia_util", icon: "chart", label: "Vendas / Dia Útil" },
+    { id: "pbi_cfv", icon: "money", label: "CFV (Custo Fin.)" },
+    { id: "pbi_geral", icon: "invest", label: "Visão Comercial" },
   ];
   // === Outras Análises — todas migradas internamente (não mais links externos) ===
   const others = [
