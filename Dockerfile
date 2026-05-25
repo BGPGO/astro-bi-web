@@ -18,8 +18,15 @@ COPY index.html /usr/share/nginx/html/
 COPY styles.css /usr/share/nginx/html/
 COPY app.bundle.js /usr/share/nginx/html/
 
-# Astro: dados pre-calculados via scripts/build_astro_data.py
+# Astro: dados pre-calculados pelos scripts/build_*_data.py
 COPY astro-data.js /usr/share/nginx/html/
+COPY giro-data.js /usr/share/nginx/html/
+COPY frete-data.js /usr/share/nginx/html/
+COPY pedmin-data.js /usr/share/nginx/html/
+COPY recompra-data.js /usr/share/nginx/html/
+COPY campanhas-data.js /usr/share/nginx/html/
+COPY agressividade-data.js /usr/share/nginx/html/
+COPY abc-data.js /usr/share/nginx/html/
 COPY data /usr/share/nginx/html/data
 COPY assets /usr/share/nginx/html/assets
 

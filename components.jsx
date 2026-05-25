@@ -56,16 +56,16 @@ const Sidebar = ({ active, onSelect, open }) => {
     { id: "pbi_composicao_total", icon: "chart", label: "Composição Total", badge: "EM BREVE" },
     { id: "pbi_const_venda", icon: "chart", label: "Const. Venda", badge: "EM BREVE" },
   ];
-  // === Outras Análises — Plano de Ação interno + links externos pro Streamlit legacy ===
+  // === Outras Análises — todas migradas internamente (não mais links externos) ===
   const others = [
     { id: "plano_acao", icon: "report", label: "Plano de Ação" },
-    { id: "ext:giro", icon: "chart", label: "Giro Estoque", href: ASTRO_LEGACY_BASE + "/Giro_Estoque" },
-    { id: "ext:frete", icon: "expense", label: "Frete RJ", href: ASTRO_LEGACY_BASE + "/Frete_RJ" },
-    { id: "ext:pedido_min", icon: "money", label: "Pedido Mínimo", href: ASTRO_LEGACY_BASE + "/Pedido_Minimo" },
-    { id: "ext:recompra", icon: "user", label: "Recompra", href: ASTRO_LEGACY_BASE + "/Recompra" },
-    { id: "ext:campanhas", icon: "invest", label: "Campanhas (legacy)", href: ASTRO_LEGACY_BASE + "/Campanhas" },
-    { id: "ext:agressividade", icon: "chart", label: "Agressividade", href: ASTRO_LEGACY_BASE + "/Agressividade" },
-    { id: "ext:curva_abc", icon: "chart", label: "Curva ABC", href: ASTRO_LEGACY_BASE + "/Curva_ABC" },
+    { id: "astro_giro", icon: "chart", label: "Giro Estoque" },
+    { id: "astro_frete", icon: "expense", label: "Frete RJ" },
+    { id: "astro_pedmin", icon: "money", label: "Pedido Mínimo" },
+    { id: "astro_recompra", icon: "user", label: "Recompra" },
+    { id: "astro_campanhas", icon: "invest", label: "Campanhas Ads" },
+    { id: "astro_agressividade", icon: "chart", label: "Agressividade" },
+    { id: "astro_abc", icon: "chart", label: "Curva ABC" },
   ];
   // Modo da page (active/upsell/hidden) injetado pelo build-jsx.cjs a partir do bi.config.js
   const pageMode = (id) => (window.BI_PAGE_MODE && window.BI_PAGE_MODE[id]) || 'active';

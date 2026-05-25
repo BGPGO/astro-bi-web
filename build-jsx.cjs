@@ -25,6 +25,15 @@ const SOURCES = [
   'pages-4.jsx',
   'upsell-pages.jsx',
   'pages-astro.jsx',
+  // Telas Astro migradas do Streamlit (vêm DEPOIS de pages-astro pra reusar Astro* + _fmt*).
+  // Ordem importa: pages-abc.jsx redefine PageCurvaABC (sobrescrevendo a fin40 de pages-3.jsx).
+  'pages-giro.jsx',
+  'pages-frete.jsx',
+  'pages-pedmin.jsx',
+  'pages-recompra.jsx',
+  'pages-campanhas.jsx',
+  'pages-agressividade.jsx',
+  'pages-abc.jsx',
 ];
 
 // Lê bi.config.js (se existir) pra injetar BI_PAGE_MODE
@@ -80,6 +89,13 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
     crm: '16 CRM',
     astro_dash: 'Astro · Dash',
     plano_acao: 'Astro · Plano de Ação',
+    astro_giro: 'Astro · Giro Estoque',
+    astro_frete: 'Astro · Frete RJ',
+    astro_pedmin: 'Astro · Pedido Mínimo',
+    astro_recompra: 'Astro · Recompra',
+    astro_campanhas: 'Astro · Campanhas Ads',
+    astro_agressividade: 'Astro · Agressividade',
+    astro_abc: 'Astro · Curva ABC',
   };
   function App() {
     var p = useState('astro_dash'); var page = p[0], setPage = p[1];
@@ -213,6 +229,13 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
       crm: PageCRM,
       astro_dash: typeof PageAstroDash !== 'undefined' ? PageAstroDash : null,
       plano_acao: typeof PagePlanoAcao !== 'undefined' ? PagePlanoAcao : null,
+      astro_giro: typeof PageGiroEstoque !== 'undefined' ? PageGiroEstoque : null,
+      astro_frete: typeof PageFreteRJ !== 'undefined' ? PageFreteRJ : null,
+      astro_pedmin: typeof PagePedidoMinimo !== 'undefined' ? PagePedidoMinimo : null,
+      astro_recompra: typeof PageRecompra !== 'undefined' ? PageRecompra : null,
+      astro_campanhas: typeof PageCampanhasAds !== 'undefined' ? PageCampanhasAds : null,
+      astro_agressividade: typeof PageAgressividade !== 'undefined' ? PageAgressividade : null,
+      astro_abc: typeof PageCurvaABCAstro !== 'undefined' ? PageCurvaABCAstro : null,
     };
     // Modo da page atual: 'active' (default), 'upsell' (mostra UpsellPage), 'hidden' (não renderiza)
     var pageMode = (window.BI_PAGE_MODE && window.BI_PAGE_MODE[page]) || 'active';
