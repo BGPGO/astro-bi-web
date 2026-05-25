@@ -29,27 +29,42 @@ const _fmtPct = (v, d = 1) => {
   return `${(v*100).toFixed(d).replace('.', ',')}%`;
 };
 
-// ===== Mini chart: bar vertical simples (sem SVG) =====
-const AstroBarV = ({ values, labels, color = 'cyan', height = 200, fmt = _fmtBRLk }) => {
+// ===== Mini chart: bar vertical via SVG (robusto, sem bug de flex %) =====
+const AstroBarV = ({ values, labels, color = 'cyan', height = 220, fmt = _fmtBRLk, onBarClick, activeIdx }) => {
   if (!values || !values.length) return <div className="empty">sem dados</div>;
-  const max = Math.max(...values);
-  const palette = { cyan: 'var(--cyan)', green: 'var(--green)', amber: 'var(--amber)', violet: 'var(--violet)' };
+  const max = Math.max(...values, 1);
+  const palette = { cyan: '#22d3ee', green: '#10b981', amber: '#f59e0b', violet: '#a78bfa', red: '#ef4444' };
+  const color1 = palette[color] || palette.cyan;
+  const N = values.length;
+  const W = 600, H = height;
+  const padT = 28, padB = 26, padL = 8, padR = 8;
+  const innerW = W - padL - padR;
+  const innerH = H - padT - padB;
+  const barW = Math.min(48, (innerW / N) * 0.7);
+  const gap = (innerW - barW * N) / Math.max(1, N - 1) || 0;
   return (
-    <div className="astro-bar-v" style={{ height, display: 'flex', alignItems: 'flex-end', gap: 10, padding: '20px 4px 0' }}>
-      {values.map((v, i) => (
-        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minWidth: 0 }}>
-          <span style={{ fontSize: 11, color: 'var(--text-2)', fontFamily: 'var(--font-mono)' }}>{fmt(v)}</span>
-          <div style={{
-            width: '100%', maxWidth: 56,
-            background: palette[color] || palette.cyan,
-            height: `${Math.max(2, (v/max)*100)}%`,
-            borderRadius: '6px 6px 0 0',
-            boxShadow: '0 -2px 12px rgba(34,211,238,0.25)'
-          }} />
-          <span style={{ fontSize: 11, color: 'var(--mute)' }}>{labels[i]}</span>
-        </div>
-      ))}
-    </div>
+    <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ width: '100%', height, display: 'block' }}>
+      {values.map((v, i) => {
+        const h = (v / max) * innerH;
+        const x = padL + i * (barW + gap);
+        const y = padT + (innerH - h);
+        const isActive = activeIdx === i;
+        return (
+          <g key={i} onClick={() => onBarClick && onBarClick(i, v, labels[i])} style={{ cursor: onBarClick ? 'pointer' : 'default' }}>
+            <rect
+              x={x} y={y} width={barW} height={Math.max(2, h)}
+              rx="4"
+              fill={color1}
+              opacity={isActive ? 1 : (activeIdx != null ? 0.45 : 0.9)}
+            />
+            <text x={x + barW/2} y={y - 6} textAnchor="middle"
+                  style={{ fontSize: 11, fill: '#cbd5e1', fontFamily: 'JetBrains Mono, monospace' }}>{fmt(v)}</text>
+            <text x={x + barW/2} y={H - 8} textAnchor="middle"
+                  style={{ fontSize: 11, fill: '#94a3b8' }}>{labels[i]}</text>
+          </g>
+        );
+      })}
+    </svg>
   );
 };
 
