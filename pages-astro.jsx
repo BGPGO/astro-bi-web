@@ -321,7 +321,7 @@ const DEFAULT_FILTERS_ASTRO = {
 
 const buildWhere = (f) => {
   const parts = [];
-  parts.push(`situacao IS DISTINCT FROM 'Cancelado'`);
+  // NOTA: parquet slim ja filtrou Cancelado no build, nao tem coluna situacao
   parts.push(`data_pedido IS NOT NULL`);
   if (f.anoMes && f.anoMes.length) parts.push(`strftime(data_pedido, '%Y-%m') IN (${_sqlList(f.anoMes)})`);
   if (f.diaUtil === 'util') parts.push(`dayofweek(data_pedido) BETWEEN 1 AND 5`);
@@ -469,7 +469,7 @@ const FilterBarAstro = ({ filters, setF }) => {
   // Usa JSON arrays pra evitar Arrow ListVector (que não é Array nativo do JS).
   const opcsQ = useDuckDBQuery(`
     WITH base AS (
-      SELECT * FROM vendas WHERE situacao IS DISTINCT FROM 'Cancelado' AND data_pedido IS NOT NULL
+      SELECT * FROM vendas WHERE data_pedido IS NOT NULL
     )
     SELECT
       (SELECT json_group_array(am) FROM (SELECT DISTINCT strftime(data_pedido, '%Y-%m') AS am FROM base ORDER BY am DESC) t) AS ano_mes,
