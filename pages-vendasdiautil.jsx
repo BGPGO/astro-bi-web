@@ -47,15 +47,43 @@ const _vduFmtAm = (am) => {
 const DEFAULT_FILTERS_VDU = {
   anoMes: [],      // multi (string YYYY-MM); vazio = todos os meses presentes
   marca: [],       // multi (string); vazio = top 20 do heatmap
-  diaUtil: 'util', // util | all (essa tela ESPERA dia util; deixamos toggle pra inspecao)
+  diaUtil: 'util', // util = ÷ dias úteis (seg-sex menos feriados) | all = ÷ dias corridos
 };
+
+// Feriados NACIONAIS oficiais 2024-2026 (sem carnaval/corpus, que são facultativos).
+// O PBI calcula "Vendas/Dia útil" = venda do mês ÷ dias úteis (seg-sex menos feriados).
+// Ex.: abril/2026 tem Sexta-Santa (03/04) + Tiradentes (21/04) → 22-2 = 20 dias úteis,
+// e R$ 3,22M ÷ 20 = R$ 161.039 (bate com o KPI da Composição de Venda).
+const _BR_HOLIDAYS = [
+  '2024-01-01', '2024-03-29', '2024-04-21', '2024-05-01', '2024-09-07', '2024-10-12', '2024-11-02', '2024-11-15', '2024-11-20', '2024-12-25',
+  '2025-01-01', '2025-04-18', '2025-04-21', '2025-05-01', '2025-09-07', '2025-10-12', '2025-11-02', '2025-11-15', '2025-11-20', '2025-12-25',
+  '2026-01-01', '2026-04-03', '2026-04-21', '2026-05-01', '2026-09-07', '2026-10-12', '2026-11-02', '2026-11-15', '2026-11-20', '2026-12-25',
+];
+const _HOLIDAYS_SQL = _BR_HOLIDAYS.map((h) => `DATE '${h}'`).join(', ');
+
+// CTE dias_uteis(am, du): dias úteis de CALENDÁRIO por mês (não dias-com-pedido).
+// Capa no último dia com dados → o mês corrente usa dias úteis DECORRIDOS, não o mês cheio.
+// utilOnly=false: conta dias corridos (toggle "Todos").
+const _diasUteisCte = (utilOnly) => `
+  dias_uteis AS (
+    SELECT strftime(d, '%Y-%m') AS am, COUNT(*)::INT AS du
+    FROM range(DATE '2024-01-01', DATE '2027-01-01', INTERVAL 1 DAY) t(d)
+    -- Espelha a janela das vendas dos DOIS lados: o mês de borda (início da janela
+    -- ou mês corrente) conta só os dias úteis DENTRO do range, evitando dividir
+    -- venda parcial pelo mês cheio.
+    WHERE d::DATE >= (current_date - INTERVAL 12 MONTH)
+      AND d::DATE <= (SELECT MAX(data_pedido)::DATE FROM vendas)
+      ${utilOnly ? `AND dayofweek(d) BETWEEN 1 AND 5 AND d::DATE NOT IN (${_HOLIDAYS_SQL})` : ''}
+    GROUP BY 1
+  )`;
 
 const _buildWhereVDU = (f) => {
   const parts = [];
   parts.push(`data_pedido IS NOT NULL`);
-  // Tela é "últimos 12 meses fixos" — não escuta Header global nem anoMes da page
+  // Tela é "últimos 12 meses fixos" — não escuta Header global nem anoMes da page.
+  // NOTA: o numerador conta TODAS as vendas do mês (inclusive fds); o "dia útil" é só
+  // do denominador (dias úteis de calendário), igual ao PBI.
   parts.push(`data_pedido >= (current_date - INTERVAL 12 MONTH)`);
-  if (f.diaUtil === 'util') parts.push(`dayofweek(data_pedido) BETWEEN 1 AND 5`);
   if (f.anoMes && f.anoMes.length) parts.push(`strftime(data_pedido, '%Y-%m') IN (${_sqlList(f.anoMes)})`);
   if (f.marca && f.marca.length) parts.push(`marca IN (${_sqlList(f.marca)})`);
   return parts.join(' AND ');
@@ -197,12 +225,7 @@ const PageVendasDiaUtil = () => {
   // === Matriz Marca x Mes (heatmap principal) ===
   const matrizSql = React.useMemo(() => `
     WITH base AS (SELECT * FROM vendas WHERE ${where} AND marca IS NOT NULL AND marca <> ''),
-    dias_uteis AS (
-      SELECT strftime(data_pedido, '%Y-%m') AS am,
-             COUNT(DISTINCT CAST(data_pedido AS DATE)) AS du
-      FROM base
-      GROUP BY 1
-    ),
+    ${_diasUteisCte(filters.diaUtil === 'util')},
     vendas_marca_mes AS (
       SELECT marca,
              strftime(data_pedido, '%Y-%m') AS am,
@@ -231,31 +254,32 @@ const PageVendasDiaUtil = () => {
     WHERE v.marca IN (SELECT marca FROM top_marcas)
       AND v.am IN (SELECT am FROM top_meses)
     ORDER BY v.am ASC, rs_dia_util DESC
-  `, [where]);
+  `, [where, filters.diaUtil]);
   const matrizQ = useDuckDBQuery(matrizSql, [matrizSql]);
 
   // === Evolucao mensal (linha do topo, agregada de TODAS as marcas no recorte) ===
   const mensalSql = React.useMemo(() => `
-    WITH base AS (SELECT * FROM vendas WHERE ${where})
-    SELECT strftime(data_pedido, '%Y-%m') AS am,
-           SUM(valor_rateado)::DOUBLE AS v_total,
-           COUNT(DISTINCT CAST(data_pedido AS DATE))::INT AS dias_uteis,
-           (SUM(valor_rateado) / NULLIF(COUNT(DISTINCT CAST(data_pedido AS DATE)), 0))::DOUBLE AS rs_dia_util
-    FROM base
-    GROUP BY 1
-    ORDER BY 1 DESC
+    WITH base AS (SELECT * FROM vendas WHERE ${where}),
+    ${_diasUteisCte(filters.diaUtil === 'util')},
+    vm AS (
+      SELECT strftime(data_pedido, '%Y-%m') AS am,
+             SUM(valor_rateado)::DOUBLE AS v_total
+      FROM base GROUP BY 1
+    )
+    SELECT vm.am,
+           vm.v_total,
+           d.du AS dias_uteis,
+           (vm.v_total / NULLIF(d.du, 0))::DOUBLE AS rs_dia_util
+    FROM vm JOIN dias_uteis d USING (am)
+    ORDER BY vm.am DESC
     LIMIT 18
-  `, [where]);
+  `, [where, filters.diaUtil]);
   const mensalQ = useDuckDBQuery(mensalSql, [mensalSql]);
 
   // === TOP 30 (marca, mes) por R$/dia util ===
   const topSql = React.useMemo(() => `
     WITH base AS (SELECT * FROM vendas WHERE ${where} AND marca IS NOT NULL AND marca <> ''),
-    dias_uteis AS (
-      SELECT strftime(data_pedido, '%Y-%m') AS am,
-             COUNT(DISTINCT CAST(data_pedido AS DATE)) AS du
-      FROM base GROUP BY 1
-    ),
+    ${_diasUteisCte(filters.diaUtil === 'util')},
     vm AS (
       SELECT marca, strftime(data_pedido, '%Y-%m') AS am,
              SUM(valor_rateado)::DOUBLE AS v,
@@ -269,7 +293,7 @@ const PageVendasDiaUtil = () => {
     FROM vm JOIN dias_uteis d USING(am)
     ORDER BY rs_dia_util DESC NULLS LAST
     LIMIT 30
-  `, [where]);
+  `, [where, filters.diaUtil]);
   const topQ = useDuckDBQuery(topSql, [topSql]);
 
   // === Derivados pro heatmap (lista de marcas + meses ordenados) ===
@@ -335,8 +359,8 @@ const PageVendasDiaUtil = () => {
 
       <h1 style={{ margin: '0 0 4px', fontSize: 24, fontWeight: 700 }}>Vendas / Dia útil · Marca × Mês</h1>
       <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--mute)' }}>
-        Heatmap reativo: cada célula = SUM(valor_rateado) ÷ DISTINCT(dias_uteis) daquela marca naquele mês.
-        Clique numa célula pra cross-filtrar a Dash.
+        Heatmap reativo: cada célula = venda da marca no mês ÷ dias úteis do mês (seg–sex menos feriados
+        nacionais; o mês corrente usa os dias úteis decorridos). Clique numa célula pra cross-filtrar a Dash.
       </p>
 
       {/* Filtros sticky compactos */}
@@ -471,7 +495,8 @@ const PageVendasDiaUtil = () => {
           </div>
 
           <div style={{ marginTop: 8, fontSize: 11, color: 'var(--mute)', borderTop: '1px solid var(--border)', paddingTop: 10 }}>
-            Métrica: <code>SUM(valor_rateado) / COUNT(DISTINCT data_pedido::DATE)</code> com dayofweek BETWEEN 1 AND 5.
+            Métrica: <code>SUM(valor_rateado) do mês ÷ dias úteis do mês</code> (seg–sex menos feriados nacionais;
+            mês corrente = dias úteis decorridos). Toggle "Todos" divide por dias corridos.
             Fonte: <code>vendas_dash.parquet</code> via DuckDB-WASM.
           </div>
         </>
