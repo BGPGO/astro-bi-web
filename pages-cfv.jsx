@@ -112,9 +112,9 @@ const PageCFV = () => {
           <p style={{ margin: 0, color: 'var(--text-2)', fontSize: 12.5 }}>
             <b style={{ color: '#f59e0b' }}>Nota:</b> os valores nesta tela são{' '}
             <b>estimados</b> a partir de <code>vendas_dash.parquet</code> com a premissa{' '}
-            <b>CFV ≈ 6,16% × Venda Bruta</b> (média histórica). A decomposição usa pesos
-            fixos (60% variável / 30% fixa / 10% desconto). O PBI original calcula com
-            as taxas reais de cada gateway/banco — para paridade total, precisamos das
+            <b>CFV ≈ 5,06% × Venda Bruta</b> (blended "Total" do PBI). A decomposição usa
+            os ratios reais do PBI (<b>60,39% descontos / 31,98% variável / 7,63% fixa</b>).
+            Só a magnitude absoluta segue estimada — para paridade total no valor, precisamos das
             colunas <code>taxa_fixa</code>, <code>taxa_variavel</code> e{' '}
             <code>valor_desconto</code> na fonte. {ESTIM_BADGE}
           </p>
@@ -134,9 +134,9 @@ const PageCFV = () => {
           <div className="kpi-hint">média aplicada uniformemente</div>
         </div>
         <div className="kpi-tile cyan">
-          <div className="kpi-label">Taxa Fixa {ESTIM_BADGE}</div>
-          <div className="kpi-value"><span className="currency">R$</span>{_fmtBRLk(k.taxa_fixa_total).replace('R$ ','')}</div>
-          <div className="kpi-hint">{_fmtPct((k.taxa_fixa_total / k.cfv_total) || 0)} do CFV</div>
+          <div className="kpi-label">Descontos {ESTIM_BADGE}</div>
+          <div className="kpi-value"><span className="currency">R$</span>{_fmtBRLk(k.desconto_total).replace('R$ ','')}</div>
+          <div className="kpi-hint">{_fmtPct((k.desconto_total / k.cfv_total) || 0)} do CFV</div>
         </div>
         <div className="kpi-tile green">
           <div className="kpi-label">Taxa Variável {ESTIM_BADGE}</div>
@@ -177,9 +177,9 @@ const PageCFV = () => {
           </h3>
           <AstroDonut segments={decompSegments} size={200} />
           <div style={{ marginTop: 12, fontSize: 11.5, color: 'var(--mute)', lineHeight: 1.5 }}>
-            Pesos fixos: <b>60% variável</b> · <b>30% fixa</b> · <b>10% descontos</b>.
-            O PBI original mostra 31,98% / 7,63% / 60,39% — diverge porque calcula com taxas
-            reais por gateway que não temos na slim.
+            Ratios do PBI: <b>60,39% descontos</b> · <b>31,98% variável</b> · <b>7,63% fixa</b>.
+            A magnitude absoluta segue estimada (% fixo sobre a venda); só a decomposição
+            usa os pesos reais por gateway.
           </div>
         </div>
       </div>

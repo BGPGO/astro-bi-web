@@ -4,15 +4,14 @@ Le vendas_dash.parquet (template slim) -> cfv-data.js. Como o parquet NAO tem
 as colunas brutas de CFV (Taxa Fixa / Variavel / Desconto vem do PBI original
 com integracao mais profunda), AQUI APROXIMAMOS:
 
-  CFV total estimado    = 0.0616 * valor_rateado          (5.06% medio do PBI)
-  Decomposicao:
-     Taxa Variavel      = 60% do CFV
-     Taxa Fixa          = 30% do CFV
-     Desconto           = 10% do CFV
+  CFV total estimado    = 0.0506 * valor_rateado          (5.06% = "Total" do PBI)
+  Decomposicao (ratios reais do PBI, pg4 do PDF):
+     Desconto           = 60.39% do CFV
+     Taxa Variavel      = 31.98% do CFV
+     Taxa Fixa          =  7.63% do CFV
 
-OBS: a decomposicao 60/30/10 nao bate com o donut do PBI (7.63/31.98/60.39).
-Mantemos os pesos da especificacao do prompt e adicionamos badge "estimado"
-em todos os numeros no frontend.
+A magnitude absoluta do CFV continua estimada (% fixo sobre a venda), mas a
+decomposicao agora bate com o donut do PBI. Badge "estimado" no frontend.
 
 meio_pagamento: nao existe na slim — derivamos de forma_pagamento com mapping
 1:1 (credito->Cartao de Credito, boleto->Boleto a Vista, pix->Pix,
@@ -36,11 +35,11 @@ OUT = ROOT / "cfv-data.js"
 if not PARQUET.exists():
     raise SystemExit(f"parquet nao encontrado: {PARQUET}")
 
-# === Constantes de aproximacao (documentadas no prompt) ===
-CFV_PCT = 0.0616     # 6.16% do valor_rateado vira CFV
-PCT_VAR = 0.60       # 60% do CFV = taxa variavel
-PCT_FIX = 0.30       # 30% do CFV = taxa fixa
-PCT_DESC = 0.10      # 10% do CFV = desconto
+# === Constantes de aproximacao (alinhadas ao PBI / PDF pg4) ===
+CFV_PCT = 0.0506     # 5.06% do valor_rateado vira CFV ("Total" do PBI)
+PCT_VAR = 0.3198     # 31.98% do CFV = taxa variavel
+PCT_FIX = 0.0763     # 7.63% do CFV = taxa fixa
+PCT_DESC = 0.6039    # 60.39% do CFV = desconto
 
 
 con = duckdb.connect()
