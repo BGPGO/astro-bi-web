@@ -46,6 +46,7 @@ const SOURCES = [
   'pages-vendasdiautil.jsx',
   'pages-cfv.jsx',
   'pages-geral.jsx',
+  'pages-filipe.jsx',
 ];
 
 // Lê bi.config.js (se existir) pra injetar BI_PAGE_MODE
@@ -120,6 +121,7 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
     pbi_vendas_dia_util: 'Astro · Vendas / Dia Útil',
     pbi_cfv: 'Astro · CFV (Custo Financeiro Venda)',
     pbi_geral: 'Astro · Visão Comercial Geral',
+    filipe: 'Astro · Tela Filipe (Clientes)',
   };
   function App() {
     var p = useState('astro_dash'); var page = p[0], setPage = p[1];
@@ -277,6 +279,7 @@ const PAGE_MODE_INJECT = `\n// Injetado por build-jsx.cjs a partir de bi.config.
       pbi_vendas_dia_util: typeof PageVendasDiaUtil !== 'undefined' ? PageVendasDiaUtil : null,
       pbi_cfv: typeof PageCFV !== 'undefined' ? PageCFV : null,
       pbi_geral: typeof PageGeralComercial !== 'undefined' ? PageGeralComercial : null,
+      filipe: typeof PageFilipe !== 'undefined' ? PageFilipe : null,
     };
     // Modo da page atual: 'active' (default), 'upsell' (mostra UpsellPage), 'hidden' (não renderiza)
     var pageMode = (window.BI_PAGE_MODE && window.BI_PAGE_MODE[page]) || 'active';

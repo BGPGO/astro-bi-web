@@ -20,6 +20,7 @@ COPY app.bundle.js /usr/share/nginx/html/
 
 # Astro: dados pre-calculados pelos scripts/build_*_data.py
 COPY astro-data.js /usr/share/nginx/html/
+COPY filipe-data.js /usr/share/nginx/html/
 COPY giro-data.js /usr/share/nginx/html/
 COPY frete-data.js /usr/share/nginx/html/
 COPY pedmin-data.js /usr/share/nginx/html/

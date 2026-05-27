@@ -65,6 +65,7 @@ const Sidebar = ({ active, onSelect, open }) => {
     { id: "astro_campanhas", icon: "invest", label: "Campanhas Ads" },
     { id: "astro_agressividade", icon: "chart", label: "Agressividade" },
     { id: "astro_abc", icon: "chart", label: "Curva ABC" },
+    { id: "filipe", icon: "user", label: "Tela Filipe · Clientes" },
   ];
   // Modo da page (active/upsell/hidden) injetado pelo build-jsx.cjs a partir do bi.config.js
   const pageMode = (id) => (window.BI_PAGE_MODE && window.BI_PAGE_MODE[id]) || 'active';
