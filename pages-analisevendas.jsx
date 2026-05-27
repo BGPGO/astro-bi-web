@@ -118,10 +118,16 @@ const PageAnaliseVendas = () => {
           .reverse();
 
         // Tabela categoria
+        // Dias úteis = dias de calendário (seg-sex menos feriados nacionais), nos meses
+        // presentes no recorte — MESMA definição das telas Vendas/Dia Útil e Composição,
+        // pra "Vendas/Dia útil" bater entre as telas e com o PBI (abril → 20 dias úteis).
         const diasUteisRows = await _runQuery(`
-          SELECT COUNT(DISTINCT CAST(data_pedido AS DATE))::BIGINT AS d
-          FROM vendas
-          WHERE ${WHERE} AND dayofweek(data_pedido) BETWEEN 1 AND 5
+          SELECT COUNT(*)::BIGINT AS d
+          FROM range(DATE '2024-01-01', DATE '2027-01-01', INTERVAL 1 DAY) g(dd)
+          WHERE dayofweek(dd) BETWEEN 1 AND 5
+            AND dd::DATE NOT IN (${_HOLIDAYS_SQL})
+            AND dd::DATE <= (SELECT MAX(data_pedido)::DATE FROM vendas)
+            AND strftime(dd, '%Y-%m') IN (SELECT DISTINCT strftime(data_pedido, '%Y-%m') FROM vendas WHERE ${WHERE})
         `);
         const dUteis = Math.max(1, Number(diasUteisRows[0]?.d || 1));
 
@@ -151,7 +157,7 @@ const PageAnaliseVendas = () => {
             n_vendas: nv,
             pct_novos: cls ? nN / cls : 0,
             pct_recorrentes: cls ? nR / cls : 0,
-            vendas_dia_util: (Number(r.valor_util) || 0) / dUteis,
+            vendas_dia_util: val / dUteis,
             valor_total: val,
             margem_pct: val ? (val - cmvC) / val : 0,
             ticket_medio: nv ? val / nv : 0,

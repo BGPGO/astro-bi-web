@@ -208,9 +208,12 @@ ROAS ${c.roas.toFixed(2)}x (vs media: ${c.vs_pct>=0?"+":""}${(m=c.vs_pct)==null?
           ORDER BY d DESC
           LIMIT 120
         `)).map(W=>({d:String(W.d),v:Number(W.v)||0})).reverse(),D=await _runQuery(`
-          SELECT COUNT(DISTINCT CAST(data_pedido AS DATE))::BIGINT AS d
-          FROM vendas
-          WHERE ${S} AND dayofweek(data_pedido) BETWEEN 1 AND 5
+          SELECT COUNT(*)::BIGINT AS d
+          FROM range(DATE '2024-01-01', DATE '2027-01-01', INTERVAL 1 DAY) g(dd)
+          WHERE dayofweek(dd) BETWEEN 1 AND 5
+            AND dd::DATE NOT IN (${_HOLIDAYS_SQL})
+            AND dd::DATE <= (SELECT MAX(data_pedido)::DATE FROM vendas)
+            AND strftime(dd, '%Y-%m') IN (SELECT DISTINCT strftime(data_pedido, '%Y-%m') FROM vendas WHERE ${S})
         `),w=Math.max(1,Number(((f=D[0])==null?void 0:f.d)||1)),L=(await _runQuery(`
           SELECT categoria_mae AS categoria,
                  COUNT(DISTINCT numero)::BIGINT AS n_vendas,
@@ -224,7 +227,7 @@ ROAS ${c.roas.toFixed(2)}x (vs media: ${c.vs_pct>=0?"+":""}${(m=c.vs_pct)==null?
           WHERE ${S} AND categoria_mae IS NOT NULL AND categoria_mae <> ''
           GROUP BY categoria
           ORDER BY valor_total DESC
-        `)).map(W=>{const I=Number(W.n_vendas)||0,V=Number(W.valor_total)||0,z=Number(W.cmv)||0,U=Number(W.n_novos)||0,j=Number(W.n_rec)||0,J=U+j;return{categoria:W.categoria,n_vendas:I,pct_novos:J?U/J:0,pct_recorrentes:J?j/J:0,vendas_dia_util:(Number(W.valor_util)||0)/w,valor_total:V,margem_pct:V?(V-z)/V:0,ticket_medio:I?V/I:0}}),P=(await _runQuery(`
+        `)).map(W=>{const I=Number(W.n_vendas)||0,V=Number(W.valor_total)||0,z=Number(W.cmv)||0,U=Number(W.n_novos)||0,j=Number(W.n_rec)||0,J=U+j;return{categoria:W.categoria,n_vendas:I,pct_novos:J?U/J:0,pct_recorrentes:J?j/J:0,vendas_dia_util:V/w,valor_total:V,margem_pct:V?(V-z)/V:0,ticket_medio:I?V/I:0}}),P=(await _runQuery(`
           WITH p AS (
             SELECT
               COALESCE(NULLIF(seo_title, ''), 'sem nome') AS produto,

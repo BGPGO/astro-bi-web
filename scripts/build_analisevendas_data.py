@@ -149,10 +149,21 @@ has_recompra = bool(
     )
 ) or True  # parquet tem essa col em todos os ambientes Astro
 
+# Dias úteis = dias de CALENDÁRIO (seg-sex menos feriados nacionais) até max_d.
+# MESMA definição das telas Vendas/Dia Útil e Composição (e do PBI). Não usar
+# COUNT(DISTINCT data-com-pedido): o e-commerce tem pedido em feriado/fim de semana,
+# o que inflaria o denominador.
+_HOLIDAYS = [
+    '2024-01-01', '2024-03-29', '2024-04-21', '2024-05-01', '2024-09-07', '2024-10-12', '2024-11-02', '2024-11-15', '2024-11-20', '2024-12-25',
+    '2025-01-01', '2025-04-18', '2025-04-21', '2025-05-01', '2025-09-07', '2025-10-12', '2025-11-02', '2025-11-15', '2025-11-20', '2025-12-25',
+    '2026-01-01', '2026-04-03', '2026-04-21', '2026-05-01', '2026-09-07', '2026-10-12', '2026-11-02', '2026-11-15', '2026-11-20', '2026-12-25',
+]
+_hol_sql = ", ".join(f"DATE '{h}'" for h in _HOLIDAYS)
 dias_uteis_total = int(
     q1(
-        "SELECT COUNT(DISTINCT CAST(data_pedido AS DATE)) FROM v "
-        "WHERE dayofweek(data_pedido) BETWEEN 1 AND 5"
+        f"""SELECT COUNT(*) FROM range(DATE '2024-01-01', DATE '2027-01-01', INTERVAL 1 DAY) t(d)
+            WHERE dayofweek(d) BETWEEN 1 AND 5 AND d::DATE NOT IN ({_hol_sql})
+              AND d::DATE <= DATE '{max_d}'"""
     )
 )
 dias_uteis_total = max(1, dias_uteis_total)
@@ -185,7 +196,7 @@ for r in categoria_raw:
     n_class = n_novos + n_rec
     pct_novos = (n_novos / n_class) if n_class else 0
     pct_rec = (n_rec / n_class) if n_class else 0
-    vdu = _safe(r["valor_util"]) / dias_uteis_total
+    vdu = val / dias_uteis_total  # venda total ÷ dias úteis do período (igual ao PBI)
     margem_pct = (val - cmv_c) / val if val else 0
     ticket = val / nv if nv else 0
     tabela_categoria.append(
