@@ -68,7 +68,17 @@ meses_rows = q("""
 meses = sorted([r["mes"] for r in meses_rows])  # asc
 if not meses:
     sys.exit("sem meses na fonte")
-mes_default = meses[-1]
+
+# Default = ultimo mes COMPLETO. Abrir a tela no mes parcial em curso (ex: dados
+# ate dia 12) subcontaria TODOS os KPIs vs o mes fechado anterior e divergiria do
+# PBI (que sempre mostra o mes fechado). Detecta parcial comparando o ultimo dia
+# com dados contra o ultimo dia do calendario daquele mes.
+import calendar
+_max_date = q1("SELECT MAX(data_pedido) FROM v")
+_y, _m = map(int, meses[-1].split("-"))
+_ult_dia_mes = calendar.monthrange(_y, _m)[1]
+_mes_completo = (_max_date is not None) and (_max_date.day >= _ult_dia_mes)
+mes_default = meses[-1] if (_mes_completo or len(meses) == 1) else meses[-2]
 
 # ============================================================
 # 2) Tenta carregar gasto ADS por mes a partir de campanhas-data.js
