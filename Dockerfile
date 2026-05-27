@@ -34,7 +34,6 @@ COPY tendmarcas-data.js /usr/share/nginx/html/
 COPY cohort-data.js /usr/share/nginx/html/
 COPY compvendatotal-data.js /usr/share/nginx/html/
 COPY analisevendas-data.js /usr/share/nginx/html/
-COPY dashfatur-data.js /usr/share/nginx/html/
 COPY campest-data.js /usr/share/nginx/html/
 COPY vendasdiautil-data.js /usr/share/nginx/html/
 COPY cfv-data.js /usr/share/nginx/html/

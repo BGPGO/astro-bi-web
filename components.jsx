@@ -42,7 +42,6 @@ const Sidebar = ({ active, onSelect, open }) => {
   // === Power BI — telas na ORDEM do PDF original (17 telas, 3 ainda EM BREVE) ===
   const general = [
     { id: "astro_dash",              icon: "home",    label: "01 · Dash" },
-    { id: "astro_dashfatur",         icon: "chart",   label: "02 · Dash · Faturamento" },
     { id: "pbi_vendas_dia_util",     icon: "chart",   label: "03 · Vendas / Dia Útil" },
     { id: "pbi_cfv",                 icon: "money",   label: "04 · CFV" },
     { id: "pbi_geral",               icon: "invest",  label: "05 · Geral" },
