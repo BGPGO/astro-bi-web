@@ -93,33 +93,28 @@ const ComposicaoLevel = ({ level, depth, path, where, onPick, color }) => {
 // KPIs do path: Vendas/Dia útil filtrado pelo path atual
 // =====================================================================
 
-const ComposicaoKpis = ({ where, path }) => {
+const ComposicaoKpis = ({ where, path, diasUteis }) => {
   const extra = path.map((p) => `${p.col} = '${_sqlEsc(p.val)}'`).join(' AND ');
   const fullWhere = extra ? `(${where}) AND ${extra}` : where;
   const sql = React.useMemo(() => `
-    WITH base AS (SELECT * FROM vendas WHERE ${fullWhere}),
-    diasut AS (
-      SELECT COUNT(DISTINCT CAST(data_pedido AS DATE)) AS d
-      FROM base WHERE dayofweek(data_pedido) BETWEEN 1 AND 5
-    )
     SELECT
       COALESCE(SUM(valor_rateado), 0)::DOUBLE AS valor_bruto,
-      COALESCE(SUM(CASE WHEN dayofweek(data_pedido) BETWEEN 1 AND 5 THEN valor_rateado ELSE 0 END), 0)::DOUBLE AS bruto_util,
-      (SELECT d FROM diasut) AS dias_uteis,
       COUNT(DISTINCT numero)::INT AS n_vendas
-    FROM base
+    FROM vendas WHERE ${fullWhere}
   `, [fullWhere]);
   const { data, loading } = useDuckDBQuery(sql, [sql]);
-  const r = (data && data[0]) || { valor_bruto: 0, bruto_util: 0, dias_uteis: 0, n_vendas: 0 };
-  const dias = r.dias_uteis || 0;
-  const venda_dia_util = dias ? (r.bruto_util || 0) / dias : 0;
+  const r = (data && data[0]) || { valor_bruto: 0, n_vendas: 0 };
+  const dias = diasUteis || 0;
+  // Vendas/Dia útil = venda total do recorte ÷ dias úteis do PERÍODO (constante no drill),
+  // igual ao PBI e à tela Vendas/Dia Útil.
+  const venda_dia_util = dias ? (r.valor_bruto || 0) / dias : 0;
   const sk = (txt) => <span style={{ opacity: loading ? 0.45 : 1, transition: 'opacity 200ms' }}>{txt}</span>;
   return (
     <div className="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 16 }}>
       <div className="kpi-tile cyan">
         <div className="kpi-label">Vendas / Dia útil</div>
         <div className="kpi-value"><span className="currency">R$</span>{sk(_fmtBRLk(venda_dia_util).replace('R$ ', ''))}</div>
-        <div className="kpi-hint">bruto útil ÷ {dias} dias úteis</div>
+        <div className="kpi-hint">venda ÷ {dias} dias úteis (excl. feriados)</div>
       </div>
       <div className="card kpi-mini">
         <div className="kpi-label">Valor Bruto (período)</div>
@@ -205,6 +200,21 @@ const ComposicaoVendaInner = ({ where }) => {
   // path = [{col, val}] na MESMA ORDEM dos níveis. Cada item ancora 1 nível.
   const [path, setPath] = React.useState([]);
 
+  // Dias úteis do PERÍODO (calendário: seg-sex menos feriados nacionais; mês corrente
+  // = dias decorridos), sobre os meses presentes no recorte de DATA. Constante ao longo
+  // do drill (o path muda só o numerador). Mesma definição da tela Vendas/Dia Útil →
+  // os KPIs "Vendas/Dia útil" das duas telas batem.
+  const duSql = React.useMemo(() => `
+    SELECT COUNT(*)::INT AS du
+    FROM range(DATE '2024-01-01', DATE '2027-01-01', INTERVAL 1 DAY) t(d)
+    WHERE dayofweek(d) BETWEEN 1 AND 5
+      AND d::DATE NOT IN (${_HOLIDAYS_SQL})
+      AND d::DATE <= (SELECT MAX(data_pedido)::DATE FROM vendas)
+      AND strftime(d, '%Y-%m') IN (SELECT DISTINCT strftime(data_pedido, '%Y-%m') FROM vendas WHERE ${where})
+  `, [where]);
+  const duQ = useDuckDBQuery(duSql, [duSql]);
+  const diasUteis = (duQ.data && duQ.data[0] && duQ.data[0].du) || 0;
+
   const onPick = (col, val) => {
     setPath((prev) => {
       // Encontrar índice do nível no array de níveis
@@ -227,7 +237,7 @@ const ComposicaoVendaInner = ({ where }) => {
 
   return (
     <>
-      <ComposicaoKpis where={where} path={path} />
+      <ComposicaoKpis where={where} path={path} diasUteis={diasUteis} />
       <ComposicaoBreadcrumb path={path} onResetTo={onResetTo} />
 
       <div style={{
@@ -257,6 +267,7 @@ const ComposicaoVendaInner = ({ where }) => {
               onPick={onPick}
               color={COMP_VENDA_COLORS[depth % COMP_VENDA_COLORS.length]}
               activeVal={path[depth] && path[depth].col === lvl.col ? path[depth].val : null}
+              diasUteis={diasUteis}
             />
           );
         })}
@@ -266,27 +277,24 @@ const ComposicaoVendaInner = ({ where }) => {
 };
 
 // Wrapper que passa activeVal pro AstroBarH (highlight da barra ancorada)
-const ComposicaoLevelWithActive = ({ level, depth, path, where, onPick, color, activeVal }) => {
+const ComposicaoLevelWithActive = ({ level, depth, path, where, onPick, color, activeVal, diasUteis }) => {
   const extra = path.map((p) => `${p.col} = '${_sqlEsc(p.val)}'`).join(' AND ');
   const fullWhere = extra ? `(${where}) AND ${extra}` : where;
   const col = level.col;
+  // Ranking por venda total (= ranking por vendas/dia útil, pois o denominador é
+  // constante no período). Divide pelo MESMO nº de dias úteis do período (calendário
+  // sem feriados), não por dias-com-pedido de cada grupo — senão grupos que vendem
+  // em poucos dias inflavam artificialmente.
   const sql = React.useMemo(() => `
-    WITH base AS (
-      SELECT ${col} AS k,
-             COUNT(DISTINCT CAST(data_pedido AS DATE)) FILTER (WHERE dayofweek(data_pedido) BETWEEN 1 AND 5) AS dias_uteis,
-             SUM(CASE WHEN dayofweek(data_pedido) BETWEEN 1 AND 5 THEN valor_rateado ELSE 0 END)::DOUBLE AS venda_util
-      FROM vendas
-      WHERE ${fullWhere} AND ${col} IS NOT NULL AND ${col} <> ''
-      GROUP BY 1
-    )
-    SELECT k,
-           CASE WHEN dias_uteis > 0 THEN venda_util / dias_uteis ELSE 0 END AS vendas_dia_util
-    FROM base
-    ORDER BY vendas_dia_util DESC
+    SELECT ${col} AS k, SUM(valor_rateado)::DOUBLE AS venda
+    FROM vendas
+    WHERE ${fullWhere} AND ${col} IS NOT NULL AND ${col} <> ''
+    GROUP BY 1
+    ORDER BY venda DESC
     LIMIT 10
   `, [fullWhere, col]);
   const { data, loading, error } = useDuckDBQuery(sql, [sql]);
-  const items = (data || []).map((r) => ({ label: r.k, v: r.vendas_dia_util || 0 }));
+  const items = (data || []).map((r) => ({ label: r.k, v: diasUteis ? (r.venda || 0) / diasUteis : 0 }));
 
   return (
     <div className="card" style={{ padding: 12, minWidth: 0 }}>
@@ -389,9 +397,9 @@ const PageComposicaoVenda = () => {
       )}
 
       <div style={{ marginTop: 24, fontSize: 11, color: 'var(--mute)', borderTop: '1px solid var(--border)', paddingTop: 12 }}>
-        Vendas/Dia útil = SUM(valor_rateado) restrito a dias úteis (seg-sex) ÷ COUNT(DISTINCT data útil) no recorte
-        atual (filtros sticky + path do drill). Queries DuckDB-WASM in-browser sobre <code>data/vendas_dash.parquet</code> —
-        sem build_*_data.py.
+        Vendas/Dia útil = SUM(valor_rateado) do recorte ÷ dias úteis do período (seg–sex menos feriados nacionais;
+        mês corrente = dias decorridos). O denominador é constante no drill — só o numerador muda. Mesma definição da
+        tela "Vendas/Dia Útil". Queries DuckDB-WASM in-browser sobre <code>data/vendas_dash.parquet</code> — sem build_*_data.py.
       </div>
     </div>
   );
